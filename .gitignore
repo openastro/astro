@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# Build system
+build
+bin
+lib
+doc
+tests
+
+# Project files
+*.sublime*
