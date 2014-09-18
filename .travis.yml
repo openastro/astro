@@ -11,6 +11,8 @@ env:
 before_install:
   - git clone https://www.github.com/kartikkumar/sml
   - cd sml 
+  - git submodule init
+  - git submodule update
   - cmake -HSML -Bbuild
   - cd build
   - make
