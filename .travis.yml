@@ -8,6 +8,15 @@ env:
   - BUILD_TYPE=Debug
   - BUILD_TYPE=Release
 
+before_install:
+  - git clone https://www.github.com/kartikkumar/sml
+  - cd sml 
+  - cmake -HSML -Bbuild
+  - cd build
+  - make
+  - cd ..
+  - cd ..
+
 install:
   - cmake -HSAM -Bbuild -DCMAKE_BUILD_TYPE=$BUILD_TYPE
   - cd build
