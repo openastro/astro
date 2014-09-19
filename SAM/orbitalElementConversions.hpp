@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 
+#ifndef SAM_ORBITAL_ELEMENT_CONVERSIONS_HPP
+#define SAM_ORBITAL_ELEMENT_CONVERSIONS_HPP
+
 namespace sam
 {
 
@@ -14,4 +17,10 @@ Vector6 convertCartesianToKeplerianElements(
     
 }
 
+// convert true anomaly to eccentric anomaly
+
+// convert eccentric anomaly to mean anomaly
+
 } // namespace sam
+
+#endif // SAM_ORBITAL_ELEMENT_CONVERSIONS_HPP

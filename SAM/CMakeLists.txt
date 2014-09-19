@@ -114,6 +114,7 @@ endif(BUILD_DOCS)
 set(SML_UNIT_TESTS
   "${SOURCE_ROOT}/UnitTests/unitTestSam.cpp"
   "${SOURCE_ROOT}/UnitTests/unitTestOrbitalElementConversions.cpp"  
+  "${SOURCE_ROOT}/UnitTests/unitTestTwoBodyMethods.cpp"  
 )
 
 add_executable(sam_tests ${SML_UNIT_TESTS})
