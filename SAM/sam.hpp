@@ -7,6 +7,6 @@
 #define SAM_HPP
 
 #include "SAM/orbitalElementConversions.hpp"
-#include "SAM/twoBodyFunctions.hpp"
+#include "SAM/twoBodyMethods.hpp"
 
 #endif // SAM_HPP
