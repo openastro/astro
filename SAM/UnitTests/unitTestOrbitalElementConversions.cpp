@@ -65,6 +65,34 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
 
 TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-anomaly]")
 {
+    SECTION( "Test run-time errors" )
+    {
+        SECTION( "Test negative eccentricities" )
+        {
+            REQUIRE_THROWS( convertTrueAnomalyToEllipticalEccentricAnomaly( 1.234, -0.152 ) );
+            REQUIRE_THROWS( convertTrueAnomalyToHyperbolicEccentricAnomaly( 1.234, -0.152 ) );
+            REQUIRE_THROWS( convertTrueAnomalyToEccentricAnomaly( 1.234, -0.152 ) );
+        }
+
+        SECTION( "Test parabolic eccentricity" )
+        {
+            REQUIRE_THROWS( convertTrueAnomalyToEllipticalEccentricAnomaly( 1.234, 1.0 ) );
+            REQUIRE_THROWS( convertTrueAnomalyToHyperbolicEccentricAnomaly( 1.234, 1.0 ) );
+            REQUIRE_THROWS( convertTrueAnomalyToEccentricAnomaly( 1.234, 1.0 ) );
+        }
+
+        SECTION( "Test hyperbolic eccentricity for elliptical conversion" )
+        {
+            REQUIRE_THROWS( convertTrueAnomalyToEllipticalEccentricAnomaly( 1.234, 2.345 ) );
+
+        }
+
+        SECTION( "Test elliptical eccentricity for hyperbolic conversion" )
+        {
+            REQUIRE_THROWS( convertTrueAnomalyToHyperbolicEccentricAnomaly( 1.234, 0.152 ) );
+        }
+    }
+
     SECTION( "Test elliptical orbits" )
     {
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
@@ -140,7 +168,115 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
 
             REQUIRE( computedEccentricAnomaly 
                      == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 1.0e-5 ) );
+        }
+    }
+}
 
+TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-anomaly]")
+{
+    SECTION( "Test run-time errors" )
+    {
+        SECTION( "Test negative eccentricities" )
+        {
+            REQUIRE_THROWS( convertEllipticalEccentricAnomalyToMeanAnomaly( 1.234, -0.152 ) );
+            REQUIRE_THROWS( convertHyperbolicEccentricAnomalyToMeanAnomaly( 1.234, -0.152 ) );
+            REQUIRE_THROWS( convertEccentricAnomalyToMeanAnomaly( 1.234, -0.152 ) );
+        }
+
+        SECTION( "Test parabolic eccentricity" )
+        {
+            REQUIRE_THROWS( convertEllipticalEccentricAnomalyToMeanAnomaly( 1.234, 1.0 ) );
+            REQUIRE_THROWS( convertHyperbolicEccentricAnomalyToMeanAnomaly( 1.234, 1.0 ) );
+            REQUIRE_THROWS( convertEccentricAnomalyToMeanAnomaly( 1.234, 1.0 ) );
+        }
+
+        SECTION( "Test hyperbolic eccentricity for elliptical conversion" )
+        {
+            REQUIRE_THROWS( convertEllipticalEccentricAnomalyToMeanAnomaly( 1.234, 2.345 ) );
+
+        }
+
+        SECTION( "Test elliptical eccentricity for hyperbolic conversion" )
+        {
+            REQUIRE_THROWS( convertHyperbolicEccentricAnomalyToMeanAnomaly( 1.234, 0.152 ) );
+        }
+    }    
+
+    SECTION( "Test elliptical orbits" )
+    {
+        // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+        // Set eccentricities [-].
+        const REAL eccentricities[ 3 ] = { 0.541, 0.0, 0.0 };
+
+        // Set elliptical eccentric anomalies [rad].
+        const REAL ellipticalEccentricAnomalies[ 3 ] 
+            = { 176.09 / 180.0 * sml::SML_PI,
+                320.12 / 180.0 * sml::SML_PI,
+                0.0 };
+
+        // Set expected mean anomalies [rad].
+        const REAL expectedMeanAnomalies[ 3 ] 
+            = { 3.036459804491048,
+                5.587148001484247,
+                0.0 };
+
+        // Loop through all the cases, compute the mean anomaly and check that the result
+        // matches the expected value. Both the direct and wrapper functions are tested.
+        for ( unsigned int i = 0; i < 3; i++ )
+        {
+            // Compute mean anomaly [rad].
+            const REAL computedMeanAnomaly 
+                = convertEllipticalEccentricAnomalyToMeanAnomaly( 
+                    ellipticalEccentricAnomalies[ i ], eccentricities[ i ] );
+
+            const REAL computedMeanAnomalyWrapper 
+                = convertEccentricAnomalyToMeanAnomaly( 
+                    ellipticalEccentricAnomalies[ i ], eccentricities[ i ] );
+
+            // Check if computed mean anomaly matches the expected value.
+            REQUIRE( computedMeanAnomaly 
+                     == Approx( expectedMeanAnomalies[ i ] ).epsilon( 
+                                    std::numeric_limits< REAL >::epsilon( ) ) );        
+
+            REQUIRE( computedMeanAnomalyWrapper 
+                     == Approx( expectedMeanAnomalies[ i ] ).epsilon( 
+                                    std::numeric_limits< REAL >::epsilon( ) ) );              
+        }
+    }    
+
+    SECTION( "Test hyperbolic orbits" )
+    {
+        // The benchmark data is obtained from (Vallado, 2004).
+
+        // Set eccentricities [-].
+        const REAL eccentricities[ 1 ] = { 2.4 };
+
+        // Set hyperbolic eccentric anomalies [rad].
+        const REAL hyperbolicEccentricAnomalies[ 1 ] = { 1.6013761449 };
+
+        // Set expected mean anomalies [rad].
+        const REAL expectedMeanAnomalies[ 1 ] = { 235.4 / 180.0 * sml::SML_PI };    
+
+        // Loop through all the cases, compute the mean anomaly and check that the result
+        // matches the expected value. Both the direct and wrapper functions are tested.
+        for ( unsigned int i = 0; i < 1; i++ )
+        {
+            // Compute mean anomaly [rad].
+            const REAL computedMeanAnomaly 
+                = convertHyperbolicEccentricAnomalyToMeanAnomaly( 
+                    hyperbolicEccentricAnomalies[ i ], eccentricities[ i ] );
+
+            const REAL computedMeanAnomalyWrapper 
+                = convertEccentricAnomalyToMeanAnomaly( 
+                    hyperbolicEccentricAnomalies[ i ], eccentricities[ i ] );
+
+            // Check if computed mean anomaly matches the expected value.
+            REQUIRE( computedMeanAnomaly 
+                     == Approx( expectedMeanAnomalies[ i ] ).epsilon( 1.0e-10 ) );        
+
+            REQUIRE( computedMeanAnomalyWrapper 
+                     == Approx( expectedMeanAnomalies[ i ] ).epsilon( 1.0e-10 ) );
         }
     }
 }
@@ -150,9 +286,10 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
 
 /*!
  * References
- *      NASA, Goddard Spaceflight Center. Orbit Determination Toolbox (ODTBX), NASA - GSFC Open
- *          Source Software, http://opensource.gsfc.nasa.gov/projects/ODTBX/, last accessed:
- *          31st January, 2012.
- *      Fortescue, P. W., et al. Spacecraft systems engineering, Third Edition,
- *          Wiley, England, 2003. 
+ *  NASA, Goddard Spaceflight Center. Orbit Determination Toolbox (ODTBX), NASA - GSFC Open
+ *   Source Software, http://opensource.gsfc.nasa.gov/projects/ODTBX/, last accessed:
+ *   31st January, 2012.
+ *  Fortescue, P. W., et al. Spacecraft systems engineering, Third Edition, Wiley, England, 2003. 
+ *  Vallado, D. A., McClain, W. D. Fundamentals of astrodynamics and applications, 2nd Edition,
+ *   Kluwer Academic Publishers, The Netherlands, 2004. 
  */
