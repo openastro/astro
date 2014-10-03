@@ -5,9 +5,12 @@
 
 #define REAL double
 
+#include <limits>
 #include <vector>
 
 #include <catch.hpp>
+
+#include <SML/sml.hpp>
 
 #include <SAM/orbitalElementConversions.hpp>
 
@@ -51,13 +54,95 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
         result = convertCartesianToKeplerianElements< REAL, Vector6, Vector3 >( 
             cartesianElements, earthGravitationalParameter );
 
-        // Loop through vectors and require that each element of the result matches the expected value
-        // to the given tolerance.
+        // Loop through vectors and require that each element of the result matches the expected 
+        // value to the given tolerance.
         for ( unsigned int i = 0; i < result.size( ); i++ )
         {
             REQUIRE( keplerianElements[ i ] == Approx( result[ i ] ).epsilon( 1.0e-14 ) );        
         }        
     } 
+}
+
+TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-anomaly]")
+{
+    SECTION( "Test elliptical orbits" )
+    {
+        // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+        // Set eccentricities [-].
+        const REAL eccentricities[ 3 ] = { 0.146, 0.0, 0.0 };
+
+        // Set true anomalies [rad].
+        const REAL trueAnomalies[ 3 ] 
+            = { 82.16 / 180.0 * sml::SML_PI, 
+                160.43 / 180.0 * sml::SML_PI,
+                0.0 };
+
+        // Set expected eccentric anomalies [rad].
+        const REAL expectedEccentricAnomalies[ 3 ] 
+            = { 1.290237398010989, 
+                2.800031718974503,
+                0.0 };
+
+        // Loop through all the cases, compute the eccentric anomaly and check that the result
+        // matches the expected value. Both the direct and wrapper functions are tested.
+        for ( unsigned int i = 0; i < 3; i++ )
+        {
+            // Compute eccentric anomaly [rad].
+            const REAL computedEllipticalEccentricAnomaly 
+                = convertTrueAnomalyToEllipticalEccentricAnomaly( 
+                    trueAnomalies[ i ], eccentricities[ i ] );
+
+            const REAL computedEccentricAnomaly 
+                = convertTrueAnomalyToEccentricAnomaly( 
+                    trueAnomalies[ i ], eccentricities[ i ] );
+
+            // Check if computed eccentric anomaly matches the expected value.
+            REQUIRE( computedEllipticalEccentricAnomaly 
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 
+                                    std::numeric_limits< REAL >::epsilon( ) ) );        
+
+            REQUIRE( computedEccentricAnomaly 
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 
+                                    std::numeric_limits< REAL >::epsilon( ) ) );              
+        }
+    }
+
+    SECTION( "Test general hyperbolic orbits" )
+    {
+        // The benchmark data is obtained from (Fortescue, 2003).
+
+        // Set eccentricities [-].
+        const REAL eccentricities[ 1 ] = { 3.0 };        
+
+        // Set true anomalies [rad].
+        const REAL trueAnomalies[ 1 ] = { 0.5291 };        
+
+        // Set expected eccentric anomalies [rad].
+        const REAL expectedEccentricAnomalies[ 1 ] = { 0.3879 };        
+
+        // Loop through all the cases, compute the eccentric anomaly and check that the result
+        // matches the expected value. Both the direct and wrapper functions are tested.
+        for ( unsigned int i = 0; i < 1; i++ )
+        {
+            // Compute eccentric anomaly [rad].
+            const REAL computedHyperbolicEccentricAnomaly 
+                = convertTrueAnomalyToHyperbolicEccentricAnomaly( 
+                    trueAnomalies[ i ], eccentricities[ i ] );
+
+            const REAL computedEccentricAnomaly 
+                = convertTrueAnomalyToEccentricAnomaly( 
+                    trueAnomalies[ i ], eccentricities[ i ] );
+
+            // Check if computed eccentric anomaly matches the expected value.
+            REQUIRE( computedHyperbolicEccentricAnomaly 
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 1.0e-5 ) );        
+
+            REQUIRE( computedEccentricAnomaly 
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 1.0e-5 ) );
+
+        }
+    }
 }
 
 } // namespace unit_tests
@@ -68,4 +153,6 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
  *      NASA, Goddard Spaceflight Center. Orbit Determination Toolbox (ODTBX), NASA - GSFC Open
  *          Source Software, http://opensource.gsfc.nasa.gov/projects/ODTBX/, last accessed:
  *          31st January, 2012.
+ *      Fortescue, P. W., et al. Spacecraft systems engineering, Third Edition,
+ *          Wiley, England, 2003. 
  */
