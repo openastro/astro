@@ -6,6 +6,7 @@
 #ifndef SAM_HPP
 #define SAM_HPP
 
+#include "SAM/constants.hpp"
 #include "SAM/orbitalElementConversions.hpp"
 #include "SAM/twoBodyMethods.hpp"
 

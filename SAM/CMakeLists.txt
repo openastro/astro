@@ -113,8 +113,8 @@ endif(BUILD_DOCS)
 # Add unit tests for SML.
 set(SML_UNIT_TESTS
   "${SOURCE_ROOT}/UnitTests/unitTestSam.cpp"
+  "${SOURCE_ROOT}/UnitTests/unitTestConstants.cpp"  
   "${SOURCE_ROOT}/UnitTests/unitTestOrbitalElementConversions.cpp"  
-  "${SOURCE_ROOT}/UnitTests/unitTestTwoBodyMethods.cpp"  
 )
 
 add_executable(sam_tests ${SML_UNIT_TESTS})

@@ -12,6 +12,7 @@
 
 #include <SML/sml.hpp>
 
+#include <SAM/constants.hpp>
 #include <SAM/orbitalElementConversions.hpp>
 
 namespace sam
@@ -279,6 +280,30 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
                      == Approx( expectedMeanAnomalies[ i ] ).epsilon( 1.0e-10 ) );
         }
     }
+}
+
+TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-motion]")
+{
+    // Reference: http://en.wikipedia.org/wiki/Geostationary_orbit.
+
+    // Set satellite mass [kg].
+    const REAL satelliteMass = 1.0e3;
+
+    // Set gravitational parameter of Earth [m^3 s^-2].
+    const REAL earthGravitationalParameter = SAM_GRAVITATIONAL_CONSTANT * 5.9736e24;
+
+    // Set distance between Earth center and satellite [m].
+    const REAL distanceBetweenSatelliteAndEarth = 4.2164e7;
+
+    // Set expected mean motion [rad/s].
+    const REAL expectedMeanMotion = 7.2921e-5;
+
+    // Compute mean motion.
+    const REAL meanMotion = computeKeplerMeanMotion(
+        distanceBetweenSatelliteAndEarth, earthGravitationalParameter, satelliteMass );
+
+    // Check if computed mean motion matches expected value.
+    REQUIRE( meanMotion == Approx( expectedMeanMotion ).epsilon( 1.0e-7 ) );
 }
 
 } // namespace unit_tests
