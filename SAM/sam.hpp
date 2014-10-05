@@ -8,5 +8,6 @@
 
 #include "SAM/constants.hpp"
 #include "SAM/orbitalElementConversions.hpp"
+#include "SAM/twoBodyMethods.hpp"
 
 #endif // SAM_HPP
