@@ -73,6 +73,30 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
                      == Approx( expectedCircularVelocities[ i ] ).epsilon( 1.0e-4 ) );
         }
     }
+
+    SECTION( "Test orbit around Mars" )
+    {
+        // Reference data obtained from Wikipedia (2014).
+
+        // Set Mars mean radius [km].
+        const REAL marsRadius = 3389.5;
+
+        // Set Mars' gravitational parameter [km^3 s^-2].
+        const REAL marsGravitationalParameter = 42828.0;
+
+        // Set radius of orbit [km].
+        const REAL radius = marsRadius + 200.0;
+
+        // Set expected circular velocity [km/s].
+        // This value was computed "by hand" using Julia.
+        const REAL expectedCircularVelocity = 3.454195532696839;
+
+        const REAL computedCircularVelocity 
+            = computeCircularVelocity( radius, marsGravitationalParameter ); 
+
+        //! Check if computed circular velocity matches expected value.
+        REQUIRE( computedCircularVelocity == expectedCircularVelocity );
+    }
 }
 
 } // namespace unit_tests
