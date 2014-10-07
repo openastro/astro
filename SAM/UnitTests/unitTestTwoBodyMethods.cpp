@@ -76,7 +76,7 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
 
     SECTION( "Test orbit around Mars" )
     {
-        // Reference data obtained from Wikipedia (2014).
+        // Reference data obtained from Wikipedia (2014a, 2014b).
 
         // Set Mars mean radius [km].
         const REAL marsRadius = 3389.5;
@@ -108,4 +108,9 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
  *   Kluwer Academic Publishers, The Netherlands, 2004. 
  *  Wertz, J.R. Mission Geometry: Orbit and Constellation Design and Management, Mircocosm Press,
  *   El Segundo, CA, 2001.
+ *  Wikipedia. Mars, http://en.wikipedia.org/wiki/Mars, last updated: 2 Oct 2014, last accessed:
+ *   7 Oct 2014a.
+ *  Wikipedia. Standard gravitational parameter, 
+ *   http://en.wikipedia.org/wiki/Standard_gravitational_parameter, last updated: 2 Oct 2014,
+ *   last accessed: 7 Oct 2014b.
  */
