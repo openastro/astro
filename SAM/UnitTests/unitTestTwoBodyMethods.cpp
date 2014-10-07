@@ -45,25 +45,34 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         REQUIRE_THROWS( computeCircularVelocity( 0.0, 0.0 ) );
     }
     
-    SECTION( "Test arbitrary elliptical orbit" )
+    SECTION( "Test orbits around the Earth" )
     {
-        // Set semi-major axis of Kepler orbit [m].
-        const REAL semiMajorAxis = 0.0;
+        // Reference data obtained from Wertz (2001).
+
+        // Set Earth equatorial radius [m].
+        const REAL earthRadius = 6378136.0;
 
         // Set Earth's gravitational parameter [m^3 s^-2].
-        const REAL earthGravitationalParameter = 0.0;
+        const REAL earthGravitationalParameter = 3.98600441e14;
 
-        // Set expected circular velocity [m/s].
-        const REAL expectedCircularVelocity = 0.0;
+        // Set altitudes [km].
+        const REAL altitudes[ 5 ] = { 0.0, 200.0, 500.0, 1000.0, 35786.0};
 
-        // Compute circular velocity [m/s].
-        const REAL computedCircularVelocity 
-            = computeCircularVelocity( semiMajorAxis, earthGravitationalParameter ); 
+        // Set expected circular velocities [km/s].
+        const REAL expectedCircularVelocities[ 5 ] = {7.905, 7.784, 7.613, 7.350, 3.075};
 
-        //! Check if computed circular velocity matches expected value.
-        REQUIRE( computedCircularVelocity == expectedCircularVelocity  );        
+        for ( unsigned int i = 0; i < 5; i++ )
+        {
+            // Compute circular velocity [m/s].
+            const REAL computedCircularVelocity 
+                = computeCircularVelocity( 
+                    earthRadius + altitudes[ i ] * 1.0e3, earthGravitationalParameter ); 
+
+            //! Check if computed circular velocity matches expected value.
+            REQUIRE( ( computedCircularVelocity / 1.0e3 )
+                     == Approx( expectedCircularVelocities[ i ] ).epsilon( 1.0e-4 ) );
+        }
     }
-
 }
 
 } // namespace unit_tests
@@ -73,4 +82,6 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
  * References
  *  Vallado, D. A., McClain, W. D. Fundamentals of astrodynamics and applications, 2nd Edition,
  *   Kluwer Academic Publishers, The Netherlands, 2004. 
+ *  Wertz, J.R. Mission Geometry: Orbit and Constellation Design and Management, Mircocosm Press,
+ *   El Segundo, CA, 2001.
  */
