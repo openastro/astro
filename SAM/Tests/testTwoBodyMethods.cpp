@@ -11,7 +11,7 @@
 
 namespace sam
 {
-namespace unit_tests
+namespace tests
 {
 
 TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-motion]")
@@ -99,7 +99,7 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
     }
 }
 
-} // namespace unit_tests
+} // namespace tests
 } // namespace sam
 
 /*!

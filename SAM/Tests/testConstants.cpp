@@ -9,7 +9,7 @@
 
 namespace sam
 {
-namespace unit_tests
+namespace tests
 {
 
 TEST_CASE( "Test definition of constants", "[constants]")
@@ -20,5 +20,5 @@ TEST_CASE( "Test definition of constants", "[constants]")
     REQUIRE( SAM_JULIAN_YEAR_IN_SECONDS == 3.15576e7 );
 }
 
-} // namespace unit_tests
+} // namespace tests
 } // namespace sam

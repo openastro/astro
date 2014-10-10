@@ -17,7 +17,7 @@
 
 namespace sam
 {
-namespace unit_tests
+namespace tests
 {
 
 typedef std::vector< REAL > Vector6;
@@ -282,7 +282,7 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
     }
 }
 
-} // namespace unit_tests
+} // namespace tests
 } // namespace sam
 
 /*!
