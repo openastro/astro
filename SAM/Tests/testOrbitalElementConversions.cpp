@@ -20,8 +20,7 @@ namespace sam
 namespace tests
 {
 
-typedef std::vector< REAL > Vector6;
-typedef std::vector< REAL > Vector3;
+typedef std::vector< REAL > Vector;
 
 TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-keplerian-elements]")
 {
@@ -33,7 +32,7 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
         const REAL earthGravitationalParameter = 3.986004415e14;
 
         // Set Cartesian elements.
-        Vector6 cartesianElements( 6 );
+        Vector cartesianElements( 6 );
         cartesianElements[ xPositionIndex ] = 3.75e6;
         cartesianElements[ yPositionIndex ] = 4.24e6;
         cartesianElements[ zPositionIndex ] = -1.39e6;
@@ -42,17 +41,17 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
         cartesianElements[ zVelocityIndex ] = 1.66e3;
 
         // Set expected Keplerian elements.
-        Vector6 keplerianElements( 6 );
-        keplerianElements[ semiMajorAxisIndex ] = 3.707478199246163e6;
-        keplerianElements[ eccentricityIndex ] = 0.949175203660321;
-        keplerianElements[ inclinationIndex ] = 0.334622356632438;
-        keplerianElements[ argumentOfPeriapsisIndex ] = 2.168430616511167;
+        Vector keplerianElements( 6 );
+        keplerianElements[ semiMajorAxisIndex ]            = 3.707478199246163e6;
+        keplerianElements[ eccentricityIndex ]             = 0.949175203660321;
+        keplerianElements[ inclinationIndex ]              = 0.334622356632438;
+        keplerianElements[ argumentOfPeriapsisIndex ]      = 2.168430616511167;
         keplerianElements[ longitudeOfAscendingNodeIndex ] = 1.630852596545341;
-        keplerianElements[ trueAnomalyIndex ] = 3.302032232567084;
+        keplerianElements[ trueAnomalyIndex ]              = 3.302032232567084;
 
         // Compute Keplerian elements.
-        Vector6 result( 6 );
-        result = convertCartesianToKeplerianElements< REAL, Vector6, Vector3 >( 
+        Vector result( 6 );
+        result = convertCartesianToKeplerianElements< REAL, Vector >( 
             cartesianElements, earthGravitationalParameter );
 
         // Loop through vectors and require that each element of the result matches the expected 

@@ -58,62 +58,61 @@ enum KeplerianElementIndices
  * WARNING: If inclination is 0.0 within 1.0e-15, longitude of ascending node is set to 0.0, since 
  *          the orbit is equatorial.
  *
- * @tparam  Real              Real type
- * @tparam  Vector6           6-Vector type
- * @tparam  Vector3           3-Vector type
- * @param   cartesianElements Vector containing Cartesian elements. 
- *                            N.B.: Order of elements is important!
- *                            cartesianElements( 0 ) = x-position coordinate [m]
- *                            cartesianElements( 1 ) = y-position coordinate [m]
- *                            cartesianElements( 2 ) = z-position coordinate [m]
- *                            cartesianElements( 3 ) = x-velocity coordinate [m/s]
- *                            cartesianElements( 4 ) = y-velocity coordinate [m/s]
- *                            cartesianElements( 5 ) = z-velocity coordinate [m/s]
+ * @tparam  Real                   Real type
+ * @tparam  Vector                 Vector type
+ * @param   cartesianElements      Vector containing Cartesian elements                     <br> 
+ *                                 N.B.: Order of elements is important!                    <br>
+ *                                 cartesianElements( 0 ) = x-position coordinate [m]       <br>
+ *                                 cartesianElements( 1 ) = y-position coordinate [m]       <br>
+ *                                 cartesianElements( 2 ) = z-position coordinate [m]       <br>
+ *                                 cartesianElements( 3 ) = x-velocity coordinate [m/s]     <br>
+ *                                 cartesianElements( 4 ) = y-velocity coordinate [m/s]     <br>
+ *                                 cartesianElements( 5 ) = z-velocity coordinate [m/s] 
  * @param   gravitationalParameter Gravitational parameter of central body [m^3 s^-2]
- * @param   tolerance         Tolerance used to check for limit cases 
- *                            (zero eccentricity, inclination)
- * @return  Converted vector of Keplerian elements.
- *          N.B.: Order of elements is important! 
- *          keplerianElements( 0 ) = semiMajorAxis                [m]
- *          keplerianElements( 1 ) = eccentricity                 [-]
- *          keplerianElements( 2 ) = inclination                  [rad]
- *          keplerianElements( 3 ) = argument of periapsis        [rad]
- *          keplerianElements( 4 ) = longitude of ascending node  [rad]
+ * @param   tolerance              Tolerance used to check for limit cases 
+ *                                 (zero eccentricity, inclination)
+ * @return  Converted vector of Keplerian elements                                          <br>
+ *          N.B.: Order of elements is important!                                           <br>
+ *          keplerianElements( 0 ) = semiMajorAxis                [m]                       <br>
+ *          keplerianElements( 1 ) = eccentricity                 [-]                       <br>
+ *          keplerianElements( 2 ) = inclination                  [rad]                     <br>
+ *          keplerianElements( 3 ) = argument of periapsis        [rad]                     <br>
+ *          keplerianElements( 4 ) = longitude of ascending node  [rad]                     <br>
  *          keplerianElements( 5 ) = true anomaly                 [rad]
  */
-template< typename Real, typename Vector6, typename Vector3 >
-Vector6 convertCartesianToKeplerianElements(
-    const Vector6& cartesianElements, const Real gravitationalParameter,
+template< typename Real, typename Vector >
+Vector convertCartesianToKeplerianElements(
+    const Vector& cartesianElements, const Real gravitationalParameter,
     const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) )
 {
-    Vector6 keplerianElements( 6 );
+    Vector keplerianElements( 6 );
 
     // Set position and velocity vectors.
-    Vector3 position( 3 );
+    Vector position( 3 );
     position[ 0 ] = cartesianElements[ 0 ];
     position[ 1 ] = cartesianElements[ 1 ];
     position[ 2 ] = cartesianElements[ 2 ];
 
-    Vector3 velocity( 3 );
+    Vector velocity( 3 );
     velocity[ 0 ] = cartesianElements[ 3 ];
     velocity[ 1 ] = cartesianElements[ 4 ];
     velocity[ 2 ] = cartesianElements[ 5 ];     
 
     // Compute orbital angular momentum vector.
-    const Vector3 angularMomentum( sml::cross( position, velocity ) );
+    const Vector angularMomentum( sml::cross( position, velocity ) );
 
     // Compute semi-latus rectum.
     const Real semiLatusRectum 
         = sml::squaredNorm< Real >( angularMomentum ) / gravitationalParameter;
 
     // Compute unit vector to ascending node.
-    Vector3 ascendingNodeUnitVector 
+    Vector ascendingNodeUnitVector 
         = sml::normalize< Real >( 
-            sml::cross( sml::getZUnitVector< Vector3 >( ), 
+            sml::cross( sml::getZUnitVector< Vector >( ), 
                         sml::normalize< Real >( angularMomentum ) ) );        
 
     // Compute eccentricity vector.
-    Vector3 eccentricityVector 
+    Vector eccentricityVector 
         = sml::add( sml::multiply( sml::cross( velocity, angularMomentum ), 
                                    1.0 / gravitationalParameter ),
                     sml::multiply( sml::normalize< Real >( position ), -1.0 ) );
@@ -139,8 +138,7 @@ Vector6 convertCartesianToKeplerianElements(
 
     // Compute and store inclination.
     keplerianElements[ inclinationIndex ]
-        = std::acos( angularMomentum[ zPositionIndex ] 
-                     / sml::norm< Real >( angularMomentum ) );    
+        = std::acos( angularMomentum[ zPositionIndex ] / sml::norm< Real >( angularMomentum ) ); 
 
     // Compute and store longitude of ascending node.
     // Define the quadrant condition for the argument of perigee.
@@ -150,7 +148,7 @@ Vector6 convertCartesianToKeplerianElements(
     // x-axis.
     if ( std::fabs( keplerianElements[ inclinationIndex ] ) < tolerance )
     {
-        ascendingNodeUnitVector = sml::getXUnitVector< Vector3 >( );
+        ascendingNodeUnitVector = sml::getXUnitVector< Vector >( );
 
         // If the orbit is equatorial, eccentricityVector_z is zero, therefore the quadrant
         // condition is taken to be the y-component, eccentricityVector_y.
@@ -159,7 +157,7 @@ Vector6 convertCartesianToKeplerianElements(
 
     // Compute and store the resulting longitude of ascending node.
     keplerianElements[ longitudeOfAscendingNodeIndex ] 
-        = std::acos( ascendingNodeUnitVector[ xPositionIndex] );
+        = std::acos( ascendingNodeUnitVector[ xPositionIndex ] );
 
     // Check if the quandrant is correct.
     if ( ascendingNodeUnitVector[ yPositionIndex ] < 0.0 )
@@ -182,7 +180,7 @@ Vector6 convertCartesianToKeplerianElements(
 
         // Check if orbit is also equatorial and set true anomaly quandrant check condition
         // accordingly.
-        if ( ascendingNodeUnitVector == sml::getXUnitVector< Vector3 >( ) )
+        if ( ascendingNodeUnitVector == sml::getXUnitVector< Vector >( ) )
         {
             // If the orbit is circular, dot( position, velocity ) = 0, therefore this value
             // cannot be used as a quadrant condition. Moreover, if the orbit is equatorial,
@@ -204,7 +202,8 @@ Vector6 convertCartesianToKeplerianElements(
     else
     {
         keplerianElements[ argumentOfPeriapsisIndex ]
-            = std::acos( sml::dot< Real >( sml::normalize< Real >( eccentricityVector ), ascendingNodeUnitVector ) );
+            = std::acos( sml::dot< Real >( sml::normalize< Real >( eccentricityVector ),
+                         ascendingNodeUnitVector ) );
 
         // Check if the quadrant is correct.
         if ( argumentOfPeriapsisQuandrantCondition < 0.0 )
@@ -217,7 +216,7 @@ Vector6 convertCartesianToKeplerianElements(
     // Compute dot-product of position and eccentricity vectors.
     Real dotProductPositionAndEccentricityVectors
         = sml::dot< Real >( sml::normalize< Real >( position ), 
-                            sml::normalize< Real >(eccentricityVector ) );
+                            sml::normalize< Real >( eccentricityVector ) );
 
     // Check if the dot-product is one of the limiting cases: 0.0 or 1.0
     // (within prescribed tolerance).
@@ -232,13 +231,12 @@ Vector6 convertCartesianToKeplerianElements(
     }
 
     // Compute and store true anomaly.
-    keplerianElements[ trueAnomalyIndex ] 
-        = std::acos( dotProductPositionAndEccentricityVectors );    
+    keplerianElements[ trueAnomalyIndex ] = std::acos( dotProductPositionAndEccentricityVectors );
 
     // Check if the quandrant is correct.
     if ( trueAnomalyQuandrantCondition < 0.0 )
     {
-        keplerianElements[ trueAnomalyIndex ]
+        keplerianElements[ trueAnomalyIndex ] 
             = 2.0 * sml::SML_PI - keplerianElements[ trueAnomalyIndex ];
     }
 
