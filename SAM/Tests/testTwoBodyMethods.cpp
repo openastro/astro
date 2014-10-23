@@ -14,7 +14,7 @@ namespace sam
 namespace tests
 {
 
-TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-motion]")
+TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-motion]" )
 {
     // Reference: http://en.wikipedia.org/wiki/Geostationary_orbit.
 
@@ -56,10 +56,10 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         const REAL earthGravitationalParameter = 3.98600441e14;
 
         // Set altitudes [km].
-        const REAL altitudes[ 5 ] = { 0.0, 200.0, 500.0, 1000.0, 35786.0};
+        const REAL altitudes[ 5 ] = { 0.0, 200.0, 500.0, 1000.0, 35786.0 };
 
         // Set expected circular velocities [km/s].
-        const REAL expectedCircularVelocities[ 5 ] = {7.905, 7.784, 7.613, 7.350, 3.075};
+        const REAL expectedCircularVelocities[ 5 ] = { 7.905, 7.784, 7.613, 7.350, 3.075 };
 
         for ( unsigned int i = 0; i < 5; i++ )
         {

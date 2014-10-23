@@ -5,14 +5,20 @@
 
 #define REAL double
 
+#ifdef BUILD_WITH_EIGEN
+ #include <Eigen/Core>
+ typedef Eigen::Matrix< REAL, Eigen::Dynamic, 1 > Vector;
+#else
+ #include <vector>
+ typedef std::vector< REAL > Vector;
+#endif // BUILD_WITH_EIGEN
+
 #include <limits>
-#include <vector>
 
 #include <catch.hpp>
 
 #include <SML/sml.hpp>
 
-#include <SAM/constants.hpp>
 #include <SAM/orbitalElementConversions.hpp>
 
 namespace sam
@@ -22,7 +28,8 @@ namespace tests
 
 typedef std::vector< REAL > Vector;
 
-TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-keplerian-elements]")
+TEST_CASE( "Convert Cartesian elements to Keplerian elements", 
+           "[cartesian-to-keplerian-elements]" )
 {
     SECTION( "Test elliptical orbit around the Earth" )
     {
@@ -63,7 +70,7 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements", "[cartesian-to-ke
     } 
 }
 
-TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-anomaly]")
+TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-anomaly]" )
 {
     SECTION( "Test run-time errors" )
     {
@@ -172,7 +179,7 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
     }
 }
 
-TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-anomaly]")
+TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-anomaly]" )
 {
     SECTION( "Test run-time errors" )
     {

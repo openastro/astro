@@ -36,12 +36,7 @@ namespace sam
 template< typename Real > 
 Real computeKeplerMeanMotion( const Real semiMajorAxis,
                               const Real gravitationalParameterOfCentralBody,
-                              const Real massOfOrbitingBody = 0.0 )
-{
-    return std::sqrt( ( ( SAM_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
-                        + gravitationalParameterOfCentralBody ) 
-                      / ( semiMajorAxis * semiMajorAxis * semiMajorAxis ) );
-}
+                              const Real massOfOrbitingBody = 0.0 );
 
 //! Compute circular velocity.
 /*!
@@ -61,6 +56,21 @@ Real computeKeplerMeanMotion( const Real semiMajorAxis,
  * @param  gravitationalParameterOfCentralBody Gravitational parameter of central body [m^3 s^-2] 
  * @return                                     Circular velocity
  */
+template< typename Real > 
+Real computeCircularVelocity( const Real semiMajorAxis, 
+                              const Real gravitationalParameterOfCentralBody );
+//! Compute mean motion.
+template< typename Real > 
+Real computeKeplerMeanMotion( const Real semiMajorAxis,
+                              const Real gravitationalParameterOfCentralBody,
+                              const Real massOfOrbitingBody )
+{
+    return std::sqrt( ( ( SAM_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
+                        + gravitationalParameterOfCentralBody ) 
+                      / ( semiMajorAxis * semiMajorAxis * semiMajorAxis ) );
+}
+
+//! Compute circular velocity.
 template< typename Real > 
 Real computeCircularVelocity( const Real semiMajorAxis, 
                               const Real gravitationalParameterOfCentralBody )
