@@ -3,14 +3,14 @@
  * All rights reserved.
  */
 
-#define REAL double
+typedef double Real;
 
 #ifdef BUILD_WITH_EIGEN
  #include <Eigen/Core>
- typedef Eigen::Matrix< REAL, Eigen::Dynamic, 1 > Vector;
+ typedef Eigen::Matrix< Real, Eigen::Dynamic, 1 > Vector;
 #else
  #include <vector>
- typedef std::vector< REAL > Vector;
+ typedef std::vector< Real > Vector;
 #endif // BUILD_WITH_EIGEN
 
 #include <limits>
@@ -26,7 +26,7 @@ namespace sam
 namespace tests
 {
 
-typedef std::vector< REAL > Vector;
+typedef std::vector< Real > Vector;
 
 TEST_CASE( "Convert Cartesian elements to Keplerian elements", 
            "[cartesian-to-keplerian-elements]" )
@@ -36,7 +36,7 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
         // Set Earth gravitational parameter [m^3 s^-2] .
-        const REAL earthGravitationalParameter = 3.986004415e14;
+        const Real earthGravitationalParameter = 3.986004415e14;
 
         // Set Cartesian elements.
         Vector cartesianElements( 6 );
@@ -58,7 +58,7 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
 
         // Compute Keplerian elements.
         Vector result( 6 );
-        result = convertCartesianToKeplerianElements< REAL, Vector >( 
+        result = convertCartesianToKeplerianElements< Real, Vector >( 
             cartesianElements, earthGravitationalParameter );
 
         // Loop through vectors and require that each element of the result matches the expected 
@@ -105,16 +105,16 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
         // Set eccentricities [-].
-        const REAL eccentricities[ 3 ] = { 0.146, 0.0, 0.0 };
+        const Real eccentricities[ 3 ] = { 0.146, 0.0, 0.0 };
 
         // Set true anomalies [rad].
-        const REAL trueAnomalies[ 3 ] 
+        const Real trueAnomalies[ 3 ] 
             = { 82.16 / 180.0 * sml::SML_PI, 
                 160.43 / 180.0 * sml::SML_PI,
                 0.0 };
 
         // Set expected eccentric anomalies [rad].
-        const REAL expectedEccentricAnomalies[ 3 ] 
+        const Real expectedEccentricAnomalies[ 3 ] 
             = { 1.290237398010989, 
                 2.800031718974503,
                 0.0 };
@@ -124,22 +124,22 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
         for ( unsigned int i = 0; i < 3; i++ )
         {
             // Compute eccentric anomaly [rad].
-            const REAL computedEllipticalEccentricAnomaly 
+            const Real computedEllipticalEccentricAnomaly 
                 = convertTrueAnomalyToEllipticalEccentricAnomaly( 
                     trueAnomalies[ i ], eccentricities[ i ] );
 
-            const REAL computedEccentricAnomaly 
+            const Real computedEccentricAnomaly 
                 = convertTrueAnomalyToEccentricAnomaly( 
                     trueAnomalies[ i ], eccentricities[ i ] );
 
             // Check if computed eccentric anomaly matches the expected value.
             REQUIRE( computedEllipticalEccentricAnomaly 
                      == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 
-                                    std::numeric_limits< REAL >::epsilon( ) ) );        
+                                    std::numeric_limits< Real >::epsilon( ) ) );        
 
             REQUIRE( computedEccentricAnomaly 
                      == Approx( expectedEccentricAnomalies[ i ] ).epsilon( 
-                                    std::numeric_limits< REAL >::epsilon( ) ) );              
+                                    std::numeric_limits< Real >::epsilon( ) ) );              
         }
     }
 
@@ -148,24 +148,24 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
         // The benchmark data is obtained from (Fortescue, 2003).
 
         // Set eccentricities [-].
-        const REAL eccentricities[ 1 ] = { 3.0 };        
+        const Real eccentricities[ 1 ] = { 3.0 };        
 
         // Set true anomalies [rad].
-        const REAL trueAnomalies[ 1 ] = { 0.5291 };        
+        const Real trueAnomalies[ 1 ] = { 0.5291 };        
 
         // Set expected eccentric anomalies [rad].
-        const REAL expectedEccentricAnomalies[ 1 ] = { 0.3879 };        
+        const Real expectedEccentricAnomalies[ 1 ] = { 0.3879 };        
 
         // Loop through all the cases, compute the eccentric anomaly and check that the result
         // matches the expected value. Both the direct and wrapper functions are tested.
         for ( unsigned int i = 0; i < 1; i++ )
         {
             // Compute eccentric anomaly [rad].
-            const REAL computedHyperbolicEccentricAnomaly 
+            const Real computedHyperbolicEccentricAnomaly 
                 = convertTrueAnomalyToHyperbolicEccentricAnomaly( 
                     trueAnomalies[ i ], eccentricities[ i ] );
 
-            const REAL computedEccentricAnomaly 
+            const Real computedEccentricAnomaly 
                 = convertTrueAnomalyToEccentricAnomaly( 
                     trueAnomalies[ i ], eccentricities[ i ] );
 
@@ -214,16 +214,16 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
         // Set eccentricities [-].
-        const REAL eccentricities[ 3 ] = { 0.541, 0.0, 0.0 };
+        const Real eccentricities[ 3 ] = { 0.541, 0.0, 0.0 };
 
         // Set elliptical eccentric anomalies [rad].
-        const REAL ellipticalEccentricAnomalies[ 3 ] 
+        const Real ellipticalEccentricAnomalies[ 3 ] 
             = { 176.09 / 180.0 * sml::SML_PI,
                 320.12 / 180.0 * sml::SML_PI,
                 0.0 };
 
         // Set expected mean anomalies [rad].
-        const REAL expectedMeanAnomalies[ 3 ] 
+        const Real expectedMeanAnomalies[ 3 ] 
             = { 3.036459804491048,
                 5.587148001484247,
                 0.0 };
@@ -233,22 +233,22 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
         for ( unsigned int i = 0; i < 3; i++ )
         {
             // Compute mean anomaly [rad].
-            const REAL computedMeanAnomaly 
+            const Real computedMeanAnomaly 
                 = convertEllipticalEccentricAnomalyToMeanAnomaly( 
                     ellipticalEccentricAnomalies[ i ], eccentricities[ i ] );
 
-            const REAL computedMeanAnomalyWrapper 
+            const Real computedMeanAnomalyWrapper 
                 = convertEccentricAnomalyToMeanAnomaly( 
                     ellipticalEccentricAnomalies[ i ], eccentricities[ i ] );
 
             // Check if computed mean anomaly matches the expected value.
             REQUIRE( computedMeanAnomaly 
                      == Approx( expectedMeanAnomalies[ i ] ).epsilon( 
-                                    std::numeric_limits< REAL >::epsilon( ) ) );        
+                                    std::numeric_limits< Real >::epsilon( ) ) );        
 
             REQUIRE( computedMeanAnomalyWrapper 
                      == Approx( expectedMeanAnomalies[ i ] ).epsilon( 
-                                    std::numeric_limits< REAL >::epsilon( ) ) );              
+                                    std::numeric_limits< Real >::epsilon( ) ) );              
         }
     }    
 
@@ -257,24 +257,24 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
         // The benchmark data is obtained from (Vallado, 2004).
 
         // Set eccentricities [-].
-        const REAL eccentricities[ 1 ] = { 2.4 };
+        const Real eccentricities[ 1 ] = { 2.4 };
 
         // Set hyperbolic eccentric anomalies [rad].
-        const REAL hyperbolicEccentricAnomalies[ 1 ] = { 1.6013761449 };
+        const Real hyperbolicEccentricAnomalies[ 1 ] = { 1.6013761449 };
 
         // Set expected mean anomalies [rad].
-        const REAL expectedMeanAnomalies[ 1 ] = { 235.4 / 180.0 * sml::SML_PI };    
+        const Real expectedMeanAnomalies[ 1 ] = { 235.4 / 180.0 * sml::SML_PI };    
 
         // Loop through all the cases, compute the mean anomaly and check that the result
         // matches the expected value. Both the direct and wrapper functions are tested.
         for ( unsigned int i = 0; i < 1; i++ )
         {
             // Compute mean anomaly [rad].
-            const REAL computedMeanAnomaly 
+            const Real computedMeanAnomaly 
                 = convertHyperbolicEccentricAnomalyToMeanAnomaly( 
                     hyperbolicEccentricAnomalies[ i ], eccentricities[ i ] );
 
-            const REAL computedMeanAnomalyWrapper 
+            const Real computedMeanAnomalyWrapper 
                 = convertEccentricAnomalyToMeanAnomaly( 
                     hyperbolicEccentricAnomalies[ i ], eccentricities[ i ] );
 

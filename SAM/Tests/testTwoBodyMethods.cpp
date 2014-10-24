@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 
-#define REAL double
-
 #include <catch.hpp>
 
 #include <SAM/twoBodyMethods.hpp>
@@ -14,24 +12,26 @@ namespace sam
 namespace tests
 {
 
+typedef double Real;
+
 TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-motion]" )
 {
     // Reference: http://en.wikipedia.org/wiki/Geostationary_orbit.
 
     // Set satellite mass [kg].
-    const REAL satelliteMass = 1.0e3;
+    const Real satelliteMass = 1.0e3;
 
     // Set gravitational parameter of Earth [m^3 s^-2].
-    const REAL earthGravitationalParameter = 6.67259e-11 * 5.9736e24;
+    const Real earthGravitationalParameter = 6.67259e-11 * 5.9736e24;
 
     // Set distance between Earth center and satellite [m].
-    const REAL distanceBetweenSatelliteAndEarth = 4.2164e7;
+    const Real distanceBetweenSatelliteAndEarth = 4.2164e7;
 
     // Set expected mean motion [rad/s].
-    const REAL expectedMeanMotion = 7.2921e-5;
+    const Real expectedMeanMotion = 7.2921e-5;
 
     // Compute mean motion.
-    const REAL meanMotion = computeKeplerMeanMotion(
+    const Real meanMotion = computeKeplerMeanMotion(
         distanceBetweenSatelliteAndEarth, earthGravitationalParameter, satelliteMass );
 
     // Check if computed mean motion matches expected value.
@@ -50,21 +50,21 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         // Reference data obtained from Wertz (2001).
 
         // Set Earth equatorial radius [m].
-        const REAL earthRadius = 6378136.0;
+        const Real earthRadius = 6378136.0;
 
         // Set Earth's gravitational parameter [m^3 s^-2].
-        const REAL earthGravitationalParameter = 3.98600441e14;
+        const Real earthGravitationalParameter = 3.98600441e14;
 
         // Set altitudes [km].
-        const REAL altitudes[ 5 ] = { 0.0, 200.0, 500.0, 1000.0, 35786.0 };
+        const Real altitudes[ 5 ] = { 0.0, 200.0, 500.0, 1000.0, 35786.0 };
 
         // Set expected circular velocities [km/s].
-        const REAL expectedCircularVelocities[ 5 ] = { 7.905, 7.784, 7.613, 7.350, 3.075 };
+        const Real expectedCircularVelocities[ 5 ] = { 7.905, 7.784, 7.613, 7.350, 3.075 };
 
         for ( unsigned int i = 0; i < 5; i++ )
         {
             // Compute circular velocity [m/s].
-            const REAL computedCircularVelocity 
+            const Real computedCircularVelocity 
                 = computeCircularVelocity( 
                     earthRadius + altitudes[ i ] * 1.0e3, earthGravitationalParameter ); 
 
@@ -79,19 +79,19 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         // Reference data obtained from Wikipedia (2014a, 2014b).
 
         // Set Mars mean radius [km].
-        const REAL marsRadius = 3389.5;
+        const Real marsRadius = 3389.5;
 
         // Set Mars' gravitational parameter [km^3 s^-2].
-        const REAL marsGravitationalParameter = 42828.0;
+        const Real marsGravitationalParameter = 42828.0;
 
         // Set radius of orbit [km].
-        const REAL radius = marsRadius + 200.0;
+        const Real radius = marsRadius + 200.0;
 
         // Set expected circular velocity [km/s].
         // This value was computed "by hand" using Julia.
-        const REAL expectedCircularVelocity = 3.454195532696839;
+        const Real expectedCircularVelocity = 3.454195532696839;
 
-        const REAL computedCircularVelocity 
+        const Real computedCircularVelocity 
             = computeCircularVelocity( radius, marsGravitationalParameter ); 
 
         //! Check if computed circular velocity matches expected value.
