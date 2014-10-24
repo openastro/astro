@@ -807,7 +807,7 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */UnitTests/*
+EXCLUDE_PATTERNS       = */Tests/*
 EXCLUDE_PATTERNS       += */ConfigurationFiles/*
 EXCLUDE_PATTERNS       += */.git/*
 
