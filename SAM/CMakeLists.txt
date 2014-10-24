@@ -72,7 +72,7 @@ if(BUILD_DOCS)
 
   if(NOT DOXYGEN_FOUND)
     message(FATAL_ERROR 
-            "Doxygen is needed to build the documentation. Please install it correctly.")
+            "Doxygen is needed to build the documentation. Please make sure it is installed.")
   endif(NOT DOXYGEN_FOUND)
 
   configure_file(${PROJECT_ROOT}/Doxyfile.in 

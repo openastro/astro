@@ -7,6 +7,7 @@
 #define SAM_ORBITAL_ELEMENT_CONVERSIONS_HPP
 
 #include <cmath>
+#include <vector>
  
 #include <SML/sml.hpp>
 
@@ -80,9 +81,9 @@ enum KeplerianElementIndices
  *          keplerianElements( 4 ) = longitude of ascending node  [rad]                     <br>
  *          keplerianElements( 5 ) = true anomaly                 [rad]
  */
-template< typename Real, typename Vector >
-Vector convertCartesianToKeplerianElements(
-    const Vector& cartesianElements, const Real gravitationalParameter,
+template< typename Real, typename Vector6 >
+Vector6 convertCartesianToKeplerianElements(
+    const Vector6& cartesianElements, const Real gravitationalParameter,
     const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) );
 
 //! Convert true anomaly to elliptical eccentric anomaly.
@@ -204,9 +205,9 @@ template< typename Real >
 Real convertEccentricAnomalyToMeanAnomaly( const Real eccentricAnomaly, const Real eccentricity );
 
 //! Convert Cartesian elements to Keplerian elements.
-template< typename Real, typename Vector >
-Vector convertCartesianToKeplerianElements(
-    const Vector& cartesianElements, const Real gravitationalParameter, const Real tolerance )
+template< typename Real, typename Vector6 >
+Vector6 convertCartesianToKeplerianElements(
+    const Vector6& cartesianElements, const Real gravitationalParameter, const Real tolerance )
 {
     // Check that the Cartesian elements vector contains exactly 6 elemenets and otherwise throw
     // and error.
@@ -216,34 +217,34 @@ Vector convertCartesianToKeplerianElements(
             "ERROR: Cartesian elements vector has more or less than 6 elements!" );
     }
 
-    Vector keplerianElements( 6 );
+    Vector6 keplerianElements( 6 );
 
     // Set position and velocity vectors.
-    Vector position( 3 );
+    std::vector< Real > position( 3 );
     position[ 0 ] = cartesianElements[ 0 ];
     position[ 1 ] = cartesianElements[ 1 ];
     position[ 2 ] = cartesianElements[ 2 ];
 
-    Vector velocity( 3 );
+    std::vector< Real > velocity( 3 );
     velocity[ 0 ] = cartesianElements[ 3 ];
     velocity[ 1 ] = cartesianElements[ 4 ];
     velocity[ 2 ] = cartesianElements[ 5 ];     
 
     // Compute orbital angular momentum vector.
-    const Vector angularMomentum( sml::cross( position, velocity ) );
+    const std::vector< Real > angularMomentum( sml::cross( position, velocity ) );
 
     // Compute semi-latus rectum.
     const Real semiLatusRectum 
         = sml::squaredNorm< Real >( angularMomentum ) / gravitationalParameter;
 
     // Compute unit vector to ascending node.
-    Vector ascendingNodeUnitVector 
+    std::vector< Real > ascendingNodeUnitVector 
         = sml::normalize< Real >( 
-            sml::cross( sml::getZUnitVector< Vector >( ), 
+            sml::cross( sml::getZUnitVector< std::vector< Real > >( ), 
                         sml::normalize< Real >( angularMomentum ) ) );        
 
     // Compute eccentricity vector.
-    Vector eccentricityVector 
+    std::vector< Real > eccentricityVector 
         = sml::add( sml::multiply( sml::cross( velocity, angularMomentum ), 
                                    1.0 / gravitationalParameter ),
                     sml::multiply( sml::normalize< Real >( position ), -1.0 ) );
@@ -279,7 +280,7 @@ Vector convertCartesianToKeplerianElements(
     // x-axis.
     if ( std::fabs( keplerianElements[ inclinationIndex ] ) < tolerance )
     {
-        ascendingNodeUnitVector = sml::getXUnitVector< Vector >( );
+        ascendingNodeUnitVector = sml::getXUnitVector< std::vector< Real > >( );
 
         // If the orbit is equatorial, eccentricityVector_z is zero, therefore the quadrant
         // condition is taken to be the y-component, eccentricityVector_y.
@@ -311,7 +312,7 @@ Vector convertCartesianToKeplerianElements(
 
         // Check if orbit is also equatorial and set true anomaly quandrant check condition
         // accordingly.
-        if ( ascendingNodeUnitVector == sml::getXUnitVector< Vector >( ) )
+        if ( ascendingNodeUnitVector == sml::getXUnitVector< std::vector< Real > >( ) )
         {
             // If the orbit is circular, dot( position, velocity ) = 0, therefore this value
             // cannot be used as a quadrant condition. Moreover, if the orbit is equatorial,
