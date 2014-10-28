@@ -31,7 +31,7 @@
 build
 bin
 lib
-doc
+docs
 test
 debug
 

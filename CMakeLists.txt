@@ -6,9 +6,9 @@ project(SAM)
 
 enable_testing()
 
-set(SOURCE_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
-set(PROJECT_ROOT "${SOURCE_ROOT}/..")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_ROOT}/cmake/Modules/")
+set(PROJECT_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+set(SOURCE_PATH "${PROJECT_PATH}/${CMAKE_PROJECT_NAME}")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_PATH}/cmake/Modules/")
 
 OPTION(INSTALL_HEADERS          "Install header files" OFF)
 OPTION(BUILD_DOCS               "Build docs" OFF)
@@ -49,11 +49,11 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
 endif()
 
-include_directories(AFTER "${PROJECT_ROOT}")
+include_directories(AFTER "${PROJECT_PATH}")
 
 # Install header files. Destination is set by CMAKE_INSTALL_PREFIX and defaults to usual locations,
 # unless overridden by user.
-install(DIRECTORY ${PROJECT_ROOT}/SAM 
+install(DIRECTORY ${PROJECT_PATH}/SAM 
         DESTINATION ${CMAKE_INSTALL_PREFIX}
         FILES_MATCHING PATTERN "*.hpp"
                        PATTERN "Tests" EXCLUDE)
@@ -74,23 +74,23 @@ if(BUILD_DOCS)
             "Doxygen is needed to build the documentation. Please make sure it is installed.")
   endif(NOT DOXYGEN_FOUND)
 
-  configure_file(${PROJECT_ROOT}/Doxyfile.in 
+  configure_file(${PROJECT_PATH}/Doxyfile.in 
                  ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
 
   # Add a custom target to run Doxygen whenever the project is built.
   # If you do NOT want the documentation to be generated EVERY time you build the project
   # then leave out the 'ALL' keyword from the command below.
-  add_custom_target (docs ALL COMMAND ${DOXYGEN_EXECUTABLE} 
-                     ${PROJECT_BINARY_DIR}/Doxyfile 
-                     SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
+  add_custom_target(docs ALL COMMAND ${DOXYGEN_EXECUTABLE} 
+                    ${PROJECT_BINARY_DIR}/Doxyfile 
+                    SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
 endif(BUILD_DOCS)
 
 if(BUILD_TESTS)
-  if(NOT TEST_ROOT)
-    set(TEST_ROOT "${PROJECT_BINARY_DIR}/../test")
+  if(NOT TESTS_PATH)
+    set(TESTS_PATH "${PROJECT_BINARY_DIR}/tests")
   endif()
 
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TEST_ROOT})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TESTS_PATH})
 
   find_package(CATCH REQUIRED)
   if(NOT APPLE)
@@ -100,15 +100,15 @@ if(BUILD_TESTS)
   endif(NOT APPLE)
 
   set(SAM_TESTS
-    "${SOURCE_ROOT}/Tests/testSam.cpp"
-    "${SOURCE_ROOT}/Tests/testConstants.cpp" 
-    "${SOURCE_ROOT}/Tests/testOrbitalElementConversions.cpp"
-    "${SOURCE_ROOT}/Tests/testTwoBodyMethods.cpp"    
+    "${SOURCE_PATH}/Tests/testSam.cpp"
+    "${SOURCE_PATH}/Tests/testConstants.cpp" 
+    "${SOURCE_PATH}/Tests/testOrbitalElementConversions.cpp"
+    "${SOURCE_PATH}/Tests/testTwoBodyMethods.cpp"    
   )
 
   add_executable(sam_tests ${SAM_TESTS})
   target_link_libraries(sam_tests)
-  add_test(NAME sam_tests COMMAND "${TEST_ROOT}/sam_tests")
+  add_test(NAME sam_tests COMMAND "${TESTS_PATH}/sam_tests")
 
   # Build tests using the Eigen library if requested.
   if(BUILD_WITH_EIGEN)
@@ -121,6 +121,6 @@ if(BUILD_TESTS)
 
     add_executable(sam_tests_eigen ${SAM_TESTS})
     target_link_libraries(sam_tests_eigen)
-    add_test(NAME sam_tests_eigen COMMAND "${TEST_ROOT}/sam_tests_eigen")
+    add_test(NAME sam_tests_eigen COMMAND "${TESTS_PATH}/sam_tests_eigen")
   endif(BUILD_WITH_EIGEN)  
 endif(BUILD_TESTS)
