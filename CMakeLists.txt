@@ -29,6 +29,7 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  "${PROJECT_PATH}/cmake/Modules/")
 OPTION(BUILD_DOCS                            "Build docs" OFF)
 OPTION(BUILD_TESTS                           "Build tests" OFF)
 OPTION(BUILD_WITH_EIGEN                      "Build tests with Eigen" OFF)
+OPTION(FIND_DEPEND                           "Find locally-installed dependencies" ON)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release". 
 if((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
@@ -67,11 +68,11 @@ endif(WIN32)
 # Allows for external dependencies to be built by CMake.
 include(ExternalProject)
 
-find_package(Git REQUIRED)
-
 include_directories(AFTER "${INCLUDE_PATH}")
 
-find_package(SML)
+if(FIND_DEPEND)
+  find_package(SML)
+endif(FIND_DEPEND)
 
 if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
@@ -125,7 +126,9 @@ if(BUILD_TESTS)
 
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TESTS_PATH})
 
-  find_package(CATCH)
+  if(FIND_DEPEND)
+    find_package(CATCH)
+  endif(FIND_DEPEND)
 
   if(NOT CATCH_FOUND)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
@@ -160,8 +163,10 @@ if(BUILD_TESTS)
 
   # Build tests using the Eigen library if requested.
   if(BUILD_WITH_EIGEN)
-    find_package(Eigen3)
-
+    if(FIND_DEPEND)
+      find_package(Eigen3)
+    endif(FIND_DEPEND)
+    
     if(NOT EIGEN3_FOUND)
       message(STATUS "Eigen3 will be downloaded when ${CMAKE_PROJECT_NAME} is built")
       ExternalProject_Add(

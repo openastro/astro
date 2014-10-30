@@ -17,11 +17,20 @@ Features
 Requirements
 ------
 
-This project requires the following:
+To install this project, please ensure that you have installed the following (install guides are provided on the respective websites):
 
   - [Git](http://git-scm.com)
   - A C++ compiler, e.g., [GCC](https://gcc.gnu.org/), [clang](http://clang.llvm.org/), [MinGW](http://www.mingw.org/)
   - [CMake](http://www.cmake.org)
+  - [Doxygen](http://www.doxygen.org "Doxygen homepage") (optional)
+
+In addition, `SAM` depends on the following libraries:
+
+  - [SML](https://www.github.com/kartikkumar/sml)
+  - [CATCH](https://www.github.com/philsquared/Catch)
+  - [Eigen](http://eigen.tuxfamily.org/) (optional)
+
+These dependencies will be downloaded and configured automatically if they are not already present locally (requires an internet connection).
  
 Installation
 ------
@@ -51,8 +60,8 @@ You can pass the follow command-line options when running `CMake`:
   - `-DBUILD_TESTS=on`: build tests (execute tests from build-directory using `make test`)
   - `-DBUILD_WITH_EIGEN=on`: build tests using [Eigen](http://eigen.tuxfamily.org/)  
   - `-DBUILD_SHARED_LIBS=on`: build shared libraries instead of static
-  - `-DCMAKE_INSTALL_PREFIX`: set path prefix for install script (`make install`); if not set, defaults to usual locations.
-
+  - `-DCMAKE_INSTALL_PREFIX`: set path prefix for install script (`make install`); if not set, defaults to usual locations
+  - `-FIND_DEPEND=off`: switch off automatic search for dependencies locally using `find_package()`  
 Contributing
 ------------
 
@@ -82,6 +91,8 @@ Shoot an [email](mailto:me@kartikkumar.com?subject=SAM) if you have any question
 TODO
 ------
 
- - Add other basic orbital element conversions
- - Extend test suite
- - Figure out how to build tests with standard library and Eigen in the same build tree
+  - Add other basic orbital element conversions
+  - Extend test suite
+  - Figure out how to build tests with standard library and Eigen in the same build tree
+  - Add version detection in CMake module so that find_package respects minimum version required.
+  - Find a way to provide an option to clean installation. 
