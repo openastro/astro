@@ -61,13 +61,13 @@ You can pass the follow command-line options when running `CMake`:
   - `-DBUILD_WITH_EIGEN=on`: build tests using [Eigen](http://eigen.tuxfamily.org/)  
   - `-DBUILD_SHARED_LIBS=on`: build shared libraries instead of static
   - `-DCMAKE_INSTALL_PREFIX`: set path prefix for install script (`make install`); if not set, defaults to usual locations
-  - `-FIND_DEPEND=off`: switch off automatic search for dependencies locally using `find_package()`  
+  - `-DFIND_DEPEND=off`: switch off automatic search for dependencies locally using `find_package()`  
 Contributing
 ------------
 
 Once you've made your great commits:
 
-1. [Fork](https://github.com/kartikkumar/sam/fork) SAM
+1. [Fork](https://github.com/kartikkumar/sam/fork) `SAM`
 2. Create a topic branch - `git checkout -b my_branch`
 3. Push to your branch - `git push origin my_branch`
 4. Create a [Pull Request](http://help.github.com/pull-requests/) from your branch
@@ -93,6 +93,6 @@ TODO
 
   - Add other basic orbital element conversions
   - Extend test suite
-  - Figure out how to build tests with standard library and Eigen in the same build tree
-  - Add version detection in CMake module so that find_package respects minimum version required.
+  - Figure out better way (avoiding code duplication) to build STL-based and Eigen-based tests in the same build tree
+  - Add version detection in `CMake` module so that find_package respects minimum version required.
   - Find a way to provide an option to clean installation. 

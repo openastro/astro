@@ -6,30 +6,45 @@ cmake_minimum_required(VERSION 2.6)
 
 # Change this section to correspond with your project info.
 project(SAM C CXX)
-set(PROJECT_DESC                             "A simple astrodynamics library")
-set(PROJECT_UPPER                            "SAM")
-set(PROJECT_EXE                              "sam")
-set(PROJECT_TEST                             "sam")
+set(MYPROJ_DESC                              "A simple astrodynamics library")
+set(MYPROJ_UPPER                             "SAM")
+#set(MYPROJ_EXE                               "sam_main")
+#set(MYPROJ_LIB                               "san")
+set(MYPROJ_TEST                              "test_sam")
 set(${CMAKE_PROJECT_NAME}_VENDOR_NAME        "Kartik Kumar")
 set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT     "me@kartikkumar.com")
 
 set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR      0)
 set(${CMAKE_PROJECT_NAME}_VERSION_MINOR      1)
 set(${CMAKE_PROJECT_NAME}_VERSION_PATCH      0)
-set(PROJECT_VERSION
-    "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
+set(MYPROJ_VERSION
+  "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
 
-set(PROJECT_PATH                             "${CMAKE_CURRENT_SOURCE_DIR}")
-set(EXTERNAL_PATH                            "${PROJECT_PATH}/external")
-set(INCLUDE_PATH                             "${PROJECT_PATH}/include")
-set(SOURCE_PATH                              "${PROJECT_PATH}/src")
-set(TEST_SOURCE_PATH                         "${PROJECT_PATH}/tests")
-set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  "${PROJECT_PATH}/cmake/Modules/")
+set(MYPROJ_PATH                              "${CMAKE_CURRENT_SOURCE_DIR}")
+set(MYEXT_PATH                               "${MYPROJ_PATH}/external")
+set(MYINC_PATH                               "${MYPROJ_PATH}/include")
+set(MYSRC_PATH                               "${MYPROJ_PATH}/src")
+set(MYTEST_SRC_PATH                          "${MYPROJ_PATH}/tests")
+set(MYCMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${MYPROJ_PATH}/cmake/Modules")
 
+#OPTION(BUILD_MAIN                            "Build main" OFF)
 OPTION(BUILD_DOCS                            "Build docs" OFF)
 OPTION(BUILD_TESTS                           "Build tests" OFF)
-OPTION(BUILD_WITH_EIGEN                      "Build tests with Eigen" OFF)
+OPTION(BUILD_TESTS_WITH_EIGEN                "Build tests with Eigen library" OFF)
 OPTION(FIND_DEPEND                           "Find locally-installed dependencies" ON)
+
+#set(MYPROJ_SRC
+#)
+
+#set(MYPROJ_EXE_SRC
+#)
+
+set(MYPROJ_TEST_SRC
+  "${MYTEST_SRC_PATH}/testSam.cpp"
+  "${MYTEST_SRC_PATH}/testConstants.cpp"
+#  "${MYTEST_SRC_PATH}/testOrbitalElementConversions.cpp"      
+#  "${MYTEST_SRC_PATH}/testTwoBodyMethods.cpp"      
+)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release". 
 if((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
@@ -49,8 +64,8 @@ if(WIN32)
     # We need to force MSVC to use static runtime: 
     # (from http://www.cmake.org/Wiki/CMake_FAQ#Dynamic_Replace).
     foreach(flag_var
-          CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-          CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+      CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+      CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
       # Find all dynamic runtime (MD) references and replace with static (MT)
       if(${flag_var} MATCHES "/MD")
         string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
@@ -58,17 +73,33 @@ if(WIN32)
     endforeach(flag_var)
   else(MSVC)
     set(CMAKE_CXX_FLAGS 
-        "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
+      "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
   endif(MSVC)
 else(WIN32)
   set(CMAKE_CXX_FLAGS 
-      "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
+    "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
 endif(WIN32)
 
 # Allows for external dependencies to be built by CMake.
 include(ExternalProject)
 
-include_directories(AFTER "${INCLUDE_PATH}")
+include_directories(AFTER "${MYINC_PATH}")
+
+#if(NOT MYLIB_PATH)
+#  set(MYLIB_PATH "${PROJECT_BINARY_DIR}/lib")
+#endif(NOT MYLIB_PATH)
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${MYLIB_PATH})
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${MYLIB_PATH})
+#add_library(${MYPROJ_LIB} ${MYPROJ_SRC})
+
+#if(BUILD_MAIN)
+#  if(NOT MYBIN_PATH)
+#    set(MYBIN_PATH "${PROJECT_BINARY_DIR}/bin")
+#  endif(NOT MYBIN_PATH)
+#  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MYBIN_PATH})
+#  add_executable(${MYPROJ_EXE} ${MYPROJ_EXE_SRC})
+#  target_link_libraries(${MYPROJ_EXE} ${MYPROJ_LIB})
+#endif(BUILD_MAIN)
 
 if(FIND_DEPEND)
   find_package(SML)
@@ -78,15 +109,22 @@ if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
   ExternalProject_Add(
       SML
-      PREFIX ${EXTERNAL_PATH}/sml
+      PREFIX ${MYEXT_PATH}/sml
+      #--Download step--------------
       URL https://github.com/kartikkumar/sml/archive/master.zip
       TIMEOUT 30
+      #--Update/Patch step----------
       UPDATE_COMMAND ""
+      PATCH_COMMAND ""
+      #--Configure step-------------
       CONFIGURE_COMMAND ""
+      #--Build step-----------------
       BUILD_COMMAND ""
+      #--Install step---------------
       INSTALL_COMMAND ""
+      #--Output logging-------------
       LOG_DOWNLOAD ON
-     )
+    )
 
   ExternalProject_Get_Property(SML source_dir)
   set(SML_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for SML")
@@ -106,7 +144,7 @@ if(BUILD_DOCS)
             "Doxygen is needed to build the documentation. Please make sure it is installed.")
   endif(NOT DOXYGEN_FOUND)
 
-  configure_file(${PROJECT_PATH}/Doxyfile.in 
+  configure_file(${MYPROJ_PATH}/Doxyfile.in 
                  ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
 
   # Add a custom target to run Doxygen whenever the project is built.
@@ -120,11 +158,11 @@ endif(BUILD_DOCS)
 if(BUILD_TESTS)
   enable_testing()
 
-  if(NOT TESTS_PATH)
-    set(TESTS_PATH "${PROJECT_BINARY_DIR}/tests")
-  endif(NOT TESTS_PATH)
+  if(NOT MYTESTS_PATH)
+    set(MYTESTS_PATH "${PROJECT_BINARY_DIR}/tests")
+  endif(NOT MYTESTS_PATH)
 
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TESTS_PATH})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MYTESTS_PATH})
 
   if(FIND_DEPEND)
     find_package(CATCH)
@@ -134,15 +172,22 @@ if(BUILD_TESTS)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
     ExternalProject_Add(
         catch
-        PREFIX ${EXTERNAL_PATH}/Catch
+        PREFIX ${MYEXT_PATH}/Catch
+        #--Download step--------------
         URL https://github.com/philsquared/Catch/archive/master.zip
         TIMEOUT 30
+        #--Update/Patch step----------
         UPDATE_COMMAND ""
+        PATCH_COMMAND ""
+        #--Configure step-------------
         CONFIGURE_COMMAND ""
+        #--Build step-----------------
         BUILD_COMMAND ""
+        #--Install step---------------
         INSTALL_COMMAND ""
+        #--Output logging-------------
         LOG_DOWNLOAD ON
-       )
+      )
 
     ExternalProject_Get_Property(catch source_dir)
     set(CATCH_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for Catch")
@@ -154,65 +199,65 @@ if(BUILD_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem \"${CATCH_INCLUDE_DIRS}\"")
   endif(NOT APPLE)
 
-  set(PROJECT_TESTS
-    "${TEST_SOURCE_PATH}/testSam.cpp"
-    "${TEST_SOURCE_PATH}/testConstants.cpp" 
-    "${TEST_SOURCE_PATH}/testOrbitalElementConversions.cpp"
-    "${TEST_SOURCE_PATH}/testTwoBodyMethods.cpp"    
-  )
+  if(BUILD_TESTS_WITH_EIGEN)
+    add_definitions(-DBUILD_EIGEN=on)
 
-  # Build tests using the Eigen library if requested.
-  if(BUILD_WITH_EIGEN)
     if(FIND_DEPEND)
       find_package(Eigen3)
     endif(FIND_DEPEND)
-    
-    if(NOT EIGEN3_FOUND)
-      message(STATUS "Eigen3 will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-      ExternalProject_Add(
+
+    message(STATUS "Eigen will be downloaded when ${CMAKE_PROJECT_NAME} is built")
+    ExternalProject_Add(
         eigen
-        PREFIX ${EXTERNAL_PATH}/Eigen
+        PREFIX ${MYEXT_PATH}/Eigen
+        #--Download step--------------
         URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
         TIMEOUT 30
+        #--Update/Patch step----------
+        UPDATE_COMMAND ""
+        PATCH_COMMAND ""
+        #--Configure step-------------
         CONFIGURE_COMMAND ""
+        #--Build step-----------------
         BUILD_COMMAND ""
+        #--Install step---------------
         INSTALL_COMMAND ""
+        #--Output logging-------------
         LOG_DOWNLOAD ON
-       )
+      )
 
-      ExternalProject_Get_Property(eigen source_dir)
-      set(EIGEN3_INCLUDE_DIR ${source_dir} CACHE INTERNAL 
-          "Path to include folder for Eigen3")      
-    endif(NOT EIGEN3_FOUND)
-
+    ExternalProject_Get_Property(eigen source_dir)
+    set(EIGEN3_INCLUDE_DIR ${source_dir} CACHE INTERNAL "Path to include folder for Eigen")
     if(NOT APPLE)
       include_directories(SYSTEM AFTER "${EIGEN3_INCLUDE_DIR}")
     else(APPLE)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem \"${EIGEN3_INCLUDE_DIR}\"")
     endif(NOT APPLE)
 
-    add_executable(${PROJECT_EXE}_tests_eigen ${PROJECT_TESTS})
-    target_link_libraries(${PROJECT_EXE}_tests_eigen ${PROJECT_LIB})
-    add_test(NAME ${PROJECT_EXE}_tests_eigen COMMAND "${TESTS_PATH}/${PROJECT_EXE}_tests_eigen")
-  else(BUILD_WITH_EIGEN)
-    add_executable(${PROJECT_EXE}_tests ${PROJECT_TESTS})
-    target_link_libraries(${PROJECT_EXE}_tests ${PROJECT_LIB})
-    add_test(NAME ${PROJECT_EXE}_tests COMMAND "${TESTS_PATH}/${PROJECT_EXE}_tests")
-  endif(BUILD_WITH_EIGEN)
+    string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${MYPROJ_TEST_SRC}")
+    add_executable(${MYPROJ_TEST}_eigen ${TESTS_SRC_EIGEN})
+    #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
+    add_test(NAME ${MYPROJ_TEST}_eigen COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}_eigen")    
+  endif(BUILD_TESTS_WITH_EIGEN)
+  add_definitions(-DBUILD_STL=on)
+  add_executable(${MYPROJ_TEST} ${MYPROJ_TEST_SRC})
+  #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
+  add_test(NAME ${MYPROJ_TEST} COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}")
 endif(BUILD_TESTS)
 
 # Install header files and library. 
 # Destination is set by CMAKE_INSTALL_PREFIX and defaults to usual locations, unless overridden by
 # user.
-install(DIRECTORY ${INCLUDE_PATH}/${CMAKE_PROJECT_NAME} 
+install(DIRECTORY ${MYINC_PATH}/${CMAKE_PROJECT_NAME} 
         DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
+#install(TARGETS ${MYPROJ_LIB} DESTINATION lib)
 
 # Set up packager.
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "${CMAKE_PROJECT_NAME}_VENDOR_NAME")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_PATH}/README.md")
-set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_PATH}/LICENSE.md")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${MYPROJ_PATH}/README.md")
+set(CPACK_RESOURCE_FILE_LICENSE "${MYPROJ_PATH}/LICENSE.md")
 set(CPACK_PACKAGE_VERSION_MAJOR "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${${CMAKE_PROJECT_NAME}_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")

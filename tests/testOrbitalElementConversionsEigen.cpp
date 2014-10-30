@@ -5,9 +5,10 @@
  */
 
 #include <limits>
-#include <vector>
 
 #include <catch.hpp>
+
+#include <Eigen/Core>
 
 #include <SML/sml.hpp>
 
@@ -19,7 +20,7 @@ namespace tests
 {
 
 typedef double Real;
-typedef std::vector< Real > Vector;
+typedef Eigen::Matrix< Real, Eigen::Dynamic, 1 > Vector;
 
 TEST_CASE( "Convert Cartesian elements to Keplerian elements", 
            "[cartesian-to-keplerian-elements]" )
