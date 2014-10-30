@@ -94,7 +94,7 @@ endif(NOT SML_FOUND)
 if(NOT APPLE)
   include_directories(SYSTEM AFTER "${SML_INCLUDE_DIRS}")
 else(APPLE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem \"${SML_INCLUDE_DIRS}\"")  
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem \"${SML_INCLUDE_DIRS}\"")
 endif(NOT APPLE)
 
 if(BUILD_DOCS)
