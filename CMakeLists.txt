@@ -71,7 +71,7 @@ find_package(Git REQUIRED)
 
 include_directories(AFTER "${INCLUDE_PATH}")
 
-find_package(SML)
+#find_package(SML)
 
 if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
