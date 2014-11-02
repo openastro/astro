@@ -40,8 +40,8 @@ Run the following commands to download, build, and install this project.
     git clone https://www.github.com/kartikkumar/sam
     cd sam
     git submodule init && git submodule update
-    mkdir build
-    cd build
+    git submodule init && git submodule update
+    mkdir build && cd build
     cmake ..
     cmake --build .
 
@@ -56,12 +56,16 @@ Build options
 
 You can pass the follow command-line options when running `CMake`:
 
-  - `-DBUILD_DOCS=on`: build the [Doxygen](http://www.doxygen.org "Doxygen homepage") documentation ([LaTeX](http://www.latex-project.org/) must be installed)
-  - `-DBUILD_TESTS=on`: build tests (execute tests from build-directory using `make test`)
-  - `-DBUILD_WITH_EIGEN=on`: build tests using [Eigen](http://eigen.tuxfamily.org/)  
-  - `-DBUILD_SHARED_LIBS=on`: build shared libraries instead of static
+  - `-DBUILD_DOCS=[on|off (default)]`: build the [Doxygen](http://www.doxygen.org "Doxygen homepage") documentation ([LaTeX](http://www.latex-project.org/) must be installed with `amsmath` package)
+  - `-DBUILD_TESTS`=[on|off (default)]: build tests (execute tests from build-directory using `make test`)
+  - `-DBUILD_WITH_EIGEN=[on|off (default)]`: build tests using [Eigen](http://eigen.tuxfamily.org/)
+  - `-DBUILD_SHARED_LIBS=[on|off (default)]`: build shared libraries instead of static
   - `-DCMAKE_INSTALL_PREFIX`: set path prefix for install script (`make install`); if not set, defaults to usual locations
-  - `-DFIND_DEPEND=off`: switch off automatic search for dependencies locally using `find_package()`  
+  - `-DBUILD_DEPENDENCIES=[on|off (default)]`: force local build of dependencies, instead of first searching system-wide using `find_package()`
+  - `-DMYLIB_PATH[=build_dir/lib (default]`: set library path
+  - `-DMYBIN_PATH[=build_dir/bin (default]`: set binary path
+  - `-DMYTEST_PATH[=build_dir/tests (default]`: set tests path
+  
 Contributing
 ------------
 
@@ -93,6 +97,6 @@ TODO
 
   - Add other basic orbital element conversions
   - Extend test suite
-  - Figure out better way (avoiding code duplication) to build STL-based and Eigen-based tests in the same build tree
+  - Figure out better way (avoiding code duplication) to build `STL`-based and `Eigen`-based tests in the same build tree
   - Add version detection in `CMake` module so that find_package respects minimum version required.
   - Find a way to provide an option to clean installation. 

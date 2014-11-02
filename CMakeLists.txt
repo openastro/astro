@@ -1,6 +1,6 @@
 # Copyright (c) 2014 Kartik Kumar (me@kartikkumar.com)
 # Distributed under the MIT License.
-# See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT
+# See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
 cmake_minimum_required(VERSION 2.6)
 
@@ -31,7 +31,7 @@ set(MYCMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${MYPROJ_PATH}/cmake/Modules")
 OPTION(BUILD_DOCS                            "Build docs" OFF)
 OPTION(BUILD_TESTS                           "Build tests" OFF)
 OPTION(BUILD_TESTS_WITH_EIGEN                "Build tests with Eigen library" OFF)
-OPTION(FIND_DEPEND                           "Find locally-installed dependencies" ON)
+OPTION(BUILD_DEPENDENCIES                    "Build dependencies for current build" OFF)
 
 #set(MYPROJ_SRC
 #)
@@ -42,8 +42,8 @@ OPTION(FIND_DEPEND                           "Find locally-installed dependencie
 set(MYPROJ_TEST_SRC
   "${MYTEST_SRC_PATH}/testSam.cpp"
   "${MYTEST_SRC_PATH}/testConstants.cpp"
-#  "${MYTEST_SRC_PATH}/testOrbitalElementConversions.cpp"      
-#  "${MYTEST_SRC_PATH}/testTwoBodyMethods.cpp"      
+  "${MYTEST_SRC_PATH}/testOrbitalElementConversions.cpp"      
+  "${MYTEST_SRC_PATH}/testTwoBodyMethods.cpp"      
 )
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release". 
@@ -80,10 +80,10 @@ else(WIN32)
     "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
 endif(WIN32)
 
-# Allows for external dependencies to be built by CMake.
-include(ExternalProject)
-
 include_directories(AFTER "${MYINC_PATH}")
+
+# Include script to build external library with CMake.
+include(ExternalProject)
 
 #if(NOT MYLIB_PATH)
 #  set(MYLIB_PATH "${PROJECT_BINARY_DIR}/lib")
@@ -101,32 +101,30 @@ include_directories(AFTER "${MYINC_PATH}")
 #  target_link_libraries(${MYPROJ_EXE} ${MYPROJ_LIB})
 #endif(BUILD_MAIN)
 
-if(FIND_DEPEND)
+if(NOT BUILD_DEPENDENCIES)
   find_package(SML)
-endif(FIND_DEPEND)
+endif(NOT BUILD_DEPENDENCIES)
 
 if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-  ExternalProject_Add(
-      SML
-      PREFIX ${MYEXT_PATH}/sml
-      #--Download step--------------
-      URL https://github.com/kartikkumar/sml/archive/master.zip
-      TIMEOUT 30
-      #--Update/Patch step----------
-      UPDATE_COMMAND ""
-      PATCH_COMMAND ""
-      #--Configure step-------------
-      CONFIGURE_COMMAND ""
-      #--Build step-----------------
-      BUILD_COMMAND ""
-      #--Install step---------------
-      INSTALL_COMMAND ""
-      #--Output logging-------------
-      LOG_DOWNLOAD ON
-    )
-
-  ExternalProject_Get_Property(SML source_dir)
+  ExternalProject_Add(sml-lib
+    PREFIX ${MYEXT_PATH}/SML
+    #--Download step--------------
+    URL https://github.com/kartikkumar/sml/archive/master.zip
+    TIMEOUT 30
+    #--Update/Patch step----------
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+    #--Configure step-------------
+    CONFIGURE_COMMAND ""
+    #--Build step-----------------
+    BUILD_COMMAND ""
+    #--Install step---------------
+    INSTALL_COMMAND ""
+    #--Output logging-------------
+    LOG_DOWNLOAD ON
+  )
+  ExternalProject_Get_Property(sml-lib source_dir)
   set(SML_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for SML")
 endif(NOT SML_FOUND)
 
@@ -164,35 +162,33 @@ if(BUILD_TESTS)
 
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MYTESTS_PATH})
 
-  if(FIND_DEPEND)
+  if(NOT BUILD_DEPENDENCIES)
     find_package(CATCH)
-  endif(FIND_DEPEND)
+  endif(NOT BUILD_DEPENDENCIES)
 
   if(NOT CATCH_FOUND)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-    ExternalProject_Add(
-        catch
-        PREFIX ${MYEXT_PATH}/Catch
-        #--Download step--------------
-        URL https://github.com/philsquared/Catch/archive/master.zip
-        TIMEOUT 30
-        #--Update/Patch step----------
-        UPDATE_COMMAND ""
-        PATCH_COMMAND ""
-        #--Configure step-------------
-        CONFIGURE_COMMAND ""
-        #--Build step-----------------
-        BUILD_COMMAND ""
-        #--Install step---------------
-        INSTALL_COMMAND ""
-        #--Output logging-------------
-        LOG_DOWNLOAD ON
-      )
-
+    ExternalProject_Add(catch
+      PREFIX ${MYEXT_PATH}/Catch  
+      #--Download step--------------
+      URL https://github.com/kartikkumar/Catch/archive/master.zip
+      TIMEOUT 30
+      #--Update/Patch step----------
+      UPDATE_COMMAND ""
+      PATCH_COMMAND ""
+      #--Configure step-------------             
+      CONFIGURE_COMMAND ""
+      #--Build step-----------------      
+      BUILD_COMMAND ""
+      #--Install step---------------      
+      INSTALL_COMMAND ""
+      #--Output logging-------------      
+      LOG_DOWNLOAD ON
+    )
     ExternalProject_Get_Property(catch source_dir)
     set(CATCH_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for Catch")
   endif(NOT CATCH_FOUND)
-  
+
   if(NOT APPLE)
     include_directories(SYSTEM AFTER "${CATCH_INCLUDE_DIRS}")
   else(APPLE)
@@ -200,34 +196,35 @@ if(BUILD_TESTS)
   endif(NOT APPLE)
 
   if(BUILD_TESTS_WITH_EIGEN)
-    add_definitions(-DBUILD_EIGEN=on)
-
-    if(FIND_DEPEND)
+    if(NOT BUILD_DEPENDENCIES)
       find_package(Eigen3)
-    endif(FIND_DEPEND)
+    endif(NOT BUILD_DEPENDENCIES)
+
+    if(NOT BUILD_DEPENDENCIES)
+      find_package(Eigen3)
+    endif(NOT BUILD_DEPENDENCIES)
 
     message(STATUS "Eigen will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-    ExternalProject_Add(
-        eigen
-        PREFIX ${MYEXT_PATH}/Eigen
-        #--Download step--------------
-        URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
-        TIMEOUT 30
-        #--Update/Patch step----------
-        UPDATE_COMMAND ""
-        PATCH_COMMAND ""
-        #--Configure step-------------
-        CONFIGURE_COMMAND ""
-        #--Build step-----------------
-        BUILD_COMMAND ""
-        #--Install step---------------
-        INSTALL_COMMAND ""
-        #--Output logging-------------
-        LOG_DOWNLOAD ON
-      )
-
-    ExternalProject_Get_Property(eigen source_dir)
+    ExternalProject_Add(eigen-lib
+      PREFIX ${MYEXT_PATH}/Eigen
+      #--Download step--------------
+      URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
+      TIMEOUT 30
+      #--Update/Patch step----------
+      UPDATE_COMMAND ""
+      PATCH_COMMAND ""
+      #--Configure step-------------
+      CONFIGURE_COMMAND ""
+      #--Build step-----------------
+      BUILD_COMMAND ""
+      #--Install step---------------
+      INSTALL_COMMAND ""
+      #--Output logging-------------
+      LOG_DOWNLOAD ON
+    )        
+    ExternalProject_Get_Property(eigen-lib source_dir)
     set(EIGEN3_INCLUDE_DIR ${source_dir} CACHE INTERNAL "Path to include folder for Eigen")
+
     if(NOT APPLE)
       include_directories(SYSTEM AFTER "${EIGEN3_INCLUDE_DIR}")
     else(APPLE)
@@ -236,11 +233,13 @@ if(BUILD_TESTS)
 
     string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${MYPROJ_TEST_SRC}")
     add_executable(${MYPROJ_TEST}_eigen ${TESTS_SRC_EIGEN})
+    #add_dependencies(${MYPROJ_TEST}_eigen)    
     #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
     add_test(NAME ${MYPROJ_TEST}_eigen COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}_eigen")    
   endif(BUILD_TESTS_WITH_EIGEN)
-  add_definitions(-DBUILD_STL=on)
+
   add_executable(${MYPROJ_TEST} ${MYPROJ_TEST_SRC})
+  #add_dependencies(${MYPROJ_TEST})    
   #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
   add_test(NAME ${MYPROJ_TEST} COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}")
 endif(BUILD_TESTS)
