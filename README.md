@@ -40,7 +40,6 @@ Run the following commands to download, build, and install this project.
     git clone https://www.github.com/kartikkumar/sam
     cd sam
     git submodule init && git submodule update
-    git submodule init && git submodule update
     mkdir build && cd build
     cmake ..
     cmake --build .
