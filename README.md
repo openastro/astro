@@ -27,7 +27,7 @@ To install this project, please ensure that you have installed the following (in
 In addition, `SAM` depends on the following libraries:
 
   - [SML](https://www.github.com/kartikkumar/sml)
-  - [CATCH](https://www.github.com/philsquared/Catch)
+  - [Catch](https://www.github.com/philsquared/Catch)
   - [Eigen](http://eigen.tuxfamily.org/) (optional)
 
 These dependencies will be downloaded and configured automatically if they are not already present locally (requires an internet connection).
@@ -61,7 +61,7 @@ You can pass the follow command-line options when running `CMake`:
   - `-DBUILD_WITH_EIGEN=[on|off (default)]`: build tests using [Eigen](http://eigen.tuxfamily.org/)
   - `-DBUILD_SHARED_LIBS=[on|off (default)]`: build shared libraries instead of static
   - `-DCMAKE_INSTALL_PREFIX`: set path prefix for install script (`make install`); if not set, defaults to usual locations
-  - `-DBUILD_DEPENDENCIES=[on|off (default)]`: force local build of dependencies, instead of first searching system-wide using `find_package()`
+  - `-DFORCE_DEPENDENCIES_BUILD=[on|off (default)]`: force local build of dependencies, instead of first searching system-wide using `find_package()`
   - `-DMYLIB_PATH[=build_dir/lib (default]`: set library path
   - `-DMYBIN_PATH[=build_dir/bin (default]`: set binary path
   - `-DMYTEST_PATH[=build_dir/tests (default]`: set tests path

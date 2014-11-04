@@ -25,13 +25,13 @@ set(MYEXT_PATH                               "${MYPROJ_PATH}/external")
 set(MYINC_PATH                               "${MYPROJ_PATH}/include")
 set(MYSRC_PATH                               "${MYPROJ_PATH}/src")
 set(MYTEST_SRC_PATH                          "${MYPROJ_PATH}/tests")
-set(MYCMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${MYPROJ_PATH}/cmake/Modules")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}   "${MYPROJ_PATH}/cmake/Modules")
 
 #OPTION(BUILD_MAIN                            "Build main" OFF)
 OPTION(BUILD_DOCS                            "Build docs" OFF)
 OPTION(BUILD_TESTS                           "Build tests" OFF)
 OPTION(BUILD_TESTS_WITH_EIGEN                "Build tests with Eigen library" OFF)
-OPTION(BUILD_DEPENDENCIES                    "Build dependencies for current build" OFF)
+OPTION(FORCE_DEPENDENCIES_BUILD              "Force build of dependencies" OFF)
 
 #set(MYPROJ_SRC
 #)
@@ -101,9 +101,9 @@ include(ExternalProject)
 #  target_link_libraries(${MYPROJ_EXE} ${MYPROJ_LIB})
 #endif(BUILD_MAIN)
 
-if(NOT BUILD_DEPENDENCIES)
+if(NOT FORCE_DEPENDENCIES_BUILD)
   find_package(SML)
-endif(NOT BUILD_DEPENDENCIES)
+endif(NOT FORCE_DEPENDENCIES_BUILD)
 
 if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
@@ -162,9 +162,9 @@ if(BUILD_TESTS)
 
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MYTESTS_PATH})
 
-  if(NOT BUILD_DEPENDENCIES)
+  if(NOT FORCE_DEPENDENCIES_BUILD)
     find_package(CATCH)
-  endif(NOT BUILD_DEPENDENCIES)
+  endif(NOT FORCE_DEPENDENCIES_BUILD)
 
   if(NOT CATCH_FOUND)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
@@ -196,34 +196,36 @@ if(BUILD_TESTS)
   endif(NOT APPLE)
 
   if(BUILD_TESTS_WITH_EIGEN)
-    if(NOT BUILD_DEPENDENCIES)
+    if(NOT FORCE_DEPENDENCIES_BUILD)
       find_package(Eigen3)
-    endif(NOT BUILD_DEPENDENCIES)
+    endif(NOT FORCE_DEPENDENCIES_BUILD)
 
-    if(NOT BUILD_DEPENDENCIES)
+    if(NOT FORCE_DEPENDENCIES_BUILD)
       find_package(Eigen3)
-    endif(NOT BUILD_DEPENDENCIES)
+    endif(NOT FORCE_DEPENDENCIES_BUILD)
 
-    message(STATUS "Eigen will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-    ExternalProject_Add(eigen-lib
-      PREFIX ${MYEXT_PATH}/Eigen
-      #--Download step--------------
-      URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
-      TIMEOUT 30
-      #--Update/Patch step----------
-      UPDATE_COMMAND ""
-      PATCH_COMMAND ""
-      #--Configure step-------------
-      CONFIGURE_COMMAND ""
-      #--Build step-----------------
-      BUILD_COMMAND ""
-      #--Install step---------------
-      INSTALL_COMMAND ""
-      #--Output logging-------------
-      LOG_DOWNLOAD ON
-    )        
-    ExternalProject_Get_Property(eigen-lib source_dir)
-    set(EIGEN3_INCLUDE_DIR ${source_dir} CACHE INTERNAL "Path to include folder for Eigen")
+    if(NOT EIGEN3_FOUND)
+      message(STATUS "Eigen will be downloaded when ${CMAKE_PROJECT_NAME} is built")
+      ExternalProject_Add(eigen-lib
+        PREFIX ${MYEXT_PATH}/Eigen
+        #--Download step--------------
+        URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
+        TIMEOUT 30
+        #--Update/Patch step----------
+        UPDATE_COMMAND ""
+        PATCH_COMMAND ""
+        #--Configure step-------------
+        CONFIGURE_COMMAND ""
+        #--Build step-----------------
+        BUILD_COMMAND ""
+        #--Install step---------------
+        INSTALL_COMMAND ""
+        #--Output logging-------------
+        LOG_DOWNLOAD ON
+      )
+      ExternalProject_Get_Property(eigen-lib source_dir)
+      set(EIGEN3_INCLUDE_DIR ${source_dir} CACHE INTERNAL "Path to include folder for Eigen")
+    endif(NOT EIGEN3_FOUND)
 
     if(NOT APPLE)
       include_directories(SYSTEM AFTER "${EIGEN3_INCLUDE_DIR}")
