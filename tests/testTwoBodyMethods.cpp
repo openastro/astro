@@ -39,6 +39,30 @@ TEST_CASE( "Convert semi-major axis to mean motion", "[semi-major-axis-to-mean-m
     REQUIRE( meanMotion == Approx( expectedMeanMotion ).epsilon( 1.0e-7 ) );
 }
 
+TEST_CASE( "Convert semi-major axis to orbital period", "[semi-major-axis-to-orbital-period]" )
+{
+    // Reference: http://en.wikipedia.org/wiki/Geostationary_orbit.
+
+    // Set satellite mass [kg].
+    const Real satelliteMass = 1.0e3;
+
+    // Set gravitational parameter of Earth [m^3 s^-2].
+    const Real earthGravitationalParameter = 6.67259e-11 * 5.9736e24;
+
+    // Set distance between Earth center and satellite [m].
+    const Real distanceBetweenSatelliteAndEarth = 4.2164e7;
+
+    // Set expected orbital period [s].
+    const Real expectedOrbitalPeriod = 86164.09054;
+
+    // Compute orbital period of satellite.
+    const Real orbitalPeriod = computeKeplerOrbitalPeriod(
+        distanceBetweenSatelliteAndEarth, earthGravitationalParameter, satelliteMass );
+
+    // Check if computed orbital period matches expected value.
+    REQUIRE( orbitalPeriod == Approx( expectedOrbitalPeriod ).epsilon( 1.0e-5 ) );
+}
+
 TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
 {
     SECTION( "Test zero-semi-major-axis error" )
