@@ -6,7 +6,7 @@
 
 #include <catch.hpp>
 
-#include <ASTRO/constants.hpp>
+#include <Astro/constants.hpp>
 
 namespace astro
 {
