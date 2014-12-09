@@ -1,14 +1,14 @@
-/*    
+/*
  * Copyright (c) 2014 K. Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#ifndef SAM_HPP
-#define SAM_HPP
+#ifndef ASTRO_HPP
+#define ASTRO_HPP
 
-#include "SAM/constants.hpp"
-#include "SAM/orbitalElementConversions.hpp"
-#include "SAM/twoBodyMethods.hpp"
+#include "Astro/constants.hpp"
+#include "Astro/orbitalElementConversions.hpp"
+#include "Astro/twoBodyMethods.hpp"
 
-#endif // SAM_HPP
+#endif // ASTRO_HPP

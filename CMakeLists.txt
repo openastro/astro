@@ -5,12 +5,12 @@
 cmake_minimum_required(VERSION 2.6)
 
 # Change this section to correspond with your project info.
-project(SAM C CXX)
+project(Astro C CXX)
 set(MYPROJ_DESC                              "A simple astrodynamics library")
-set(MYPROJ_UPPER                             "SAM")
-#set(MYPROJ_EXE                               "sam_main")
-#set(MYPROJ_LIB                               "san")
-set(MYPROJ_TEST                              "test_sam")
+set(MYPROJ_UPPER                             "Astro")
+#set(MYPROJ_EXE                               "astro_main")
+#set(MYPROJ_LIB                               "astro")
+set(MYPROJ_TEST                              "test_astro")
 set(${CMAKE_PROJECT_NAME}_VENDOR_NAME        "Kartik Kumar")
 set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT     "me@kartikkumar.com")
 
@@ -40,13 +40,13 @@ OPTION(FORCE_DEPENDENCIES_BUILD              "Force build of dependencies" OFF)
 #)
 
 set(MYPROJ_TEST_SRC
-  "${MYTEST_SRC_PATH}/testSam.cpp"
+  "${MYTEST_SRC_PATH}/testAstro.cpp"
   "${MYTEST_SRC_PATH}/testConstants.cpp"
-  "${MYTEST_SRC_PATH}/testOrbitalElementConversions.cpp"      
-  "${MYTEST_SRC_PATH}/testTwoBodyMethods.cpp"      
+  "${MYTEST_SRC_PATH}/testOrbitalElementConversions.cpp"
+  "${MYTEST_SRC_PATH}/testTwoBodyMethods.cpp"
 )
 
-# Set CMake build-type. If it not supplied by the user, the default built type is "Release". 
+# Set CMake build-type. If it not supplied by the user, the default built type is "Release".
 if((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
     message(STATUS "WARNING: building release version!")
     set(CMAKE_BUILD_TYPE Release)
@@ -61,7 +61,7 @@ endif((NOT CMAKE_BUILD_TYPE) OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
 if(WIN32)
   if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Ox /W3 /FC -D_SCL_SECURE_NO_WARNINGS")
-    # We need to force MSVC to use static runtime: 
+    # We need to force MSVC to use static runtime:
     # (from http://www.cmake.org/Wiki/CMake_FAQ#Dynamic_Replace).
     foreach(flag_var
       CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
@@ -72,11 +72,11 @@ if(WIN32)
       endif(${flag_var} MATCHES "/MD")
     endforeach(flag_var)
   else(MSVC)
-    set(CMAKE_CXX_FLAGS 
+    set(CMAKE_CXX_FLAGS
       "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
   endif(MSVC)
 else(WIN32)
-  set(CMAKE_CXX_FLAGS 
+  set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
 endif(WIN32)
 
@@ -138,18 +138,18 @@ if(BUILD_DOCS)
   find_package(Doxygen)
 
   if(NOT DOXYGEN_FOUND)
-    message(FATAL_ERROR 
+    message(FATAL_ERROR
             "Doxygen is needed to build the documentation. Please make sure it is installed.")
   endif(NOT DOXYGEN_FOUND)
 
-  configure_file(${MYPROJ_PATH}/Doxyfile.in 
+  configure_file(${MYPROJ_PATH}/Doxyfile.in
                  ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
 
   # Add a custom target to run Doxygen whenever the project is built.
   # If you do NOT want the documentation to be generated EVERY time you build the project
   # then leave out the 'ALL' keyword from the command below.
-  add_custom_target(docs ALL COMMAND ${DOXYGEN_EXECUTABLE} 
-                    ${PROJECT_BINARY_DIR}/Doxyfile 
+  add_custom_target(docs ALL COMMAND ${DOXYGEN_EXECUTABLE}
+                    ${PROJECT_BINARY_DIR}/Doxyfile
                     SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
 endif(BUILD_DOCS)
 
@@ -169,20 +169,20 @@ if(BUILD_TESTS)
   if(NOT CATCH_FOUND)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
     ExternalProject_Add(catch
-      PREFIX ${MYEXT_PATH}/Catch  
+      PREFIX ${MYEXT_PATH}/Catch
       #--Download step--------------
       URL https://github.com/kartikkumar/Catch/archive/master.zip
       TIMEOUT 30
       #--Update/Patch step----------
       UPDATE_COMMAND ""
       PATCH_COMMAND ""
-      #--Configure step-------------             
+      #--Configure step-------------
       CONFIGURE_COMMAND ""
-      #--Build step-----------------      
+      #--Build step-----------------
       BUILD_COMMAND ""
-      #--Install step---------------      
+      #--Install step---------------
       INSTALL_COMMAND ""
-      #--Output logging-------------      
+      #--Output logging-------------
       LOG_DOWNLOAD ON
     )
     ExternalProject_Get_Property(catch source_dir)
@@ -231,21 +231,21 @@ if(BUILD_TESTS)
 
     string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${MYPROJ_TEST_SRC}")
     add_executable(${MYPROJ_TEST}_eigen ${TESTS_SRC_EIGEN})
-    #add_dependencies(${MYPROJ_TEST}_eigen)    
+    #add_dependencies(${MYPROJ_TEST}_eigen)
     #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
-    add_test(NAME ${MYPROJ_TEST}_eigen COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}_eigen")    
+    add_test(NAME ${MYPROJ_TEST}_eigen COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}_eigen")
   endif(BUILD_TESTS_WITH_EIGEN)
 
   add_executable(${MYPROJ_TEST} ${MYPROJ_TEST_SRC})
-  #add_dependencies(${MYPROJ_TEST})    
+  #add_dependencies(${MYPROJ_TEST})
   #target_link_libraries(${MYPROJ_TEST} ${MYPROJ_LIB})
   add_test(NAME ${MYPROJ_TEST} COMMAND "${MYTESTS_PATH}/${MYPROJ_TEST}")
 endif(BUILD_TESTS)
 
-# Install header files and library. 
+# Install header files and library.
 # Destination is set by CMAKE_INSTALL_PREFIX and defaults to usual locations, unless overridden by
 # user.
-install(DIRECTORY ${MYINC_PATH}/${CMAKE_PROJECT_NAME} 
+install(DIRECTORY ${MYINC_PATH}/${CMAKE_PROJECT_NAME}
         DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
 #install(TARGETS ${MYPROJ_LIB} DESTINATION lib)

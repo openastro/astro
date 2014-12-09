@@ -1,4 +1,4 @@
-/*    
+/*
  * Copyright (c) 2014 K. Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
@@ -6,9 +6,9 @@
 
 #include <catch.hpp>
 
-#include <SAM/twoBodyMethods.hpp>
+#include <Astro/twoBodyMethods.hpp>
 
-namespace sam
+namespace astro
 {
 namespace tests
 {
@@ -69,7 +69,7 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
     {
         REQUIRE_THROWS( computeCircularVelocity( 0.0, 0.0 ) );
     }
-    
+
     SECTION( "Test orbits around the Earth" )
     {
         // Reference data obtained from Wertz (2001).
@@ -89,9 +89,9 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         for ( unsigned int i = 0; i < 5; i++ )
         {
             // Compute circular velocity [m/s].
-            const Real computedCircularVelocity 
-                = computeCircularVelocity( 
-                    earthRadius + altitudes[ i ] * 1.0e3, earthGravitationalParameter ); 
+            const Real computedCircularVelocity
+                = computeCircularVelocity(
+                    earthRadius + altitudes[ i ] * 1.0e3, earthGravitationalParameter );
 
             //! Check if computed circular velocity matches expected value.
             REQUIRE( ( computedCircularVelocity / 1.0e3 )
@@ -116,8 +116,8 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
         // This value was computed "by hand" using Julia.
         const Real expectedCircularVelocity = 3.454195532696839;
 
-        const Real computedCircularVelocity 
-            = computeCircularVelocity( radius, marsGravitationalParameter ); 
+        const Real computedCircularVelocity
+            = computeCircularVelocity( radius, marsGravitationalParameter );
 
         //! Check if computed circular velocity matches expected value.
         REQUIRE( computedCircularVelocity == expectedCircularVelocity );
@@ -125,17 +125,17 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
 }
 
 } // namespace tests
-} // namespace sam
+} // namespace astro
 
 /*!
  * References
  *  Vallado, D. A., McClain, W. D. Fundamentals of astrodynamics and applications, 2nd Edition,
- *   Kluwer Academic Publishers, The Netherlands, 2004. 
+ *   Kluwer Academic Publishers, The Netherlands, 2004.
  *  Wertz, J.R. Mission Geometry: Orbit and Constellation Design and Management, Mircocosm Press,
  *   El Segundo, CA, 2001.
  *  Wikipedia. Mars, http://en.wikipedia.org/wiki/Mars, last updated: 2 Oct 2014, last accessed:
  *   7 Oct 2014a.
- *  Wikipedia. Standard gravitational parameter, 
+ *  Wikipedia. Standard gravitational parameter,
  *   http://en.wikipedia.org/wiki/Standard_gravitational_parameter, last updated: 2 Oct 2014,
  *   last accessed: 7 Oct 2014b.
  */
