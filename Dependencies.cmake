@@ -5,14 +5,14 @@
 # Include script to build external library with CMake.
 include(ExternalProject)
 
-if(NOT FORCE_DEPENDENCIES_BUILD)
+if(NOT BUILD_DEPENDENCIES)
   find_package(SML)
-endif(NOT FORCE_DEPENDENCIES_BUILD)
+endif(NOT BUILD_DEPENDENCIES)
 
 if(NOT SML_FOUND)
   message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
   ExternalProject_Add(sml-lib
-    PREFIX ${MYEXT_PATH}/SML
+    PREFIX ${EXTERNAL_PATH}/SML
     #--Download step--------------
     URL https://github.com/kartikkumar/sml/archive/master.zip
     TIMEOUT 30
