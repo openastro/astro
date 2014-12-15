@@ -6,7 +6,7 @@ compiler:
 
 env:
   global:
-    - secure: secure: "PRwalASeDf3nBR1sfK90DKjqNa73mPvGRhcJArUjtpSE1xNYN+fhaOxAe7ASuTJxzT0/mcXVSD9jel5BjPB5atwnJeQOhDOwdkg1zX5bCldLjyWbw1yoaTpY2hbs3xrca0g+8Ks6Nvldw77hLAnTu1N/6x6yIX3WvQ1b+zYv/d8="
+    - secure: "PRwalASeDf3nBR1sfK90DKjqNa73mPvGRhcJArUjtpSE1xNYN+fhaOxAe7ASuTJxzT0/mcXVSD9jel5BjPB5atwnJeQOhDOwdkg1zX5bCldLjyWbw1yoaTpY2hbs3xrca0g+8Ks6Nvldw77hLAnTu1N/6x6yIX3WvQ1b+zYv/d8="
   matrix:
     - BUILD_TYPE=Debug
     - BUILD_TYPE=Release
