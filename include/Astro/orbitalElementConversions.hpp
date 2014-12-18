@@ -7,7 +7,9 @@
 #ifndef ASTRO_ORBITAL_ELEMENT_CONVERSIONS_HPP
 #define ASTRO_ORBITAL_ELEMENT_CONVERSIONS_HPP
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 #include <SML/sml.hpp>
@@ -218,7 +220,7 @@ Vector6 convertCartesianToKeplerianElements(
             "ERROR: Cartesian elements vector has more or less than 6 elements!" );
     }
 
-    Vector6 keplerianElements( 6 );
+    Vector6 keplerianElements = cartesianElements;
 
     // Set position and velocity vectors.
     std::vector< Real > position( 3 );
