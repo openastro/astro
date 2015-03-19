@@ -31,7 +31,7 @@
 build
 bin
 lib
-docs
+doxygen-docs
 temp
 debug
 external
