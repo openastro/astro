@@ -44,6 +44,7 @@ CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"   
 set(TEST_SRC
   "${TEST_SRC_PATH}/testAstro.cpp"
   "${TEST_SRC_PATH}/testConstants.cpp"
+  "${TEST_SRC_PATH}/testDragAccelerationModel.cpp"
   "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
   "${TEST_SRC_PATH}/testTwoBodyMethods.cpp"
 )
