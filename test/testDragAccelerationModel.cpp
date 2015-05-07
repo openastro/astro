@@ -4,10 +4,6 @@
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#include <iostream>
-
-using namespace std;
-
 #include <vector>
 
 #include <catch.hpp>
@@ -58,16 +54,6 @@ TEST_CASE( "Obtain drag acceleration", "[obtain-drag-acceleration]" )
                                                               velocity,
                                                               dragArea,
                                                               mass ); 
-    // Outputs of the test
-    cout << endl;
-    cout << "Comp Drag: <" << dragAcceleration[ 0 ] << ", " 
-                           << dragAcceleration[ 1 ] << ", " 
-                           << dragAcceleration[ 2 ] << ">" << endl;
-
-    cout << "Ref Drag: <" << expectedDragAcceleration[ 0 ] << ", " 
-                          << expectedDragAcceleration[ 1 ] << ", " 
-                          << expectedDragAcceleration[ 2 ] << ">" << endl;
-
 
     // Check if computed mean motion matches expected value.
     REQUIRE( abs(dragAcceleration[ 0 ] - expectedDragAcceleration[ 0 ]) <= epsilon );
