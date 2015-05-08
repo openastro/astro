@@ -100,9 +100,9 @@ TEST_CASE( "Obtain drag acceleration: test 2", "[obtain-drag-acceleration-2]" )
                                                              mass ); 
 
     // Check if computed mean motion matches expected value.
-    REQUIRE( abs(dragAcceleration[ 0 ] - expectedDragAcceleration[ 0 ]) <= epsilon );
-    REQUIRE( abs(dragAcceleration[ 1 ] - expectedDragAcceleration[ 1 ]) <= epsilon );
-    REQUIRE( abs(dragAcceleration[ 2 ] - expectedDragAcceleration[ 2 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 0 ] - expectedDragAcceleration[ 0 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 1 ] - expectedDragAcceleration[ 1 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 2 ] - expectedDragAcceleration[ 2 ]) <= epsilon );
 }
 
 } // namespace tests
