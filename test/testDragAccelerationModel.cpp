@@ -69,7 +69,7 @@ TEST_CASE( "Obtain drag acceleration: test 2", "[obtain-drag-acceleration-2]" )
     Vector expectedDragAcceleration( 3 );
     expectedDragAcceleration[ 0 ] = 0.0;
     expectedDragAcceleration[ 1 ] = 0.0;
-    expectedDragAcceleration[ 2 ] = 267.4212;
+    expectedDragAcceleration[ 2 ] =  267.4211815284975;
 
     // Set epsilon = error between expected value and computed value.
     const Real epsilon = 1.0e-10;
