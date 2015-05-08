@@ -45,6 +45,7 @@ set(TEST_SRC
   "${TEST_SRC_PATH}/testAstro.cpp"
   "${TEST_SRC_PATH}/testConstants.cpp"
   "${TEST_SRC_PATH}/testDragAccelerationModel.cpp"
+  "${TEST_SRC_PATH}/testEddyTorqueModel.cpp"
   "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
   "${TEST_SRC_PATH}/testTwoBodyMethods.cpp"
 )
