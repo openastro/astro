@@ -28,7 +28,7 @@ TEST_CASE( "Obtain drag acceleration", "[obtain-drag-acceleration]" )
     expectedDragAcceleration[ 2 ] = 0.000154000157143e-4;
 
     // Set epsilon = error between expected value and computed value.
-    const Real epsilon = 1e-10;
+    const Real epsilon = 1.0e-10;
 
     // Set drag coefficient.
     const Real dragCoefficient = 2.2;
@@ -50,15 +50,15 @@ TEST_CASE( "Obtain drag acceleration", "[obtain-drag-acceleration]" )
 
      //! Compute drag acceleration.
     const Vector dragAcceleration = computeDragAcceleration( dragCoefficient, 
-                                                              atmosphericDensity, 
-                                                              velocity,
-                                                              dragArea,
-                                                              mass ); 
+                                                             atmosphericDensity, 
+                                                             velocity,
+                                                             dragArea,
+                                                             mass ); 
 
     // Check if computed mean motion matches expected value.
-    REQUIRE( abs(dragAcceleration[ 0 ] - expectedDragAcceleration[ 0 ]) <= epsilon );
-    REQUIRE( abs(dragAcceleration[ 1 ] - expectedDragAcceleration[ 1 ]) <= epsilon );
-    REQUIRE( abs(dragAcceleration[ 2 ] - expectedDragAcceleration[ 2 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 0 ] - expectedDragAcceleration[ 0 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 1 ] - expectedDragAcceleration[ 1 ]) <= epsilon );
+    REQUIRE( std::fabs(dragAcceleration[ 2 ] - expectedDragAcceleration[ 2 ]) <= epsilon );
 }
 
 } // namespace tests
