@@ -22,6 +22,9 @@ const static double ASTRO_JULIAN_YEAR_IN_DAYS = 365.25;
 //! Julian year in seconds.
 const static double ASTRO_JULIAN_YEAR_IN_SECONDS = 3.15576e7;
 
+//! Astronautical Unit in km 
+const static double ASTRO_AU_IN_KM = 149597870.7;
+
 } // namespace astro
 
 #endif // ASTRO_CONSTANTS_HPP
