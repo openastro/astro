@@ -22,9 +22,9 @@ namespace astro
  * \f]
  * 
  * where \f$P\f$ is the solar radiotion pressure, \f$C_{R}\f$ is the radiation pressure coefficient, 
- * \f$ A_{S/C} \f$ is the absorbing area of teh satellite, which is \f$ \pi R^2 \f$ for the connonball,
- * \f$ m \f$ is the mass of the satellite, and \f$ \vec{u} \f$ is the unit vector pointing from the
- * satellite toward the sun.
+ * \f$ A_{S/C} \f$ is the absorbing area of teh satellite, which is \f$ \pi R^2 \f$ for the 
+ * connonball, \f$ m \f$ is the mass of the satellite, and \f$ \vec{u} \f$ is the unit vector 
+ * pointing from the satellite toward the sun.
  *
  * @param[in] radiationPressure        Solar Radiation Presure                     [N m^-2]
  * @param[in] radiationPressureCoef    Radiation Pressure Coefficiente             [adim]
@@ -38,7 +38,7 @@ Vector3 computeSolarRadiationPressureAcceleration(  const Real     radiationPres
                                                     const Real     radiationPressureCoef, 
                                                     const Vector3& vectorToSource,                                
                                                     const Real     area,
-                                                    const Real     mass )
+                                                    const Real     mass );
 
 //! Compute solar radiation pressure acceleration on a cannonball.
 template< typename Real, typename Vector3 >
@@ -50,7 +50,7 @@ Vector3 computeSolarRadiationPressureAcceleration(  const Real     radiationPres
 {
   
     // Instance the output accelation 
-    Vector3 radiationPressureAcceleration = vectorToSource; // TODO: [JRMM] Change the initialization
+    Vector3 radiationPressureAcceleration = vectorToSource; //@todo: [JRMM] Change the initialization
 
     // Compute the solar pressure radiation magnitude
     const Real radPressureMagnitude = -radiationPressure * radiationPressureCoefficient * area / mass;
@@ -61,7 +61,7 @@ Vector3 computeSolarRadiationPressureAcceleration(  const Real     radiationPres
     radiationPressureAcceleration[ 2 ] = radPressureMagnitude * vectorToSource[ 2 ];
 
     return radiationPressureAcceleration;
-}
+};
 
 } // namespace astro
 
