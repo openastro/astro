@@ -12,6 +12,8 @@
 
 #include <catch.hpp>
 
+#include <Eigen/Core>
+
 #include "Astro/solarRadiationPressureAccelerationModel.hpp"
 
 namespace astro
@@ -20,7 +22,7 @@ namespace tests
 {
 
 typedef double Real;
-typedef std::vector< Real > Vector;
+typedef Eigen::Matrix< Real, Eigen::Dynamic, 1 > Vector;
 
 TEST_CASE( "Compute solar radiation pressure acceleration for arbitrary case",
            "[solar_radiation_pressure, acceleration, models]" )
@@ -92,9 +94,3 @@ TEST_CASE( "Compute solar radiation pressure acceleration for arbitrary case",
 
 } // namespace tests
 } // namespace astro
-
-/*!
- * References
- *  Montenbruck, O, and Gill, E. Satellite orbits: models, methods and applications. Springer
- *      Science & Business Media, 2012.
- */

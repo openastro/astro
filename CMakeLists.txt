@@ -1,4 +1,7 @@
-# Copyright (c) 2014-2015 Kartik Kumar (me@kartikkumar.com)
+# Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
+# Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
+# Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
+# Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
 # Distributed under the MIT License.
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
@@ -23,7 +26,7 @@ if(NOT EXTERNAL_PATH)
   set(EXTERNAL_PATH                            "${PROJECT_PATH}/external")
 endif(NOT EXTERNAL_PATH)
 if(NOT DOXYGEN_PATH)
-  set(DOXYGEN_PATH                             "${PROJECT_PATH}/doxygen-docs")
+  set(DOXYGEN_PATH                             "${PROJECT_PATH}/doxydocs")
 endif(NOT DOXYGEN_PATH)
 if(NOT DOCS_PATH)
   set(DOCS_PATH                                "${PROJECT_PATH}/docs")
@@ -118,13 +121,10 @@ if(BUILD_TESTS)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TEST_PATH})
 
   if(BUILD_TESTS_WITH_EIGEN)
-    string(REPLACE "Algebra" "AlgebraEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
+    string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
+    string(REPLACE "Model" "ModelEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
     add_executable(${TEST_NAME}_eigen ${TESTS_SRC_EIGEN})
     add_test(NAME ${TEST_NAME}_eigen COMMAND "${TEST_PATH}/${TEST_NAME}_eigen")
-
-    string(REPLACE "Algebra" "AlgebraEigenFixedVector" TESTS_SRC_EIGEN_FIXED "${TEST_SRC}")
-    add_executable(${TEST_NAME}_eigen_fixed ${TESTS_SRC_EIGEN_FIXED})
-    add_test(NAME ${TEST_NAME}_eigen_fixed COMMAND "${TEST_PATH}/${TEST_NAME}_eigen_fixed")
   endif(BUILD_TESTS_WITH_EIGEN)
 
   add_executable(${TEST_NAME} ${TEST_SRC})
