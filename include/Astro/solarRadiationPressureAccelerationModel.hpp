@@ -68,7 +68,7 @@ Vector3 computeSolarRadiationPressureAcceleration( const Real     radiationPress
     radiationPressureAcceleration[ 2 ] = radiationPressureMagnitude * vectorToSource[ 2 ];
 
     return radiationPressureAcceleration;
-};
+}
 
 } // namespace astro
 
