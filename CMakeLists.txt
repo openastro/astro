@@ -1,14 +1,11 @@
-# Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
-# Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
-# Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
-# Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
+# Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
 # Distributed under the MIT License.
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
 cmake_minimum_required(VERSION 2.6)
 
 # Change this section to correspond with your project info.
-project(SML C CXX)
+project(Astro C CXX)
 set(PROJECT_SUMMARY                            "A simple astrodynamics library")
 set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "Kartik Kumar")
 set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "me@kartikkumar.com")
@@ -32,25 +29,19 @@ if(NOT DOCS_PATH)
   set(DOCS_PATH                                "${PROJECT_PATH}/docs")
 endif(NOT DOCS_PATH)
 set(TEST_PATH                                  "${PROJECT_BINARY_DIR}/test")
-set(TEST_NAME                                  "test_astro")
+set(TEST_NAME                                  "test_${CMAKE_PROJECT_NAME}")
 
-OPTION(BUILD_DOXYGEN_DOCS                      "Build Doxygen docs"             OFF)
-OPTION(BUILD_TESTS                             "Build tests"                    OFF)
-OPTION(BUILD_DEPENDENCIES                      "Force build of dependencies"    OFF)
+OPTION(BUILD_DOXYGEN_DOCS                      "Build Doxygen docs"                 OFF)
+OPTION(BUILD_TESTS                             "Build tests"                        OFF)
+OPTION(BUILD_DEPENDENCIES                      "Force local build of dependencies"  OFF)
 
 include(CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library" OFF
-                                               "BUILD_TESTS"                    OFF)
-CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"   OFF
-                                               "BUILD_TESTS"                    OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library"     OFF
+                                               "BUILD_TESTS"                        OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"       OFF
+                                               "BUILD_TESTS"                        OFF)
 
-set(TEST_SRC
-  "${TEST_SRC_PATH}/testAstro.cpp"
-  "${TEST_SRC_PATH}/testConstants.cpp"
-  "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
-  "${TEST_SRC_PATH}/testSolarRadiationPressureAccelerationModel.cpp"
-  "${TEST_SRC_PATH}/testTwoBodyMethods.cpp"
-)
+include(ProjectFiles.cmake)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release".
 if(((NOT CMAKE_BUILD_TYPE)
@@ -137,13 +128,12 @@ if(BUILD_TESTS)
   endif(BUILD_COVERAGE_ANALYSIS)
 endif(BUILD_TESTS)
 
-# Install header files and library.
+# Install files.
 # Destination is set by CMAKE_INSTALL_PREFIX and defaults to usual locations, unless overridden by
 # user.
 install(DIRECTORY ${INCLUDE_PATH}/${CMAKE_PROJECT_NAME}
         DESTINATION include
         FILES_MATCHING PATTERN "*.hpp")
-#install(TARGETS ${PROJECT_LIB} DESTINATION lib)
 
 # Set up packager.
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
@@ -163,4 +153,3 @@ if(WIN32 AND NOT UNIX)
 else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 include(CPack)
-

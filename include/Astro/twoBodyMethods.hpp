@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
- * Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
- * Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
- * Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
+ * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
+ * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
+ * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
@@ -42,7 +42,12 @@ namespace astro
 template< typename Real >
 Real computeKeplerMeanMotion( const Real semiMajorAxis,
                               const Real gravitationalParameterOfCentralBody,
-                              const Real massOfOrbitingBody = 0.0 );
+                              const Real massOfOrbitingBody = 0.0 )
+{
+    return std::sqrt( ( ( ASTRO_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
+                        + gravitationalParameterOfCentralBody )
+                      / ( semiMajorAxis * semiMajorAxis * semiMajorAxis ) );
+}
 
 //! Compute orbital period.
 /*!
@@ -66,7 +71,13 @@ Real computeKeplerMeanMotion( const Real semiMajorAxis,
 template< typename Real >
 Real computeKeplerOrbitalPeriod( const Real semiMajorAxis,
                                  const Real gravitationalParameterOfCentralBody,
-                                 const Real massOfOrbitingBody = 0.0 );
+                                 const Real massOfOrbitingBody = 0.0 )
+{
+    return 2.0 * sml::SML_PI
+        * std::sqrt( ( semiMajorAxis * semiMajorAxis * semiMajorAxis )
+                     / ( ( ASTRO_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
+                        + gravitationalParameterOfCentralBody ) );
+}
 
 //! Compute circular velocity.
 /*!
@@ -86,33 +97,6 @@ Real computeKeplerOrbitalPeriod( const Real semiMajorAxis,
  * @param  gravitationalParameterOfCentralBody Gravitational parameter of central body [m^3 s^-2]
  * @return                                     Circular velocity
  */
-template< typename Real >
-Real computeCircularVelocity( const Real semiMajorAxis,
-                              const Real gravitationalParameterOfCentralBody );
-//! Compute mean motion.
-template< typename Real >
-Real computeKeplerMeanMotion( const Real semiMajorAxis,
-                              const Real gravitationalParameterOfCentralBody,
-                              const Real massOfOrbitingBody )
-{
-    return std::sqrt( ( ( ASTRO_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
-                        + gravitationalParameterOfCentralBody )
-                      / ( semiMajorAxis * semiMajorAxis * semiMajorAxis ) );
-}
-
-//! Compute orbital period.
-template< typename Real >
-Real computeKeplerOrbitalPeriod( const Real semiMajorAxis,
-                                 const Real gravitationalParameterOfCentralBody,
-                                 const Real massOfOrbitingBody )
-{
-    return 2.0 * sml::SML_PI
-        * std::sqrt( ( semiMajorAxis * semiMajorAxis * semiMajorAxis )
-                     / ( ( ASTRO_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
-                        + gravitationalParameterOfCentralBody ) );
-}
-
-//! Compute circular velocity.
 template< typename Real >
 Real computeCircularVelocity( const Real semiMajorAxis,
                               const Real gravitationalParameterOfCentralBody )

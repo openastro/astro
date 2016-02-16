@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
- * Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
- * Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
- * Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
+ * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
+ * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
+ * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
@@ -38,14 +38,6 @@ namespace astro
  * @param[in] mass                            Mass of S/C                                 [kg]
  * @return                                    Solar radiation pressure acceleration       [m s^-2]
  */
-template< typename Real, typename Vector3 >
-Vector3 computeSolarRadiationPressureAcceleration( const Real     radiationPressure,
-                                                   const Real     radiationPressureCoefficient,
-                                                   const Vector3& vectorToSource,
-                                                   const Real     area,
-                                                   const Real     mass );
-
-//! Compute solar radiation pressure acceleration on a cannonball.
 template< typename Real, typename Vector3 >
 Vector3 computeSolarRadiationPressureAcceleration( const Real     radiationPressure,
                                                    const Real     radiationPressureCoefficient,

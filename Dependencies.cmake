@@ -1,7 +1,4 @@
-# Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
-# Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
-# Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
-# Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
+# Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
 # Distributed under the MIT License.
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
@@ -40,6 +37,8 @@ if(NOT APPLE)
 else(APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem \"${SML_INCLUDE_DIRS}\"")
 endif(NOT APPLE)
+
+# -------------------------------
 
 if(BUILD_TESTS)
   if(NOT BUILD_DEPENDENCIES)

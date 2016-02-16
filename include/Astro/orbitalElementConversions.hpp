@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
- * Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
- * Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
- * Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
+ * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
+ * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
+ * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
@@ -91,130 +91,7 @@ enum KeplerianElementIndices
 template< typename Real, typename Vector6 >
 Vector6 convertCartesianToKeplerianElements(
     const Vector6& cartesianElements, const Real gravitationalParameter,
-    const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) );
-
-//! Convert true anomaly to elliptical eccentric anomaly.
-/*!
- * Converts true anomaly to eccentric anomaly for elliptical orbits (0 <= eccentricity < 1.0).
- *
- * This implementation performs a check on the eccentricity and throws an error if it is
- * non-elliptical, i.e., eccentricity < 0.0 and eccentricity >= 1.0.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @tparam Real         Real type
- * @param  trueAnomaly  True anomaly                 [rad]
- * @param  eccentricity Eccentricity                 [-]
- * @return              Elliptical eccentric anomaly [rad]
- */
-template< typename Real >
-Real convertTrueAnomalyToEllipticalEccentricAnomaly( const Real trueAnomaly,
-                                                     const Real eccentricity );
-
-//! Convert true anomaly to hyperbolic eccentric anomaly.
-/*!
- * Converts true anomaly to hyperbolic eccentric anomaly for hyperbolic orbits
- * (eccentricity > 1.0).
- *
- * This implementation performs a check on the eccentricity and throws an error if it is
- * non-hyperbolic, i.e., eccentricity >= 1.0.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @tparam Real         Real type
- * @param  trueAnomaly  True anomaly                 [rad]
- * @param  eccentricity Eccentricity                 [-]
- * @return              Hyperbolic eccentric anomaly [rad]
- */
-template< typename Real >
-Real convertTrueAnomalyToHyperbolicEccentricAnomaly( const Real trueAnomaly,
-                                                     const Real eccentricity );
-
-//! Convert true anomaly to eccentric anomaly.
-/*!
- * Converts true anomaly to eccentric anomaly for elliptical and hyperbolic orbits
- * (eccentricity < 1.0 && eccentricity > 1.0). This function is essentially a wrapper for
- * functions that treat each case. It should be used in cases where the eccentricity of the orbit
- * is not known a priori.
- *
- * This implementation performs a check on the eccentricity and throws an error for
- * eccentricity < 0.0 and parabolic orbits, which have not been implemented.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @sa convertTrueAnomalyToEllipticalEccentricAnomaly,
- *     convertTrueAnomalyToHyperbolicEccentricAnomaly
- * @tparam Real         Real type
- * @param  trueAnomaly  True anomaly       [rad]
- * @param  eccentricity Eccentricity       [-]
- * @return              Eccentric anomaly  [rad]
- */
-template< typename Real >
-Real convertTrueAnomalyToEccentricAnomaly( const Real trueAnomaly, const Real eccentricity );
-
-//! Convert elliptical eccentric anomaly to mean anomaly.
-/*!
- * Converts eccentric anomaly to mean anomaly for elliptical orbits (0 <= eccentricity < 1.0).
- *
- * This implementation performs a check on the eccentricity and throws an error if it is
- * non-elliptical, i.e., eccentricity < 0.0 and eccentricity >= 1.0.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @tparam Real                       Real type
- * @param  ellipticalEccentricAnomaly Elliptical eccentric anomaly [rad]
- * @param  eccentricity               Eccentricity                 [-]
- * @return                            Mean anomaly                 [rad]
- */
-template< typename Real >
-Real convertEllipticalEccentricAnomalyToMeanAnomaly( const Real ellipticalEccentricAnomaly,
-                                                     const Real eccentricity );
-
-//! Convert hyperbolic eccentric anomaly to mean anomaly.
-/*!
- * Converts hyperbolic eccentric anomaly to mean anomaly for hyperbolic orbits
- * (eccentricity > 1.0).
- *
- * This implementation performs a check on the eccentricity and throws an error if it is
- * non-hyperbolic, i.e., eccentricity >= 1.0.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @tparam Real                       Real type
- * @param  hyperbolicEccentricAnomaly Hyperbolic eccentric anomaly [rad]
- * @param  eccentricity               Eccentricity                 [-]
- * @return                            Mean anomaly                 [rad]
- */
-template< typename Real >
-Real convertHyperbolicEccentricAnomalyToMeanAnomaly(
-    const Real hyperbolicEccentricAnomaly, const Real eccentricity );
-
-//! Convert eccentric anomaly to mean anomaly.
-/*!
- * Converts eccentric anomaly to mean anomaly for elliptical and hyperbolic orbits
- * (eccentricity < 1.0 && eccentricity > 1.0). This function is essentially a wrapper for
- * functions that treat each case. It should be used in cases where the eccentricity of the orbit
- * is not known a priori.
- *
- * Currently, this implementation performs a check on the eccentricity and throws an error for
- * eccentricity < 0.0 and parabolic orbits, which have not been implemented.
- *
- * The equations used can be found in (Chobotov, 2002).
- *
- * @sa convertEllipticalEccentricAnomalyToMeanAnomaly,
- *     convertHyperbolicEccentricAnomalyToMeanAnomaly
- * @tparam Real             Real type
- * @param  eccentricity     Eccentricity      [-]
- * @param  eccentricAnomaly Eccentric anomaly [rad]
- * @return                  Mean anomaly      [rad]
- */
-template< typename Real >
-Real convertEccentricAnomalyToMeanAnomaly( const Real eccentricAnomaly, const Real eccentricity );
-
-//! Convert Cartesian elements to Keplerian elements.
-template< typename Real, typename Vector6 >
-Vector6 convertCartesianToKeplerianElements(
-    const Vector6& cartesianElements, const Real gravitationalParameter, const Real tolerance )
+    const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) )
 {
     // Check that the Cartesian elements vector contains exactly 6 elemenets and otherwise throw
     // and error.
@@ -383,6 +260,19 @@ Vector6 convertCartesianToKeplerianElements(
 }
 
 //! Convert true anomaly to elliptical eccentric anomaly.
+/*!
+ * Converts true anomaly to eccentric anomaly for elliptical orbits (0 <= eccentricity < 1.0).
+ *
+ * This implementation performs a check on the eccentricity and throws an error if it is
+ * non-elliptical, i.e., eccentricity < 0.0 and eccentricity >= 1.0.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam Real         Real type
+ * @param  trueAnomaly  True anomaly                 [rad]
+ * @param  eccentricity Eccentricity                 [-]
+ * @return              Elliptical eccentric anomaly [rad]
+ */
 template< typename Real >
 Real convertTrueAnomalyToEllipticalEccentricAnomaly( const Real trueAnomaly,
                                                      const Real eccentricity )
@@ -405,6 +295,20 @@ Real convertTrueAnomalyToEllipticalEccentricAnomaly( const Real trueAnomaly,
 }
 
 //! Convert true anomaly to hyperbolic eccentric anomaly.
+/*!
+ * Converts true anomaly to hyperbolic eccentric anomaly for hyperbolic orbits
+ * (eccentricity > 1.0).
+ *
+ * This implementation performs a check on the eccentricity and throws an error if it is
+ * non-hyperbolic, i.e., eccentricity >= 1.0.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam Real         Real type
+ * @param  trueAnomaly  True anomaly                 [rad]
+ * @param  eccentricity Eccentricity                 [-]
+ * @return              Hyperbolic eccentric anomaly [rad]
+ */
 template< typename Real >
 Real convertTrueAnomalyToHyperbolicEccentricAnomaly( const Real trueAnomaly,
                                                      const Real eccentricity )
@@ -432,6 +336,24 @@ Real convertTrueAnomalyToHyperbolicEccentricAnomaly( const Real trueAnomaly,
 }
 
 //! Convert true anomaly to eccentric anomaly.
+/*!
+ * Converts true anomaly to eccentric anomaly for elliptical and hyperbolic orbits
+ * (eccentricity < 1.0 && eccentricity > 1.0). This function is essentially a wrapper for
+ * functions that treat each case. It should be used in cases where the eccentricity of the orbit
+ * is not known a priori.
+ *
+ * This implementation performs a check on the eccentricity and throws an error for
+ * eccentricity < 0.0 and parabolic orbits, which have not been implemented.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @sa convertTrueAnomalyToEllipticalEccentricAnomaly,
+ *     convertTrueAnomalyToHyperbolicEccentricAnomaly
+ * @tparam Real         Real type
+ * @param  trueAnomaly  True anomaly       [rad]
+ * @param  eccentricity Eccentricity       [-]
+ * @return              Eccentric anomaly  [rad]
+ */
 template< typename Real >
 Real convertTrueAnomalyToEccentricAnomaly( const Real trueAnomaly, const Real eccentricity )
 {
@@ -467,6 +389,19 @@ Real convertTrueAnomalyToEccentricAnomaly( const Real trueAnomaly, const Real ec
 }
 
 //! Convert elliptical eccentric anomaly to mean anomaly.
+/*!
+ * Converts eccentric anomaly to mean anomaly for elliptical orbits (0 <= eccentricity < 1.0).
+ *
+ * This implementation performs a check on the eccentricity and throws an error if it is
+ * non-elliptical, i.e., eccentricity < 0.0 and eccentricity >= 1.0.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam Real                       Real type
+ * @param  ellipticalEccentricAnomaly Elliptical eccentric anomaly [rad]
+ * @param  eccentricity               Eccentricity                 [-]
+ * @return                            Mean anomaly                 [rad]
+ */
 template< typename Real >
 Real convertEllipticalEccentricAnomalyToMeanAnomaly( const Real ellipticalEccentricAnomaly,
                                                      const Real eccentricity )
@@ -480,6 +415,20 @@ Real convertEllipticalEccentricAnomalyToMeanAnomaly( const Real ellipticalEccent
 }
 
 //! Convert hyperbolic eccentric anomaly to mean anomaly.
+/*!
+ * Converts hyperbolic eccentric anomaly to mean anomaly for hyperbolic orbits
+ * (eccentricity > 1.0).
+ *
+ * This implementation performs a check on the eccentricity and throws an error if it is
+ * non-hyperbolic, i.e., eccentricity >= 1.0.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam Real                       Real type
+ * @param  hyperbolicEccentricAnomaly Hyperbolic eccentric anomaly [rad]
+ * @param  eccentricity               Eccentricity                 [-]
+ * @return                            Mean anomaly                 [rad]
+ */
 template< typename Real >
 Real convertHyperbolicEccentricAnomalyToMeanAnomaly(
     const Real hyperbolicEccentricAnomaly, const Real eccentricity )
@@ -493,6 +442,24 @@ Real convertHyperbolicEccentricAnomalyToMeanAnomaly(
 }
 
 //! Convert eccentric anomaly to mean anomaly.
+/*!
+ * Converts eccentric anomaly to mean anomaly for elliptical and hyperbolic orbits
+ * (eccentricity < 1.0 && eccentricity > 1.0). This function is essentially a wrapper for
+ * functions that treat each case. It should be used in cases where the eccentricity of the orbit
+ * is not known a priori.
+ *
+ * Currently, this implementation performs a check on the eccentricity and throws an error for
+ * eccentricity < 0.0 and parabolic orbits, which have not been implemented.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @sa convertEllipticalEccentricAnomalyToMeanAnomaly,
+ *     convertHyperbolicEccentricAnomalyToMeanAnomaly
+ * @tparam Real             Real type
+ * @param  eccentricity     Eccentricity      [-]
+ * @param  eccentricAnomaly Eccentric anomaly [rad]
+ * @return                  Mean anomaly      [rad]
+ */
 template< typename Real >
 Real convertEccentricAnomalyToMeanAnomaly( const Real eccentricAnomaly, const Real eccentricity )
 {
