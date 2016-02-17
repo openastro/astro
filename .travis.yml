@@ -12,7 +12,7 @@ compiler:
 
 env:
   global:
-    - secure: "jj/XSifmueqUzAdD27wRWdhGmkm7xDtPes5UP+dj1Jbpa8ywPQaZVlYxlhH7/jXPA/5VKSw5z1UlzecEi82XhGOgKCqordBOwbTFWiI4NVj899N1pZuBKN2elcK7J05STN/pIrRfoOpBJeKuG5OG83EGK9vg9aLNXWIR6p6AbI/i5ylKa2QVHNh/NctzToR2QmviTkwHG9lSzvLnyajL1AlCI7wt9JI4uGVRrCCDXNSzIgBfF6E4R58KWfW6I/kj94j8t0HEjcsPjxQefuC87O+qXGU2WS3t8cm03mbIOq8Si+FNRs30STXxbV2qvXloLb97rQDJhHLn7Xg9qd8gwps1YlgTb3WlOv3+ZeGkKsTHMwjWdR23nFjL81VUNv8yUdHahkF8wY4+biI9nMF/fXuxGpX6WguGJ1nq/tOzmYZVcc08gd/l9d3QtwRj+JoHlytYbjPFVTGrlT+x9/LfCNGm+GGvyRyRlbgEwcDJHEOMNIAW0dXjV9p/inxEA/ueh54LTwX+kcYdkLQDKAbNqfx9aWY2oxI+YaUk71SLCxbVoMLV24qQVrmCEBT1TSyGvfVAuenk8ndAXKiY+4/IvTRDzfuHx8dgyfTIuVFpZzdk5YCDYVdQiaf4RvzVYkOM2oQTSpA5/DvE1MJLqjyMaIibdzdeyvxw1vXwxQ7qBlI="
+    - secure: "rCMZtC4ouLdv4OSVLZxmiCVn6hW1SNLsvkOa7PQm82TLlgi8+L5lWGhDWC32+EDLkYDXO2nHae/oJu8GAh1obE+srDlaD2T8A1QIqeHS7A/RzGZ2Z5YBlAm+yH1CXFqTMbMUQVOBBYUko+0QHoHmvar0RY2mX0ImkUKFzUZGPhUtNDcZzeA64PMvimXXNU+Wr5XK5H1+mlTmJD4JykpbtZbsWAedtawWy6qnxJTWMnfcfdQHK1ffjmtDQzveVrjwDTpho8qyVCYrqOfa+fiuSYYRov1qjfIyC6v1FC5C0K8eQNT2Q21M/RtAL3saqov2hWWOvjscvXVtVnQH12sEtp6BF/AvRr5gF3REJJTnrXgnP7RfwRxnqXkbhACpcoMhE9haYtz7OjVeguYSVayP6bnNxAl+vqJFNwBGS9YqyICg0uryXRM92j0fp0I0efMfTRDmeSyu5YpOMR2XIDhsl9hww+PNA4mUG5Lrw554hLzXhWKS1zQsqdyP1FfrK+nAoguhd0bVuKNpuKGoc3YrWjSyCR2s551eyxau9TP0lXZ2B5J5YPJ9l5NIxPU1fTiFWxUf6Bc9vPT5V3yynzqMOdTBFROdJauft5pz7n92tgIksLR4H0lc05dJRjehEU4FBvO7v92MFlNyR+JpMPWzNI/shLIu6p72dAIZiIakgHk="
   matrix:
     - BUILD_TYPE=Debug
     - BUILD_TYPE=Release
@@ -25,6 +25,9 @@ matrix:
       env: COVERITY_SCAN_BRANCH_PATTERN=coverity_scan BUILD_TYPE=Release
 
 addons:
+  apt:
+    packages:
+      - texlive
   coverity_scan:
     project:
       name: "kartikkumar/astro"
@@ -32,11 +35,6 @@ addons:
     build_command_prepend: "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on -DBUILD_TESTS_WITH_EIGEN=on .."
     build_command: "make"
     branch_pattern: coverity_scan
-
-addons:
-  apt:
-    packages:
-      - texlive
 
 before_install:
   - bash scripts/install_cmake.sh
@@ -49,18 +47,6 @@ before_install:
 before_script::
   - ls -R $HOME/cmake
   - ls -R $HOME/doxygen
-
-
-
-script:
-  - if [ "$COVERITY_SCAN_BRANCH_PATTERN" != "coverity_scan" ]; then
-      mkdir build;
-      cd build;
-      $HOME/cmake/bin/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on -DBUILD_TESTS_WITH_EIGEN=on -DDOXYGEN_EXECUTABLE=$HOME/doxygen/bin/doxygen -DBUILD_DOXYGEN_DOCS=on ..;
-      make;
-      ctest -V;
-      ../scripts/check_doxygen.sh;
-    fi
 
 script:
   - if [ "$COVERITY_SCAN_BRANCH_PATTERN" != "coverity_scan" ]; then
