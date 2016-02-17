@@ -12,7 +12,7 @@ compiler:
 
 env:
   global:
-    - secure: "PRwalASeDf3nBR1sfK90DKjqNa73mPvGRhcJArUjtpSE1xNYN+fhaOxAe7ASuTJxzT0/mcXVSD9jel5BjPB5atwnJeQOhDOwdkg1zX5bCldLjyWbw1yoaTpY2hbs3xrca0g+8Ks6Nvldw77hLAnTu1N/6x6yIX3WvQ1b+zYv/d8="
+    - secure: "Y+2OnSPSUkJmW7lns0gGnl3T9YIwLxqdiS7v7jwoUvRzs9DBYbImNuqQSt/Z88phC0PcEKsf0k8eXf+jEL7ufjuuJD2X5roZzxmztGqBHj4PAw7gR3Y3eiPais6QvaiO4/zi8KG0Vx8sQHT32mJa9VhMvLC4xaiVOo+fo/UulEHs2zuSAnrPdY2I5NkffzKrDrlAn0E1p4S5an4YXEtMH2A/YkxLEiKlLHE2ilz48ib5g1k1kTJFiSS6OJxrrvpMB9yvu+cIrtGlRAT//Z+B/T+/yr653OlPK3aK8LqI/cCo66vrObwAm1MrinpKdADOwkqncyNP0ktAZ29A6J6Jb1pfpwpv/YcwIRJ4KdpVE4g9o0jm0GUWSL2LlmEyfNGqm3vw20fMyqthiWU83/w+dvTZBV5tLsFs5rJSHUC61EVYdgJDUhHZLElRJZ564zuKRk6gN/YJEDOFm9coLMDi2kLPQrVwXFZPw26Mne8yuXnH/U9UNl9t7DFPoCQRWlw9X3OHh1jQlZ2mNU2cFKd/P3v4/KWAQIvuSKG+HPl9zcRDlWVXlDYF4hH2aCFb48eHfk5kqKmaxQGxgcmWrCXxqfuLeHLTQuWuWp4hwqD/NiT6qbV/4+40S9SLPKW3QY+nC47Zc5oIoDsujD5IesvIvb7jHnuk/3qqW+fWJVPYPvs="
   matrix:
     - BUILD_TYPE=Debug
     - BUILD_TYPE=Release
