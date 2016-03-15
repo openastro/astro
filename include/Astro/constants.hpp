@@ -25,8 +25,11 @@ const static double ASTRO_JULIAN_YEAR_IN_DAYS = 365.25;
 //! Julian year in seconds.
 const static double ASTRO_JULIAN_YEAR_IN_SECONDS = 3.15576e7;
 
-//! Astronautical Unit in km
+//! Astronautical Unit in km (NASA, 2012).
 const static double ASTRO_AU_IN_KM = 149597870.7;
+
+//! Start of Gregorian epoch in Julian days (Ramsey, 2016).
+const static double ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS = 1721425.5;
 
 } // namespace astro
 
@@ -36,4 +39,9 @@ const static double ASTRO_AU_IN_KM = 149597870.7;
  * References
  *  Standish, E.M. (1995) "Report of the IAU WGAS Sub-Group on Numerical Standards", in Highlights
  *   of Astronomy (I. Appenzeller, ed.), Table 1, Kluwer Academic Publishers, Dordrecht.
+ *  NASA (2012) Jet Propulsion Laboratory, Solar System Dynamics Astrodynamic Constants
+ *   accessed 15 March 2016 on: http://ssd.jpl.nasa.gov/?constants
+ *  Ramsey, C.B. (2016), Oxford Radiocarbon Accelerator Unit, Research Lab for 
+ *	 Archaeology, Dyson Perrins Building, South Parks Road, Oxford, OX1 3QY United Kingdom.
+ *   accessed 15 March 2016 on: https://c14.arch.ox.ac.uk/oxcalhelp/hlp_analysis_calend.html
  */
