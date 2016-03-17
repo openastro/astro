@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -54,43 +55,44 @@ enum KeplerianElementIndices
  * scenarios. Below this tolerance value for eccentricity and inclination, the orbit is considered
  * to be a limit case. Essentially, special solutions are then used for parabolic, circular
  * inclined, non-circular equatorial, and circular equatorial orbits. These special solutions are
- * required because of singularities in the classical Keplerian elements. If  high precision is
+ * required because of singularities in the classical Keplerian elements. If high precision is
  * required near these singularities, users are encouraged to consider using other elements, such
  * as Modified Equinoctial Elements (MEE). It should be noted that MEE also suffer from
  * singularities, but not for zero eccentricity and inclination.
  *
- * WARNING: If eccentricity is 1.0 within 1.0e-15, keplerianElements( 0 ) = semi-latus rectum,
+ * WARNING: If eccentricity is 1.0 within tolerance, keplerianElements( 0 ) = semi-latus rectum,
  *          since the orbit is parabolic.
- * WARNING: If eccentricity is 0.0 within 1.0e-15, argument of periapsis is set to 0.0, since the
+ * WARNING: If eccentricity is 0.0 within tolerance, argument of periapsis is set to 0.0, since the
  *          orbit is circular.
- * WARNING: If inclination is 0.0 within 1.0e-15, longitude of ascending node is set to 0.0, since
- *          the orbit is equatorial.
+ * WARNING: If inclination is 0.0 within tolerance, longitude of ascending node is set to 0.0, since
+ *          since the orbit is equatorial.
  *
  * @tparam  Real                   Real type
  * @tparam  Vector                 Vector type
  * @param   cartesianElements      Vector containing Cartesian elements                     <br>
  *                                 N.B.: Order of elements is important!                    <br>
- *                                 cartesianElements( 0 ) = x-position coordinate [m]       <br>
- *                                 cartesianElements( 1 ) = y-position coordinate [m]       <br>
- *                                 cartesianElements( 2 ) = z-position coordinate [m]       <br>
- *                                 cartesianElements( 3 ) = x-velocity coordinate [m/s]     <br>
- *                                 cartesianElements( 4 ) = y-velocity coordinate [m/s]     <br>
- *                                 cartesianElements( 5 ) = z-velocity coordinate [m/s]
- * @param   gravitationalParameter Gravitational parameter of central body [m^3 s^-2]
+ *                                 cartesianElements( 0 ) = x-position coordinate       [m] <br>
+ *                                 cartesianElements( 1 ) = y-position coordinate       [m] <br>
+ *                                 cartesianElements( 2 ) = z-position coordinate       [m] <br>
+ *                                 cartesianElements( 3 ) = x-velocity coordinate     [m/s] <br>
+ *                                 cartesianElements( 4 ) = y-velocity coordinate     [m/s] <br>
+ *                                 cartesianElements( 5 ) = z-velocity coordinate     [m/s]
+ * @param   gravitationalParameter Gravitational parameter of central body       [m^3 s^-2]
  * @param   tolerance              Tolerance used to check for limit cases
- *                                 (zero eccentricity, inclination)
+ *                                 (eccentricity, inclination)
  * @return  Converted vector of Keplerian elements                                          <br>
  *          N.B.: Order of elements is important!                                           <br>
- *          keplerianElements( 0 ) = semiMajorAxis                [m]                       <br>
- *          keplerianElements( 1 ) = eccentricity                 [-]                       <br>
- *          keplerianElements( 2 ) = inclination                  [rad]                     <br>
- *          keplerianElements( 3 ) = argument of periapsis        [rad]                     <br>
- *          keplerianElements( 4 ) = longitude of ascending node  [rad]                     <br>
- *          keplerianElements( 5 ) = true anomaly                 [rad]
+ *          keplerianElements( 0 ) = semiMajorAxis                                      [m] <br>
+ *          keplerianElements( 1 ) = eccentricity                                       [-] <br>
+ *          keplerianElements( 2 ) = inclination                                      [rad] <br>
+ *          keplerianElements( 3 ) = argument of periapsis                            [rad] <br>
+ *          keplerianElements( 4 ) = longitude of ascending node                      [rad] <br>
+ *          keplerianElements( 5 ) = true anomaly                                     [rad]
  */
 template< typename Real, typename Vector6 >
 Vector6 convertCartesianToKeplerianElements(
-    const Vector6& cartesianElements, const Real gravitationalParameter,
+    const Vector6& cartesianElements,
+    const Real gravitationalParameter,
     const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) )
 {
     // Check that the Cartesian elements vector contains exactly 6 elemenets and otherwise throw
@@ -105,14 +107,14 @@ Vector6 convertCartesianToKeplerianElements(
 
     // Set position and velocity vectors.
     std::vector< Real > position( 3 );
-    position[ 0 ] = cartesianElements[ 0 ];
-    position[ 1 ] = cartesianElements[ 1 ];
-    position[ 2 ] = cartesianElements[ 2 ];
+    position[ xPositionIndex ] = cartesianElements[ xPositionIndex ];
+    position[ yPositionIndex ] = cartesianElements[ yPositionIndex ];
+    position[ zPositionIndex ] = cartesianElements[ zPositionIndex ];
 
     std::vector< Real > velocity( 3 );
-    velocity[ 0 ] = cartesianElements[ 3 ];
-    velocity[ 1 ] = cartesianElements[ 4 ];
-    velocity[ 2 ] = cartesianElements[ 5 ];
+    velocity[ 0 ] = cartesianElements[ xVelocityIndex ];
+    velocity[ 1 ] = cartesianElements[ yVelocityIndex ];
+    velocity[ 2 ] = cartesianElements[ zVelocityIndex ];
 
     // Compute orbital angular momentum vector.
     const std::vector< Real > angularMomentum( sml::cross( position, velocity ) );
@@ -257,6 +259,134 @@ Vector6 convertCartesianToKeplerianElements(
     }
 
     return keplerianElements;
+}
+
+//! Convert Keplerian elements to Cartesian elements.
+/*!
+ * Converts a given set of Keplerian (osculating) elements to Cartesian elements (position,
+ * velocity). See Chobotov (2006) for a full derivation of the conversion.
+ *
+ * WARNING: If eccentricity is 1.0 within tolerance, keplerianElements( 0 ) = semi-latus rectum,
+ *          since the orbit is parabolic.
+ *
+ * @tparam  Real                   Real type
+ * @tparam  Vector                 Vector type
+ * @param   keplerianElements      Vector containing Keplerian elemenets                    <br>
+ *                                 N.B.: Order of elements is important!                    <br>
+ *                                 keplerianElements( 0 ) = semiMajorAxis               [m] <br>
+ *                                 keplerianElements( 1 ) = eccentricity                [-] <br>
+ *                                 keplerianElements( 2 ) = inclination               [rad] <br>
+ *                                 keplerianElements( 3 ) = argument of periapsis     [rad] <br>
+ *                                 keplerianElements( 4 ) = longitude of              [rad]
+ *                                                          ascending node            [rad] <br>
+ *                                 keplerianElements( 5 ) = true anomaly              [rad]
+ * @param   gravitationalParameter Gravitational parameter of central body       [m^3 s^-2]
+ * @param   tolerance              Tolerance used to check for limit case of eccentricity
+ * @return Converted vector of Cartesian elements                                           <br>
+ *                                 N.B.: Order of elements is important!                    <br>
+ *                                 cartesianElements( 0 ) = x-position coordinate       [m] <br>
+ *                                 cartesianElements( 1 ) = y-position coordinate       [m] <br>
+ *                                 cartesianElements( 2 ) = z-position coordinate       [m] <br>
+ *                                 cartesianElements( 3 ) = x-velocity coordinate     [m/s] <br>
+ *                                 cartesianElements( 4 ) = y-velocity coordinate     [m/s] <br>
+ *                                 cartesianElements( 5 ) = z-velocity coordinate     [m/s]
+ */
+template< typename Real, typename Vector6 >
+Vector6 convertKeplerianToCartesianElements(
+    const Vector6& keplerianElements, const Real gravitationalParameter,
+    const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) )
+{
+    // Check that the Keplerian elements vector contains exactly 6 elemenets and otherwise throw
+    // and error.
+    if ( keplerianElements.size( ) != 6 )
+    {
+        throw std::runtime_error(
+            "ERROR: Keplerian elements vector has more or less than 6 elements!" );
+    }
+
+    Vector6 cartesianElements = keplerianElements;
+
+    const Real semiMajorAxis                    = keplerianElements[ semiMajorAxisIndex ];
+    const Real eccentricity                     = keplerianElements[ eccentricityIndex ];
+    const Real inclination                      = keplerianElements[ inclinationIndex ];
+    const Real argumentOfPeriapsis              = keplerianElements[ argumentOfPeriapsisIndex ];
+    const Real longitudeOfAscendingNode         = keplerianElements[ longitudeOfAscendingNodeIndex ];
+    const Real trueAnomaly                      = keplerianElements[ trueAnomalyIndex ];
+
+    // Pre-compute sines and cosines of angles for efficient computation.
+    const Real cosineOfInclination              = std::cos( inclination );
+    const Real sineOfInclination                = std::sin( inclination );
+    const Real cosineOfArgumentOfPeriapsis      = std::cos( argumentOfPeriapsis );
+    const Real sineOfArgumentOfPeriapsis        = std::sin( argumentOfPeriapsis );
+    const Real cosineOfLongitudeOfAscendingNode = std::cos( longitudeOfAscendingNode );
+    const Real sineOfLongitudeOfAscendingNode   = std::sin( longitudeOfAscendingNode );
+    const Real cosineOfTrueAnomaly              = std::cos( trueAnomaly );
+    const Real sineOfTrueAnomaly                = std::sin( trueAnomaly );
+
+    // Compute semi-latus rectum in the case the orbit is not a parabola.
+    Real semiLatusRectum = 0.0;
+    if ( std::fabs( eccentricity - 1.0 ) > tolerance  )
+    {
+        semiLatusRectum = semiMajorAxis * ( 1.0 - eccentricity * eccentricity );
+    }
+
+    // Else set the semi-latus rectum as the first element in the vector of Keplerian elements.
+    else
+    {
+        semiLatusRectum = keplerianElements[ 0 ];
+    }
+
+    // Compute the magnitude of the orbital radius, measured from the focal point.
+    const Real radiusMagnitude = semiLatusRectum / ( 1.0 + eccentricity * cosineOfTrueAnomaly );
+
+    // Define position and velocity in the perifocal coordinate system.
+    const Real xPositionPerifocal = radiusMagnitude * cosineOfTrueAnomaly;
+    const Real yPositionPerifocal = radiusMagnitude * sineOfTrueAnomaly;
+    const Real xVelocityPerifocal
+        = -std::sqrt( gravitationalParameter / semiLatusRectum ) * sineOfTrueAnomaly;
+    const Real yVelocityPerifocal
+        = std::sqrt( gravitationalParameter / semiLatusRectum )
+          * ( eccentricity + cosineOfTrueAnomaly );
+
+    // Compute scalar components of rotation matrix to rotate from periforcal to Earth-Centered
+    // Inertial (ECI) frame.
+    const Real rotationMatrixComponent11
+        = ( cosineOfLongitudeOfAscendingNode * cosineOfArgumentOfPeriapsis
+            - sineOfLongitudeOfAscendingNode * sineOfArgumentOfPeriapsis * cosineOfInclination );
+    const Real rotationMatrixComponent12
+        = ( -cosineOfLongitudeOfAscendingNode * sineOfArgumentOfPeriapsis
+              -sineOfLongitudeOfAscendingNode * cosineOfArgumentOfPeriapsis * cosineOfInclination );
+
+    const Real rotationMatrixComponent21
+        = ( sineOfLongitudeOfAscendingNode * cosineOfArgumentOfPeriapsis
+            + cosineOfLongitudeOfAscendingNode * sineOfArgumentOfPeriapsis * cosineOfInclination );
+    const Real rotationMatrixComponent22
+        = ( -sineOfLongitudeOfAscendingNode * sineOfArgumentOfPeriapsis
+              + cosineOfLongitudeOfAscendingNode * cosineOfArgumentOfPeriapsis * cosineOfInclination );
+
+    const Real rotationMatrixComponent31 = ( sineOfArgumentOfPeriapsis * sineOfInclination );
+    const Real rotationMatrixComponent32 = ( cosineOfArgumentOfPeriapsis * sineOfInclination );
+
+    // Compute Cartesian position and velocities.
+    cartesianElements[ xPositionIndex ] = rotationMatrixComponent11 * xPositionPerifocal
+                                          + rotationMatrixComponent12 * yPositionPerifocal;
+
+    cartesianElements[ yPositionIndex ] = rotationMatrixComponent21 * xPositionPerifocal
+                                          + rotationMatrixComponent22 * yPositionPerifocal;
+
+    cartesianElements[ zPositionIndex ] = rotationMatrixComponent31 * xPositionPerifocal
+                                          + rotationMatrixComponent32 * yPositionPerifocal;
+
+    cartesianElements[ xVelocityIndex ] = rotationMatrixComponent11 * xVelocityPerifocal
+                                          + rotationMatrixComponent12 * yVelocityPerifocal;
+
+    cartesianElements[ yVelocityIndex ] = rotationMatrixComponent21 * xVelocityPerifocal
+                                          + rotationMatrixComponent22 * yVelocityPerifocal;
+
+    cartesianElements[ zVelocityIndex ] = rotationMatrixComponent31 * xVelocityPerifocal
+                                          + rotationMatrixComponent32 * yVelocityPerifocal;
+
+    return cartesianElements;
 }
 
 //! Convert true anomaly to elliptical eccentric anomaly.
