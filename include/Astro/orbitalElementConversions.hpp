@@ -265,8 +265,8 @@ Vector6 convertCartesianToKeplerianElements(
  * Converts a given set of Keplerian (osculating) elements to Cartesian elements (position,
  * velocity). See Chobotov (2006) for a full derivation of the conversion.
  *
- * WARNING: If eccentricity is 1.0 within tolerance, keplerianElements( 0 ) = semi-latus rectum,
- *          since the orbit is parabolic.
+ * WARNING: If eccentricity is 1.0 within tolerance, the user should provide
+ *          keplerianElements( 0 ) = semi-latus rectum, since the orbit is parabolic.
  *
  * @tparam  Real                   Real type
  * @tparam  Vector                 Vector type
@@ -295,14 +295,6 @@ Vector6 convertKeplerianToCartesianElements(
     const Vector6& keplerianElements, const Real gravitationalParameter,
     const Real tolerance = 10.0 * std::numeric_limits< Real >::epsilon( ) )
 {
-    // Check that the Keplerian elements vector contains exactly 6 elemenets and otherwise throw
-    // and error.
-    if ( keplerianElements.size( ) != 6 )
-    {
-        throw std::runtime_error(
-            "ERROR: Keplerian elements vector has more or less than 6 elements!" );
-    }
-
     Vector6 cartesianElements = keplerianElements;
 
     const Real semiMajorAxis                    = keplerianElements[ semiMajorAxisIndex ];
