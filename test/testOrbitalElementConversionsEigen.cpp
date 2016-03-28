@@ -33,22 +33,23 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
         const Real earthGravitationalParameter = 3.986004415e14;
 
         // Set Cartesian elements.
+        // Set Cartesian elements.
         Vector cartesianElements( 6 );
-        cartesianElements[ xPositionIndex ] = 3.75e6;
-        cartesianElements[ yPositionIndex ] = 4.24e6;
-        cartesianElements[ zPositionIndex ] = -1.39e6;
-        cartesianElements[ xVelocityIndex ] = -4.65e3;
-        cartesianElements[ yVelocityIndex ] = -2.21e3;
-        cartesianElements[ zVelocityIndex ] = 1.66e3;
+        cartesianElements[ 0 ] = 3.75e6;
+        cartesianElements[ 1 ] = 4.24e6;
+        cartesianElements[ 2 ] = -1.39e6;
+        cartesianElements[ 3 ] = -4.65e3;
+        cartesianElements[ 4 ] = -2.21e3;
+        cartesianElements[ 5 ] = 1.66e3;
 
         // Set expected Keplerian elements.
         Vector keplerianElements( 6 );
-        keplerianElements[ semiMajorAxisIndex ]            = 3.707478199246163e6;
-        keplerianElements[ eccentricityIndex ]             = 0.949175203660321;
-        keplerianElements[ inclinationIndex ]              = 0.334622356632438;
-        keplerianElements[ argumentOfPeriapsisIndex ]      = 2.168430616511167;
-        keplerianElements[ longitudeOfAscendingNodeIndex ] = 1.630852596545341;
-        keplerianElements[ trueAnomalyIndex ]              = 3.302032232567084;
+        keplerianElements[ 0 ] = 3.707478199246163e6;
+        keplerianElements[ 1 ] = 0.949175203660321;
+        keplerianElements[ 2 ] = 0.334622356632438;
+        keplerianElements[ 3 ] = 2.168430616511167;
+        keplerianElements[ 4 ] = 1.630852596545341;
+        keplerianElements[ 5 ] = 3.302032232567084;
 
         // Compute Keplerian elements.
         Vector result( 6 );
