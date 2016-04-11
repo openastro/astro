@@ -638,8 +638,8 @@ Real convertHyperbolicEccentricAnomalyToTrueAnomaly( const Real hyperbolicEccent
           / ( eccentricity * std::cosh( hyperbolicEccentricAnomaly ) - 1.0 );
 
     const Real cosineOfTrueAnomaly
-        = ( eccentricity - cosh( hyperbolicEccentricAnomaly ) )
-          / ( eccentricity * cosh( hyperbolicEccentricAnomaly ) - 1.0 );
+        = ( eccentricity - std::cosh( hyperbolicEccentricAnomaly ) )
+          / ( eccentricity * std::cosh( hyperbolicEccentricAnomaly ) - 1.0 );
 
     return std::atan2( sineOfTrueAnomaly, cosineOfTrueAnomaly );
 }
