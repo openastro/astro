@@ -593,6 +593,109 @@ Real convertEccentricAnomalyToMeanAnomaly( const Real eccentricAnomaly, const Re
     return meanAnomaly;
 }
 
+//! Convert elliptical eccentric anomaly to true anomaly.
+/*!
+ * Converts eccentric anomaly to true anomaly for elliptical orbits (0 <= eccentricity < 1.0).
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam  Real                     Real type
+ * @param   ellipticEccentricAnomaly Elliptical eccentric anomaly [rad]
+ * @param   eccentricity             Eccentricity                 [-]
+ * @return                           True anomaly                 [rad]
+ */
+template< typename Real >
+Real convertEllipticalEccentricAnomalyToTrueAnomaly( const Real ellipticEccentricAnomaly,
+                                                     const Real eccentricity )
+{
+    const Real sineOfTrueAnomaly = std::sqrt( 1.0 - eccentricity * eccentricity )
+                                   * std::sin( ellipticEccentricAnomaly )
+                                   / ( 1.0 - eccentricity * std::cos( ellipticEccentricAnomaly ) );
+
+    const Real cosineOfTrueAnomaly
+        = ( std::cos( ellipticEccentricAnomaly ) - eccentricity )
+          / ( 1.0 - eccentricity * std::cos( ellipticEccentricAnomaly ) );
+
+    return std::atan2( sineOfTrueAnomaly, cosineOfTrueAnomaly  );
+}
+
+//! Convert hyperbolic eccentric anomaly to true anomaly.
+/*!
+ * Converts hyperbolic eccentric anomaly to true anomaly for hyperbolic orbits
+ * (eccentricity > 1.0). The equations used can be found in (Chobotov, 2002).
+ *
+ * @tparam  Real                        Real type
+ * @param   hyperbolicEccentricAnomaly  Hyperbolic eccentric anomaly [rad]
+ * @param   eccentricity                Eccentricity                 [-]
+ * @return                              True anomaly                 [rad]
+ */
+template< typename Real >
+Real convertHyperbolicEccentricAnomalyToTrueAnomaly( const Real hyperbolicEccentricAnomaly,
+                                                     const Real eccentricity )
+{
+    const Real sineOfTrueAnomaly
+        = std::sqrt( eccentricity * eccentricity - 1.0 )
+          * std::sinh( hyperbolicEccentricAnomaly )
+          / ( eccentricity * std::cosh( hyperbolicEccentricAnomaly ) - 1.0 );
+
+    const Real cosineOfTrueAnomaly
+        = ( eccentricity - std::cosh( hyperbolicEccentricAnomaly ) )
+          / ( eccentricity * std::cosh( hyperbolicEccentricAnomaly ) - 1.0 );
+
+    return std::atan2( sineOfTrueAnomaly, cosineOfTrueAnomaly );
+}
+
+//! Convert eccentric anomaly to true anomaly.
+/*!
+ * Converts eccentric anomaly to true anomaly for elliptical and hyperbolic orbits
+ * (eccentricity < 1.0 && eccentricity > 1.0). This function is essentially a wrapper for
+ * functions that treat each case. It should be used in cases where the eccentricity of the orbit
+ * is not known a priori.
+ *
+ * Currently, this implementation performs a check on the eccentricity and throws an error for
+ * eccentricity < 0.0 and parabolic orbits, which have not been implemented.
+ *
+ * The equations used can be found in (Chobotov, 2002).
+ *
+ * @sa convertEllipticalEccentricAnomalyToTrueAnomaly,
+ *     convertHyperbolicEccentricAnomalyToTrueAnomaly
+ * @tparam  Real                Real type
+ * @param   eccentricAnomaly    Eccentric anomaly [rad]
+ * @param   eccentricity        Eccentricity      [-]
+ * @return                      True anomaly      [rad]
+ */
+template< typename Real >
+Real convertEccentricAnomalyToTrueAnomaly( const Real eccentricAnomaly, const Real eccentricity )
+{
+    Real trueAnomaly = 0.0;
+
+    // Check if eccentricity is invalid and throw an error if true.
+    if ( eccentricity < 0.0 )
+    {
+        throw std::runtime_error( "ERROR: Eccentricity is negative!" );
+    }
+
+    // Check if orbit is parabolic and throw an error if true.
+    else if ( std::fabs( eccentricity - 1.0 ) < std::numeric_limits< Real >::epsilon( ) )
+    {
+        throw std::runtime_error( "ERROR: Parabolic orbits have not been implemented!" );
+    }
+
+    // Check if orbit is elliptical and compute true anomaly.
+    else if ( eccentricity < 1.0 )
+    {
+        trueAnomaly = convertEllipticalEccentricAnomalyToTrueAnomaly( eccentricAnomaly,
+                                                                      eccentricity );
+    }
+
+    else if ( eccentricity > 1.0 )
+    {
+        trueAnomaly = convertHyperbolicEccentricAnomalyToTrueAnomaly( eccentricAnomaly,
+                                                                      eccentricity );
+    }
+
+    return trueAnomaly;
+}
+
 } // namespace astro
 
 #endif // ASTRO_ORBITAL_ELEMENT_CONVERSIONS_HPP

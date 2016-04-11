@@ -66,7 +66,6 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
 TEST_CASE( "Convert Keplerian elements to Cartesian elements",
            "[keplerian-to-cartesian-elements]" )
 {
-    // Set PI.
     const Real pi = 3.14159265358979323846;
 
     SECTION( "Test elliptical orbit around the Earth" )
@@ -401,6 +400,157 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
 
             REQUIRE( computedMeanAnomalyWrapper
                      == Approx( expectedMeanAnomalies[ i ] ).epsilon( 1.0e-10 ) );
+        }
+    }
+}
+
+TEST_CASE( "Convert eccentric anomaly to true anomaly" , "[eccentric-to-true-anomaly]" )
+{
+    const Real pi = 3.14159265358979323846;
+
+    SECTION( "Test elliptical orbits" )
+    {
+        SECTION( "Test general case" )
+        {
+            // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+            const Real eccentricity = 0.639;
+            const Real ellipticEccentricAnomaly = 239.45 / 180.0 * pi;
+            const Real expectedTrueAnomaly = 3.665218735816221;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                    = convertEllipticalEccentricAnomalyToTrueAnomaly(
+                        ellipticEccentricAnomaly, eccentricity ) + 2.0 * pi;
+
+            REQUIRE( computedTrueAnomaly
+                        == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+
+        SECTION( "Test wrapper function" )
+        {
+            // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+            const Real eccentricity = 0.639;
+            const Real ellipticEccentricAnomaly = 239.45 / 180.0 * pi;
+            const Real expectedTrueAnomaly = 3.665218735816221;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                    = convertEccentricAnomalyToTrueAnomaly(
+                        ellipticEccentricAnomaly, eccentricity ) + 2.0 * pi;
+
+            REQUIRE( computedTrueAnomaly
+                        == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+    }
+
+    SECTION( "Test circular orbits" )
+    {
+        SECTION( "Test general case" )
+        {
+            // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+            const Real eccentricity = 0.0;
+            const Real ellipticEccentricAnomaly = -99.54 / 180.0 * pi;
+            const Real expectedTrueAnomaly = 4.545884569744431;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                = convertEllipticalEccentricAnomalyToTrueAnomaly(
+                    ellipticEccentricAnomaly, eccentricity ) + 2.0 * pi;
+
+            REQUIRE( computedTrueAnomaly
+                     == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+
+        SECTION( "Test wrapper function" )
+        {
+            // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+            const Real eccentricity = 0.0;
+            const Real ellipticEccentricAnomaly = -99.54 / 180.0 * pi;
+            const Real expectedTrueAnomaly = 4.545884569744431;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                    = convertEccentricAnomalyToTrueAnomaly(
+                        ellipticEccentricAnomaly, eccentricity ) + 2.0 * pi;
+
+            REQUIRE( computedTrueAnomaly
+                        == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+
+        SECTION( "Test at periapsis (E=0)")
+        {
+            const Real eccentricity = 0.0;
+            const Real ellipticEccentricAnomaly = 0.0;
+            const Real expectedTrueAnomaly = 0.0;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                = convertEllipticalEccentricAnomalyToTrueAnomaly( ellipticEccentricAnomaly,
+                                                                  eccentricity );
+
+            REQUIRE( computedTrueAnomaly
+                     == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+
+        SECTION( "Test wrapper function" )
+        {
+            // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+            const Real eccentricity = 0.0;
+            const Real ellipticEccentricAnomaly = 0.0;
+            const Real expectedTrueAnomaly = 0.0;
+
+            // Compute true anomaly, modulo 2*pi.
+            const Real computedTrueAnomaly
+                    = convertEccentricAnomalyToTrueAnomaly(
+                        ellipticEccentricAnomaly, eccentricity );
+
+            REQUIRE( computedTrueAnomaly
+                        == Approx( expectedTrueAnomaly ).epsilon(
+                            std::numeric_limits< Real >::epsilon( ) ) );
+        }
+    }
+
+    SECTION( "Test hyperbolic orbits" )
+    {
+        SECTION( "Test general case" )
+        {
+            // The benchmark data is obtained from (Fortescue, 2003).
+
+            const double eccentricity = 3.0;
+            const double hyperbolicEccentricAnomaly = 0.3879;
+            const double expectedTrueAnomaly = 0.5291;
+
+            // Compute true anomaly.
+            const Real computedTrueAnomaly
+                = convertHyperbolicEccentricAnomalyToTrueAnomaly( hyperbolicEccentricAnomaly,
+                                                                  eccentricity );
+
+            REQUIRE( computedTrueAnomaly == Approx( expectedTrueAnomaly ).epsilon( 1.0e-5 ) );
+        }
+
+        SECTION( "Test wrapper function" )
+        {
+            // The benchmark data is obtained from (Fortescue, 2003).
+
+            const Real eccentricity = 3.0;
+            const Real hyperbolicEccentricAnomaly = 0.3879;
+            const Real expectedTrueAnomaly = 0.5291;
+
+            // Compute true anomaly.
+            const Real computedTrueAnomaly
+                = convertEccentricAnomalyToTrueAnomaly( hyperbolicEccentricAnomaly, eccentricity );
+
+            REQUIRE( computedTrueAnomaly == Approx( expectedTrueAnomaly ).epsilon( 1.0e-5 ) );
         }
     }
 }
