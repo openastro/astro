@@ -49,9 +49,9 @@ namespace astro
     const Real&    argumentOfPeriapsisDot )
  {
     const Real J2 = 0.00108263;
-    const Real semiMajorAxis = keplerianElements[ astro::semiMajorAxisIndiex ];
-    const Real inclination   = keplerianElements[ astro::inclinationIndiex ];
-    const Real eccentricity  = keplerianElements[ astro::eccentricityIndiex ];
+    const Real semiMajorAxis = keplerianElements[ astro::semiMajorAxisIndex ];
+    const Real inclination   = keplerianElements[ astro::inclinationIndex ];
+    const Real eccentricity  = keplerianElements[ astro::eccentricityIndex ];
 
     longitudeAscendingNodeDot
         = -1.5 * meanMotion * J2
