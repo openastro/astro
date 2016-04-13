@@ -8,8 +8,10 @@
 #define ASTRO_HPP
 
 #include "Astro/constants.hpp"
+#include "Astro/j2Gravity.hpp"
 #include "Astro/orbitalElementConversions.hpp"
 #include "Astro/twoBodyMethods.hpp"
 #include "Astro/solarRadiationPressureAccelerationModel.hpp"
+#include "Astro/stateVectorIndices.hpp"
 
 #endif // ASTRO_HPP
