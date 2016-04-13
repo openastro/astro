@@ -33,7 +33,7 @@ namespace astro
  *                                  keplerianElements( 4 ) = longitude of ascending node  [rad] <br>
  *                                  keplerianElements( 5 ) = true anomaly                 [rad]
  * @param[in]  meanMotion           meanMotion of the orbiting object [deg/day]
- * @param[in]  earthMeanRadius      Earth mean radius [km]
+ * @param[in]  earthEquatorialRadius     Earth equatorial radius [km]
  *
  * @param[out] longitudeAscendingNodeDot Stores rate of change in longitude of ascending node
  *                                       due to J2 perturbation [deg/day]
@@ -44,9 +44,9 @@ namespace astro
  void computeFirstOrderAveragedEffectJ2Perturbation(
     const Vector6& keplerianElements,
     const Real     meanMotion,
-    const Real     earthMeanRadius,
-    const Real&    longitudeAscendingNodeDot,
-    const Real&    argumentOfPeriapsisDot )
+    const Real     earthEquatorialRadius,
+    Real&          longitudeAscendingNodeDot,
+    Real&          argumentOfPeriapsisDot )
  {
     const Real J2 = 0.00108263;
     const Real semiMajorAxis = keplerianElements[ astro::semiMajorAxisIndex ];
@@ -55,13 +55,13 @@ namespace astro
 
     longitudeAscendingNodeDot
         = -1.5 * meanMotion * J2
-          * ( earthMeanRadius / semiMajorAxis ) * ( earthMeanRadius / semiMajorAxis )
+          * ( earthEquatorialRadius / semiMajorAxis ) * ( earthEquatorialRadius / semiMajorAxis )
           * std::cos( inclination )
           / ( ( 1 - eccentricity * eccentricity ) * ( 1 - eccentricity * eccentricity ) );
 
     argumentOfPeriapsisDot
         = 0.75 * meanMotion * J2
-          * ( earthMeanRadius / semiMajorAxis ) * ( earthMeanRadius / semiMajorAxis )
+          * ( earthEquatorialRadius / semiMajorAxis ) * ( earthEquatorialRadius / semiMajorAxis )
           * ( 4 - 5 * std::sin( inclination ) * std::sin( inclination ) )
           / ( ( 1 - eccentricity * eccentricity ) * ( 1 - eccentricity * eccentricity ) );
  }

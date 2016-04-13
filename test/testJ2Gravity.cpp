@@ -23,20 +23,20 @@ typedef double Real;
 typedef std::vector< Real > Vector;
 
 TEST_CASE( "First order, orbit-averaged Keplerian element rate of change due to J2 perturbation",
-            "[first-order-orbit-averaged-j2]" )
+           "[first-order-orbit-averaged-j2]" )
 {
     const Real pi = 3.14159265358979323846;
-    // Earth's mean radius in [km].
-    const Real earthMeanRadius = 6371.003;
+    // Earth's equatorial radius in [km].
+    const Real earthEquatorialRadius = 6378.13649;
     // Earth's gravitational parameter [km^3 s^-2].
     const Real earthGravitationalParameter = 398600.4418;
 
-    SECTION( "Test for Sun-Synchronous orbit" )
+    SECTION( "Test for Shuttle (LEO) orbit" )
     {
-        const Vector keplerianElements( 6 );
-        keplerianElements[ 0 ] = 6728.0;
+        Vector keplerianElements( 6 );
+        keplerianElements[ 0 ] = 6700.0;
         keplerianElements[ 1 ] = 0.0;
-        keplerianElements[ 2 ] = 96.85 * pi / 180.0 ;
+        keplerianElements[ 2 ] = 28.0 * pi / 180.0 ;
         keplerianElements[ 3 ] = 0.0;
         keplerianElements[ 4 ] = 0.0;
         keplerianElements[ 5 ] = 0.0;
@@ -50,31 +50,31 @@ TEST_CASE( "First order, orbit-averaged Keplerian element rate of change due to 
         // Mean motion in degrees per day.
         const Real meanMotionDegreesPerDay = ( meanMotion * 86400.0 ) * ( 180.0 / pi );
 
-        const Real longitudeAscendingNodeDot = 0.0;
-        const Real argumentOfPeriapsisDot = 0.0;
+        Real longitudeAscendingNodeDot = 0.0;
+        Real argumentOfPeriapsisDot = 0.0;
 
-        const Real expectedLongitudeAscendingNodeDot = 0.986;
-        const Real expectedArgumentOfPeriapsisDot = -4.890;
+        const Real expectedLongitudeAscendingNodeDot = -7.35;
+        const Real expectedArgumentOfPeriapsisDot = 12.05;
 
         computeFirstOrderAveragedEffectJ2Perturbation(
             keplerianElements,
             meanMotionDegreesPerDay,
-            earthMeanRadius,
+            earthEquatorialRadius,
             longitudeAscendingNodeDot,
             argumentOfPeriapsisDot );
 
         REQUIRE( expectedLongitudeAscendingNodeDot
-                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-10 ) );
+                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-2 ) );
         REQUIRE( expectedArgumentOfPeriapsisDot
-                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-10 ) );
+                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-2 ) );
     }
 
-    SECTION( "Test for Molniya orbit" )
+    SECTION( "Test for GPS (HEO) orbit" )
     {
-        const Vector keplerianElements( 6 );
+        Vector keplerianElements( 6 );
         keplerianElements[ 0 ] = 26600.0;
-        keplerianElements[ 1 ] = 0.75;
-        keplerianElements[ 2 ] = 63.4 * pi / 180.0 ;
+        keplerianElements[ 1 ] = 0.0;
+        keplerianElements[ 2 ] = 60.0 * pi / 180.0 ;
         keplerianElements[ 3 ] = 0.0;
         keplerianElements[ 4 ] = 0.0;
         keplerianElements[ 5 ] = 0.0;
@@ -88,28 +88,28 @@ TEST_CASE( "First order, orbit-averaged Keplerian element rate of change due to 
         // Mean motion in degrees per day.
         const Real meanMotionDegreesPerDay = ( meanMotion * 86400.0 ) * ( 180.0 / pi );
 
-        const Real longitudeAscendingNodeDot = 0.0;
-        const Real argumentOfPeriapsisDot = 0.0;
+        Real longitudeAscendingNodeDot = 0.0;
+        Real argumentOfPeriapsisDot = 0.0;
 
-        const Real expectedLongitudeAscendingNodeDot = -0.30;
-        const Real expectedArgumentOfPeriapsisDot = 0.0;
+        const Real expectedLongitudeAscendingNodeDot = -0.033;
+        const Real expectedArgumentOfPeriapsisDot = 0.008;
 
         computeFirstOrderAveragedEffectJ2Perturbation(
             keplerianElements,
             meanMotionDegreesPerDay,
-            earthMeanRadius,
+            earthEquatorialRadius,
             longitudeAscendingNodeDot,
             argumentOfPeriapsisDot );
 
         REQUIRE( expectedLongitudeAscendingNodeDot
-                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-10 ) );
+                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-3 ) );
         REQUIRE( expectedArgumentOfPeriapsisDot
-                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-10 ) );
+                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-3 ) );
     }
 
-    SECTION( "Test for Geo-Stationary orbit" )
+    SECTION( "Test for Geo-Stationary (GEO) orbit" )
     {
-        const Vector keplerianElements( 6 );
+        Vector keplerianElements( 6 );
         keplerianElements[ 0 ] = 42160.0;
         keplerianElements[ 1 ] = 0.0;
         keplerianElements[ 2 ] = 0.0;
@@ -126,23 +126,23 @@ TEST_CASE( "First order, orbit-averaged Keplerian element rate of change due to 
         // Mean motion in degrees per day.
         const Real meanMotionDegreesPerDay = ( meanMotion * 86400.0 ) * ( 180.0 / pi );
 
-        const Real longitudeAscendingNodeDot = 0.0;
-        const Real argumentOfPeriapsisDot = 0.0;
+        Real longitudeAscendingNodeDot = 0.0;
+        Real argumentOfPeriapsisDot = 0.0;
 
         const Real expectedLongitudeAscendingNodeDot = -0.013;
-        const Real expectedArgumentOfPeriapsisDot = 0.025;
+        const Real expectedArgumentOfPeriapsisDot = 0.026;
 
         computeFirstOrderAveragedEffectJ2Perturbation(
             keplerianElements,
             meanMotionDegreesPerDay,
-            earthMeanRadius,
+            earthEquatorialRadius,
             longitudeAscendingNodeDot,
             argumentOfPeriapsisDot );
 
         REQUIRE( expectedLongitudeAscendingNodeDot
-                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-10 ) );
+                    == Approx( longitudeAscendingNodeDot ).epsilon( 1.0e-3 ) );
         REQUIRE( expectedArgumentOfPeriapsisDot
-                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-10 ) );
+                    == Approx( argumentOfPeriapsisDot ).epsilon( 1.0e-3 ) );
     }
 }
 
