@@ -11,5 +11,6 @@
 #include "Astro/orbitalElementConversions.hpp"
 #include "Astro/twoBodyMethods.hpp"
 #include "Astro/solarRadiationPressureAccelerationModel.hpp"
+#include "Astro/stateVectorIndices.hpp"
 
 #endif // ASTRO_HPP
