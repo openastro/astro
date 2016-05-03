@@ -9,6 +9,7 @@
 
 #include "Astro/constants.hpp"
 #include "Astro/orbitalElementConversions.hpp"
+#include "Astro/relativeMotion.hpp"
 #include "Astro/twoBodyMethods.hpp"
 #include "Astro/solarRadiationPressureAccelerationModel.hpp"
 #include "Astro/stateVectorIndices.hpp"
