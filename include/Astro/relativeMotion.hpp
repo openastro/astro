@@ -34,8 +34,8 @@ namespace astro
  *
  * @sa computeUnperturbedHillEquations
  * @tparam  Real                   Real type
- * @tparam  Vector 6               6-Vector type
- * @tparam  Vector 3               3-Vector type
+ * @tparam  Vector6                6-Vector type
+ * @tparam  Vector3                3-Vector type
  * @param   initialState           Cartesian state at initial epoch in Hill frame
  * @param   finalTime              Final epoch
  * @param   targetMeanMotion       Mean motion of target orbit (circular)
