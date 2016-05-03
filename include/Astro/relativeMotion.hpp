@@ -8,9 +8,8 @@
 #define ASTRO_RELATIVE_MOTION_HPP
 
 #include <cmath>
-#include <vector>
 
-#include <Astro/astro.hpp>
+#include "Astro/stateVectorIndices.hpp"
 
 namespace astro
 {
