@@ -14,7 +14,7 @@
 
 #include <Eigen/Core>
 
-#include "Astro/solarRadiationPressureAccelerationModel.hpp"
+#include "astro/solarRadiationPressureAccelerationModel.hpp"
 
 namespace astro
 {

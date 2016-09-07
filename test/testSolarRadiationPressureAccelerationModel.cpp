@@ -12,7 +12,7 @@
 
 #include <catch.hpp>
 
-#include "Astro/solarRadiationPressureAccelerationModel.hpp"
+#include "astro/solarRadiationPressureAccelerationModel.hpp"
 
 namespace astro
 {

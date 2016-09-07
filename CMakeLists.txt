@@ -5,9 +5,9 @@
 cmake_minimum_required(VERSION 2.6)
 
 # Change this section to correspond with your project info.
-project(Astro C CXX)
+project(astro C CXX)
 set(PROJECT_SUMMARY                            "A simple astrodynamics library")
-set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "Kartik Kumar")
+set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "openastro")
 set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "me@kartikkumar.com")
 set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR        0)
 set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        1)
@@ -40,8 +40,6 @@ CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library" 
                                                "BUILD_TESTS"                        OFF)
 CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"       OFF
                                                "BUILD_TESTS"                        OFF)
-
-include(ProjectFiles.cmake)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release".
 if(((NOT CMAKE_BUILD_TYPE)
@@ -84,9 +82,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-include_directories(AFTER "${INCLUDE_PATH}")
-
 include(Dependencies.cmake)
+include(ProjectFiles.cmake)
+include_directories(AFTER "${INCLUDE_PATH}")
 
 if(BUILD_DOXYGEN_DOCS)
   find_package(Doxygen)
@@ -111,15 +109,23 @@ if(BUILD_TESTS)
   enable_testing()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TEST_PATH})
 
+  add_executable(${TEST_NAME} ${TEST_SRC})
+  if(NOT CATCH_FOUND)
+    add_dependencies(${TEST_NAME} sml-lib catch-lib)
+  endif(NOT CATCH_FOUND)
+  add_test(NAME ${TEST_NAME} COMMAND "${TEST_PATH}/${TEST_NAME}")
+
   if(BUILD_TESTS_WITH_EIGEN)
     string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
     string(REPLACE "Model" "ModelEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
     add_executable(${TEST_NAME}_eigen ${TESTS_SRC_EIGEN})
+    if(NOT EIGEN3_FOUND)
+      add_dependencies(${TEST_NAME}_eigen sml-lib eigen-lib)
+    else()
+      add_dependencies(${TEST_NAME}_eigen sml-lib catch-lib)
+    endif(NOT EIGEN3_FOUND)
     add_test(NAME ${TEST_NAME}_eigen COMMAND "${TEST_PATH}/${TEST_NAME}_eigen")
   endif(BUILD_TESTS_WITH_EIGEN)
-
-  add_executable(${TEST_NAME} ${TEST_SRC})
-  add_test(NAME ${TEST_NAME} COMMAND "${TEST_PATH}/${TEST_NAME}")
 
   if(BUILD_COVERAGE_ANALYSIS)
     include(CodeCoverage)

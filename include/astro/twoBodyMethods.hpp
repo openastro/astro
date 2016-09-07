@@ -13,9 +13,9 @@
 #include <cmath>
 #include <stdexcept>
 
-#include <SML/sml.hpp>
+#include <sml/sml.hpp>
 
-#include "Astro/constants.hpp"
+#include "astro/constants.hpp"
 
 namespace astro
 {

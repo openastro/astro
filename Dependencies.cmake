@@ -5,8 +5,12 @@
 # Include script to build external library with CMake.
 include(ExternalProject)
 
+# -------------------------------
+
+# SML: https://github.com/openastro/sml
+
 if(NOT BUILD_DEPENDENCIES)
-  find_package(SML)
+  find_package(sml)
 endif(NOT BUILD_DEPENDENCIES)
 
 if(NOT SML_FOUND)
@@ -40,6 +44,9 @@ endif(NOT APPLE)
 
 # -------------------------------
 
+# Catch: https://github.com/philsquared/Catch
+# Eigen: http://eigen.tuxfamily.org
+
 if(BUILD_TESTS)
   if(NOT BUILD_DEPENDENCIES)
     find_package(CATCH)
@@ -47,7 +54,7 @@ if(BUILD_TESTS)
 
   if(NOT CATCH_FOUND)
     message(STATUS "Catch will be downloaded when ${CMAKE_PROJECT_NAME} is built")
-    ExternalProject_Add(catch
+    ExternalProject_Add(catch-lib
       PREFIX ${EXTERNAL_PATH}/Catch
       #--Download step--------------
       URL https://github.com/philsquared/Catch/archive/master.zip
@@ -64,7 +71,7 @@ if(BUILD_TESTS)
       #--Output logging-------------
       LOG_DOWNLOAD ON
     )
-    ExternalProject_Get_Property(catch source_dir)
+    ExternalProject_Get_Property(catch-lib source_dir)
     set(CATCH_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for Catch")
   endif(NOT CATCH_FOUND)
 
@@ -82,10 +89,11 @@ if(BUILD_TESTS)
     if(NOT EIGEN3_FOUND)
       message(STATUS "Eigen will be downloaded when ${CMAKE_PROJECT_NAME} is built")
       ExternalProject_Add(eigen-lib
+        DEPENDS catch-lib
         PREFIX ${EXTERNAL_PATH}/Eigen
         #--Download step--------------
-        URL http://bitbucket.org/eigen/eigen/get/3.2.2.tar.gz
-        TIMEOUT 30
+        URL https://bitbucket.org/eigen/eigen/get/3.2.9.zip
+        TIMEOUT 60
         #--Update/Patch step----------
         UPDATE_COMMAND ""
         PATCH_COMMAND ""
@@ -109,3 +117,5 @@ if(BUILD_TESTS)
     endif(NOT APPLE)
   endif(BUILD_TESTS_WITH_EIGEN)
 endif(BUILD_TESTS)
+
+# -------------------------------

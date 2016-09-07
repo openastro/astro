@@ -6,7 +6,7 @@
 
 #include <catch.hpp>
 
-#include "Astro/constants.hpp"
+#include "astro/constants.hpp"
 
 namespace astro
 {
@@ -21,7 +21,7 @@ TEST_CASE( "Test definition of constants", "[constants]")
     REQUIRE( ASTRO_JULIAN_YEAR_IN_SECONDS 			== 3.15576e7   );
     REQUIRE( ASTRO_AU_IN_KM               			== 149597870.7 );
     REQUIRE( ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS	== 1721425.5   );
-    
+
 }
 
 } // namespace tests

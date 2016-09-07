@@ -10,9 +10,9 @@
 
 #include <Eigen/Core>
 
-#include <SML/sml.hpp>
+#include <sml/sml.hpp>
 
-#include "Astro/orbitalElementConversions.hpp"
+#include "astro/orbitalElementConversions.hpp"
 
 namespace astro
 {

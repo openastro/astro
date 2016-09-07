@@ -6,7 +6,7 @@
 
 #include <catch.hpp>
 
-#include "Astro/stateVectorIndices.hpp"
+#include "astro/stateVectorIndices.hpp"
 
 namespace astro
 {

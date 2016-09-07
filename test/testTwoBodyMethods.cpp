@@ -9,7 +9,7 @@
 
 #include <catch.hpp>
 
-#include "Astro/twoBodyMethods.hpp"
+#include "astro/twoBodyMethods.hpp"
 
 namespace astro
 {

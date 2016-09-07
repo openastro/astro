@@ -7,10 +7,10 @@
 #ifndef ASTRO_HPP
 #define ASTRO_HPP
 
-#include "Astro/constants.hpp"
-#include "Astro/orbitalElementConversions.hpp"
-#include "Astro/twoBodyMethods.hpp"
-#include "Astro/solarRadiationPressureAccelerationModel.hpp"
-#include "Astro/stateVectorIndices.hpp"
+#include "astro/constants.hpp"
+#include "astro/orbitalElementConversions.hpp"
+#include "astro/twoBodyMethods.hpp"
+#include "astro/solarRadiationPressureAccelerationModel.hpp"
+#include "astro/stateVectorIndices.hpp"
 
 #endif // ASTRO_HPP

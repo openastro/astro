@@ -16,9 +16,9 @@
 #include <stdexcept>
 #include <vector>
 
-#include <SML/sml.hpp>
+#include <sml/sml.hpp>
 
-#include "Astro/stateVectorIndices.hpp"
+#include "astro/stateVectorIndices.hpp"
 
 namespace astro
 {

@@ -10,7 +10,7 @@
 #ifndef ASTRO_SOLAR_PRESSURE_ACCELERATION_MODEL_HPP
 #define ASTRO_SOLAR_PRESSURE_ACCELERATION_MODEL_HPP
 
-#include <SML/linearAlgebra.hpp>
+#include <sml/linearAlgebra.hpp>
 
 namespace astro
 {
