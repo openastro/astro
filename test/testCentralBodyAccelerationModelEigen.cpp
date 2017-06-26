@@ -14,7 +14,7 @@
 
 #include <Eigen/Core>
 
-#include "Astro/centralBodyAccelerationModel.hpp"
+#include "astro/centralBodyAccelerationModel.hpp"
 
 namespace astro
 {
@@ -43,11 +43,11 @@ TEST_CASE( "Compute acceleration vector for a GEO spacecraft using a custom made
     const Real gravitationalParameter = 3.986005e5;
 
     // Set position vector of the spacecraft relative to the origin of the reference frame [km].
-    // In the following example the Earth-fixed reference frame is used ((Wertz, 1999; page 96). 
-    // Moreover, the spacecraft is assumed to be in positioned in Geostationary Orbit 
-    // (GEO) and on the Greenwich Meridian. 
+    // In the following example the Earth-fixed reference frame is used ((Wertz, 1999; page 96).
+    // Moreover, the spacecraft is assumed to be in positioned in Geostationary Orbit
+    // (GEO) and on the Greenwich Meridian.
     Vector positionVector( 3 );
-    positionVector[ 0 ] = 4.2164e4; 
+    positionVector[ 0 ] = 4.2164e4;
     positionVector[ 1 ] = 0.0;
     positionVector[ 2 ] = 0.0;
 
@@ -56,7 +56,7 @@ TEST_CASE( "Compute acceleration vector for a GEO spacecraft using a custom made
                                                                         positionVector );
 
     // Check if computed acceleration matches expected values.
-    REQUIRE( computedAcceleration[ 0 ] 
+    REQUIRE( computedAcceleration[ 0 ]
              == Approx( expectedAcceleration[ 0 ] ).epsilon( tolerance ) );
     REQUIRE( computedAcceleration[ 1 ]
              == Approx( expectedAcceleration[ 1 ] ).epsilon( tolerance ) );
@@ -67,7 +67,7 @@ TEST_CASE( "Compute acceleration vector for a GEO spacecraft using a custom made
 TEST_CASE( "Compute acceleration vector for arbitrary case using Tudat library values",
            "[central_gravity, acceleration, models]" )
 {
-    // Test case computed using the data of the Tudat library calculated using the planet Mercury as 
+    // Test case computed using the data of the Tudat library calculated using the planet Mercury as
     // a central body. More info can be found at the following link: http://goo.gl/MyXBJE.
 
     // Set expected acceleration vector [m s^-2].
@@ -89,7 +89,7 @@ TEST_CASE( "Compute acceleration vector for arbitrary case using Tudat library v
     positionVector[ 2 ] =  3012.1e3;
 
     // Compute the acceleration vector [m s^-2].
-    const Vector computedAcceleration = computeCentralBodyAcceleration( gravitationalParameter,   
+    const Vector computedAcceleration = computeCentralBodyAcceleration( gravitationalParameter,
                                                                         positionVector);
 
     // Check if computed acceleration matches expected values.

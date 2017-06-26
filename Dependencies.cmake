@@ -14,9 +14,9 @@ if(NOT BUILD_DEPENDENCIES)
 endif(NOT BUILD_DEPENDENCIES)
 
 if(NOT SML_FOUND)
-  message(STATUS "SML will be downloaded when ${CMAKE_PROJECT_NAME} is built")
+  message(STATUS "sml will be downloaded when ${CMAKE_PROJECT_NAME} is built")
   ExternalProject_Add(sml-lib
-    PREFIX ${EXTERNAL_PATH}/SML
+    PREFIX ${EXTERNAL_PATH}/sml
     #--Download step--------------
     URL https://github.com/openastro/sml/archive/master.zip
     TIMEOUT 30
@@ -33,7 +33,7 @@ if(NOT SML_FOUND)
     LOG_DOWNLOAD ON
   )
   ExternalProject_Get_Property(sml-lib source_dir)
-  set(SML_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for SML")
+  set(SML_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for sml")
 endif(NOT SML_FOUND)
 
 if(NOT APPLE)
