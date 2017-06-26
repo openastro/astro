@@ -5,6 +5,7 @@
 # Set project test source files.
 set(TEST_SRC
   "${TEST_SRC_PATH}/testAstro.cpp"
+  "${TEST_SRC_PATH}/testCentralBodyAccelerationModel.cpp"
   "${TEST_SRC_PATH}/testConstants.cpp"
   "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
   "${TEST_SRC_PATH}/testStateVectorIndices.cpp"

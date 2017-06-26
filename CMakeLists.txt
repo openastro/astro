@@ -36,10 +36,19 @@ OPTION(BUILD_TESTS                             "Build tests"                    
 OPTION(BUILD_DEPENDENCIES                      "Force local build of dependencies"  OFF)
 
 include(CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library"     OFF
-                                               "BUILD_TESTS"                        OFF)
-CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"       OFF
-                                               "BUILD_TESTS"                        OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library" OFF
+                                               "BUILD_TESTS"                    OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"   OFF
+                                               "BUILD_TESTS"                    OFF)
+
+set(TEST_SRC
+  "${TEST_SRC_PATH}/testAstro.cpp"
+  "${TEST_SRC_PATH}/testCentralBodyAccelerationModel.cpp"
+  "${TEST_SRC_PATH}/testConstants.cpp"
+  "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
+  "${TEST_SRC_PATH}/testSolarRadiationPressureAccelerationModel.cpp"
+  "${TEST_SRC_PATH}/testTwoBodyMethods.cpp"
+)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release".
 if(((NOT CMAKE_BUILD_TYPE)
