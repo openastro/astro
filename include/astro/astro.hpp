@@ -8,6 +8,7 @@
 #define ASTRO_HPP
 
 #include "astro/constants.hpp"
+#include "astro/centralBodyAccelerationModel.hpp"
 #include "astro/orbitalElementConversions.hpp"
 #include "astro/twoBodyMethods.hpp"
 #include "astro/solarRadiationPressureAccelerationModel.hpp"
