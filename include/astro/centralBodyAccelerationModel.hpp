@@ -36,27 +36,24 @@ namespace astro
  * @tparam     Real                           Real type
  * @tparam     Vector3                        3-vector type
  * @param[in]  gravitationalParameter         Gravitational parameter of central body  [km^3 s^-2]
- * @param[in]  positionVector                 Position vector of the body              [km]
+ * @param[in]  position                       Position vector of the orbiting body     [km]
  * @return                                    Acceleration vector                      [km s^-2]
  */
 template< typename Real, typename Vector3 >
 Vector3 computeCentralBodyAcceleration( const Real     gravitationalParameter,
-                                        const Vector3& positionVector )
+                                        const Vector3& position )
 {
-    Vector3 bodyAcceleration = positionVector;
+    Vector3 acceleration = position;
 
-    // Compute the magnitude of the position vector.
-    const double positionNorm = sml::norm< double >( positionVector );
-
+    const double positionNorm = sml::norm< double >( position );
     const double preMultiplier = -gravitationalParameter
                                  / ( positionNorm * positionNorm * positionNorm );
 
-    // Compute the acceleration.
-    bodyAcceleration[ 0 ] = preMultiplier * positionVector[ 0 ];
-    bodyAcceleration[ 1 ] = preMultiplier * positionVector[ 1 ];
-    bodyAcceleration[ 2 ] = preMultiplier * positionVector[ 2 ];
+    acceleration[ 0 ] = preMultiplier * position[ 0 ];
+    acceleration[ 1 ] = preMultiplier * position[ 1 ];
+    acceleration[ 2 ] = preMultiplier * position[ 2 ];
 
-    return bodyAcceleration;
+    return acceleration;
 }
 
 } // namespace astro

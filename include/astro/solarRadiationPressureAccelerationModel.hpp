@@ -10,7 +10,7 @@
 #ifndef ASTRO_SOLAR_PRESSURE_ACCELERATION_MODEL_HPP
 #define ASTRO_SOLAR_PRESSURE_ACCELERATION_MODEL_HPP
 
-#include <sml/linearAlgebra.hpp>
+#include "sml/linearAlgebra.hpp"
 
 namespace astro
 {
@@ -45,21 +45,16 @@ Vector3 computeSolarRadiationPressureAcceleration( const Real     radiationPress
                                                    const Real     area,
                                                    const Real     mass )
 {
-
-    // Initialize the output acceleration.
     //@todo: [JRMM] Change the initialization
-    Vector3 radiationPressureAcceleration = vectorToSource;
+    Vector3 acceleration = vectorToSource;
 
-    // Compute the solar pressure radiation magnitude.
-    const Real radiationPressureMagnitude = -radiationPressure * radiationPressureCoefficient
-                                            * area / mass;
+    const Real preMultiplier = -radiationPressure * radiationPressureCoefficient * area / mass;
 
-    // Compute the radiation pressure acceleration vector.
-    radiationPressureAcceleration[ 0 ] = radiationPressureMagnitude * vectorToSource[ 0 ];
-    radiationPressureAcceleration[ 1 ] = radiationPressureMagnitude * vectorToSource[ 1 ];
-    radiationPressureAcceleration[ 2 ] = radiationPressureMagnitude * vectorToSource[ 2 ];
+    acceleration[ 0 ] = preMultiplier * vectorToSource[ 0 ];
+    acceleration[ 1 ] = preMultiplier * vectorToSource[ 1 ];
+    acceleration[ 2 ] = preMultiplier * vectorToSource[ 2 ];
 
-    return radiationPressureAcceleration;
+    return acceleration;
 }
 
 } // namespace astro
