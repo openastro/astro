@@ -7,6 +7,7 @@ set(TEST_SRC
   "${TEST_SRC_PATH}/testAstro.cpp"
   "${TEST_SRC_PATH}/testCentralBodyAccelerationModel.cpp"
   "${TEST_SRC_PATH}/testConstants.cpp"
+  "${TEST_SRC_PATH}/testJ2AccelerationModel.cpp"
   "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
   "${TEST_SRC_PATH}/testStateVectorIndices.cpp"
   "${TEST_SRC_PATH}/testSolarRadiationPressureAccelerationModel.cpp"
