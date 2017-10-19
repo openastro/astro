@@ -30,6 +30,7 @@ addons:
   apt:
     packages:
       - texlive
+      - ghostscript
   coverity_scan:
     project:
       name: "kartikkumar/astro"
