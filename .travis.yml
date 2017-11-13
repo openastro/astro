@@ -30,7 +30,9 @@ addons:
   apt:
     packages:
       - texlive
+      - graphviz
       - ghostscript
+      - mscgen
   coverity_scan:
     project:
       name: "kartikkumar/astro"

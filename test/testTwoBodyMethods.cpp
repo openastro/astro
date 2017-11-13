@@ -98,7 +98,7 @@ TEST_CASE( "Compute circular velocity", "[circular-velocity]" )
 
             //! Check if computed circular velocity matches expected value.
             REQUIRE( ( computedCircularVelocity / 1.0e3 )
-                     == Approx( expectedCircularVelocities[ i ] ).epsilon( 1.0e-4 ) );
+                     == Approx( expectedCircularVelocities[ i ] ).epsilon( 1.0e-3 ) );
         }
     }
 

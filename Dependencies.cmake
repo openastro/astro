@@ -72,7 +72,7 @@ if(BUILD_TESTS)
       LOG_DOWNLOAD ON
     )
     ExternalProject_Get_Property(catch-lib source_dir)
-    set(CATCH_INCLUDE_DIRS ${source_dir}/include CACHE INTERNAL "Path to include folder for Catch")
+    set(CATCH_INCLUDE_DIRS ${source_dir}/single_include CACHE INTERNAL "Path to include folder for Catch")
   endif(NOT CATCH_FOUND)
 
   if(NOT APPLE)
