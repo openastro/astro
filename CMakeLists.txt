@@ -3,6 +3,7 @@
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
 cmake_minimum_required(VERSION 2.6)
+set(CMAKE_CXX_STANDARD 11)
 
 # Change this section to correspond with your project info.
 project(astro C CXX)
