@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
@@ -12,8 +12,6 @@
 
 #include <cmath>
 #include <stdexcept>
-
-#include <sml/sml.hpp>
 
 #include "astro/constants.hpp"
 
@@ -73,7 +71,7 @@ Real computeKeplerOrbitalPeriod( const Real semiMajorAxis,
                                  const Real gravitationalParameterOfCentralBody,
                                  const Real massOfOrbitingBody = 0.0 )
 {
-    return 2.0 * sml::SML_PI
+    return 2.0 * 3.14159265358979323846
         * std::sqrt( ( semiMajorAxis * semiMajorAxis * semiMajorAxis )
                      / ( ( ASTRO_GRAVITATIONAL_CONSTANT * massOfOrbitingBody )
                         + gravitationalParameterOfCentralBody ) );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
@@ -10,7 +10,7 @@
 #include <cmath>
 #include <vector>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 #include "astro/centralBodyAccelerationModel.hpp"
 #include "astro/j2AccelerationModel.hpp"

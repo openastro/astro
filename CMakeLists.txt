@@ -1,4 +1,4 @@
-# Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+# Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
 # Distributed under the MIT License.
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
@@ -10,8 +10,8 @@ project(astro C CXX)
 set(PROJECT_SUMMARY                            "A simple astrodynamics library")
 set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "openastro")
 set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "me@kartikkumar.com")
-set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR        0)
-set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        1)
+set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR        1)
+set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        0)
 set(${CMAKE_PROJECT_NAME}_VERSION_PATCH        0)
 set(PROJECT_VERSION
   "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
@@ -24,11 +24,8 @@ if(NOT EXTERNAL_PATH)
   set(EXTERNAL_PATH                            "${PROJECT_PATH}/external")
 endif(NOT EXTERNAL_PATH)
 if(NOT DOXYGEN_PATH)
-  set(DOXYGEN_PATH                             "${PROJECT_PATH}/doxydocs")
+  set(DOXYGEN_PATH                             "${PROJECT_PATH}/docs")
 endif(NOT DOXYGEN_PATH)
-if(NOT DOCS_PATH)
-  set(DOCS_PATH                                "${PROJECT_PATH}/docs")
-endif(NOT DOCS_PATH)
 set(TEST_PATH                                  "${PROJECT_BINARY_DIR}/test")
 set(TEST_NAME                                  "test_${CMAKE_PROJECT_NAME}")
 
@@ -37,19 +34,8 @@ OPTION(BUILD_TESTS                             "Build tests"                    
 OPTION(BUILD_DEPENDENCIES                      "Force local build of dependencies"  OFF)
 
 include(CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION(BUILD_TESTS_WITH_EIGEN  "Build tests with Eigen library" OFF
-                                               "BUILD_TESTS"                    OFF)
 CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"   OFF
                                                "BUILD_TESTS"                    OFF)
-
-set(TEST_SRC
-  "${TEST_SRC_PATH}/testAstro.cpp"
-  "${TEST_SRC_PATH}/testCentralBodyAccelerationModel.cpp"
-  "${TEST_SRC_PATH}/testConstants.cpp"
-  "${TEST_SRC_PATH}/testOrbitalElementConversions.cpp"
-  "${TEST_SRC_PATH}/testSolarRadiationPressureAccelerationModel.cpp"
-  "${TEST_SRC_PATH}/testTwoBodyMethods.cpp"
-)
 
 # Set CMake build-type. If it not supplied by the user, the default built type is "Release".
 if(((NOT CMAKE_BUILD_TYPE)
@@ -108,9 +94,9 @@ if(BUILD_DOXYGEN_DOCS)
                  ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
 
   # Add a custom target to run Doxygen whenever the project is built.
-  # If you do NOT want the documentation to be generated EVERY time you build the project
-  # then leave out the 'ALL' keyword from the command below.
-  add_custom_target(doxygen_docs ALL COMMAND ${DOXYGEN_EXECUTABLE}
+  # If you want the documentation to be generated EVERY time you build the project
+  # then add the 'ALL' keyword before 'COMMAND' below.
+  add_custom_target(doxygen_docs COMMAND ${DOXYGEN_EXECUTABLE}
                     ${PROJECT_BINARY_DIR}/Doxyfile
                     SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
 endif(BUILD_DOXYGEN_DOCS)
@@ -120,22 +106,10 @@ if(BUILD_TESTS)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TEST_PATH})
 
   add_executable(${TEST_NAME} ${TEST_SRC})
-  if(NOT CATCH_FOUND)
-    add_dependencies(${TEST_NAME} sml-lib catch-lib)
-  endif(NOT CATCH_FOUND)
+  if(NOT CATCH2_FOUND)
+    add_dependencies(${TEST_NAME} catch2-lib)
+  endif(NOT CATCH2_FOUND)
   add_test(NAME ${TEST_NAME} COMMAND "${TEST_PATH}/${TEST_NAME}")
-
-  if(BUILD_TESTS_WITH_EIGEN)
-    string(REPLACE "Conversions" "ConversionsEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
-    string(REPLACE "Model" "ModelEigen" TESTS_SRC_EIGEN "${TEST_SRC}")
-    add_executable(${TEST_NAME}_eigen ${TESTS_SRC_EIGEN})
-    if(NOT EIGEN3_FOUND)
-      add_dependencies(${TEST_NAME}_eigen sml-lib eigen-lib)
-    elseif(NOT CATCH_FOUND)
-      add_dependencies(${TEST_NAME}_eigen sml-lib catch-lib)
-    endif(NOT EIGEN3_FOUND)
-    add_test(NAME ${TEST_NAME}_eigen COMMAND "${TEST_PATH}/${TEST_NAME}_eigen")
-  endif(BUILD_TESTS_WITH_EIGEN)
 
   if(BUILD_COVERAGE_ANALYSIS)
     include(CodeCoverage)
@@ -162,7 +136,7 @@ set(CPACK_PACKAGE_VERSION_PATCH       "${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CMAKE_PROJECT_NAME}")
 if(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backlasshes.
+  # sure there is at least one set of four (4) backslashes.
   set(CPACK_NSIS_DISPLAY_NAME         "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
   set(CPACK_NSIS_CONTACT              "${CMAKE_PROJECT_NAME}_VENDOR_CONTACT")
   set(CPACK_NSIS_MODIFY_PATH ON)

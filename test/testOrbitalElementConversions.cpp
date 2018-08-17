@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
@@ -7,9 +7,7 @@
 #include <limits>
 #include <vector>
 
-#include <catch.hpp>
-
-#include <sml/sml.hpp>
+#include <catch2/catch.hpp>
 
 #include "astro/orbitalElementConversions.hpp"
 
@@ -225,8 +223,8 @@ TEST_CASE( "Convert true anomaly to eccentric anomaly" , "[true-to-eccentric-ano
 
         // Set true anomalies [rad].
         const Real trueAnomalies[ 3 ]
-            = { 82.16 / 180.0 * sml::SML_PI,
-                160.43 / 180.0 * sml::SML_PI,
+            = { 82.16 / 180.0 * 3.14159265358979323846,
+                160.43 / 180.0 * 3.14159265358979323846,
                 0.0 };
 
         // Set expected eccentric anomalies [rad].
@@ -334,8 +332,8 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
 
         // Set elliptical eccentric anomalies [rad].
         const Real ellipticalEccentricAnomalies[ 3 ]
-            = { 176.09 / 180.0 * sml::SML_PI,
-                320.12 / 180.0 * sml::SML_PI,
+            = { 176.09 / 180.0 * 3.14159265358979323846,
+                320.12 / 180.0 * 3.14159265358979323846,
                 0.0 };
 
         // Set expected mean anomalies [rad].
@@ -379,7 +377,7 @@ TEST_CASE( "Convert eccentric anomaly to mean anomaly" , "[eccentric-to-mean-ano
         const Real hyperbolicEccentricAnomalies[ 1 ] = { 1.6013761449 };
 
         // Set expected mean anomalies [rad].
-        const Real expectedMeanAnomalies[ 1 ] = { 235.4 / 180.0 * sml::SML_PI };
+        const Real expectedMeanAnomalies[ 1 ] = { 235.4 / 180.0 * 3.14159265358979323846 };
 
         // Loop through all the cases, compute the mean anomaly and check that the result
         // matches the expected value. Both the direct and wrapper functions are tested.

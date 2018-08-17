@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
@@ -31,6 +31,9 @@ const static double ASTRO_AU_IN_KM = 149597870.7;
 //! Start of Gregorian epoch in Julian days (Ramsey, 2016).
 const static double ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS = 1721425.5;
 
+//! Speed of light [m s^-1] (Wikipedia, 2018).
+const static double ASTRO_SPEED_OF_FLIGHT = 299792458.0;
+
 } // namespace astro
 
 #endif // ASTRO_CONSTANTS_HPP
@@ -41,7 +44,7 @@ const static double ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS = 1721425.5;
  *   of Astronomy (I. Appenzeller, ed.), Table 1, Kluwer Academic Publishers, Dordrecht.
  *  NASA (2012) Jet Propulsion Laboratory, Solar System Dynamics Astrodynamic Constants
  *   accessed 15 March 2016 on: http://ssd.jpl.nasa.gov/?constants
- *  Ramsey, C.B. (2016), Oxford Radiocarbon Accelerator Unit, Research Lab for 
+ *  Ramsey, C.B. (2016), Oxford Radiocarbon Accelerator Unit, Research Lab for
  *	 Archaeology, Dyson Perrins Building, South Parks Road, Oxford, OX1 3QY United Kingdom.
  *   accessed 15 March 2016 on: https://c14.arch.ox.ac.uk/oxcalhelp/hlp_analysis_calend.html
  */

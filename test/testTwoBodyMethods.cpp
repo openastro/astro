@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
@@ -7,7 +7,7 @@
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 #include "astro/twoBodyMethods.hpp"
 

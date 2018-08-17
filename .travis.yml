@@ -1,4 +1,4 @@
-# Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+# Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
 # Distributed under the MIT License.
 # See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
 
@@ -12,9 +12,9 @@ compiler:
 
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "WuBr3+twBwxp3J2ScRYyQ8FpA25kvqjo3S/JNJ7XD58Ds8YjpalZcCUBfvdcJpkpKD1LU6nyPWNQK9r+PEAMZmM55k+hm13PqSi+AfVFgVW/BvA3K7iz7FXspQbMo+jWAzrEqmC/YF4kQKJzdPU0e4AAOuppNKnCD5U3SLBekbI5PHTzSnFDdLIs2oSguWiCl8IPs+yOlIu4c+7ltJJagmYTB0JHkqTLK88RkUpj29YuYiZJ+EKyRaXxVE9Hxi2vq9/5S7IuqjPenR6iWlVgMnsERI1Bykb5/at3OeV7GxIatezwTPBGAaUx7v5XWxXfhFG72hECfjlASNnmqfcrZZDOH2DSwEfokQc7pKkAewtBkJD7j1NUcVV6JIxG66Ikntx4JZXP04VYhlHLxijxZ+geapdm4o61Bno9pmwkMS5TsnW57HyaFz1hqwriFJlPfqtlBwcGUVhwOke9UJeuMmIt8CGJqJhGVJYBLR9QezPuG1Aw5/vGY0vgRlxehjsa3X4LHQ8wHu05H6Eggost8XIGfWMYmdAKnsPd+4aUOXbf2rzNIZFfRmRkRAlb3Ale5wmA9nnLuLhuwYdvVhZSBSjqZ2iqnzpw5Zvew9RYWFhnIxcy0/fI26XgMgor5274HPnA3hlCYACntwVZDKr+HC2uZHhlR93Ygd28Tpe98wM="
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "gV49MCS1fEMqa53fReSjcxZOMLwhuauQJhFwJhqqi03m707yVqO97fZ+zxdXFdEeZ3FJu2ytPtW0g7pxijcUcd7Ema6YpatW5dIXDj6zf5OrJ5AfZYFJBogLfqS5AQSsYSz9Rb46UincDZaMYcWMWV+JnrzZnN/MSS2gJyx496vSXIoiPu5bxNDIOndGzGoBQ2RSDJ14ZM+wuEgOWr4v34cDpl9uBp0MRslZheHIWwEcFGcCVs00j2K2/wwpfn1S8i+0gMqXwfr5kiRFG2RqjjFXkx+j1JWzT4I4UbQH5CXXDJxAPK2MVwPjltEvGXSBYDA4OLpSe0EvlK6Tofro2KI/zaZGmnr8G24bJFvbB9V1vsup1YLy87/TBRWtSsxw7w8b6GnoM54nMDdyBobdrpc8NLiuClsqpPBlP5AqnYdh+GHJCSuN2p9/cgfSjnW08E4jdQPhjpwmttjAwiCcoJ+bJanxGcHmcEdeOFBZLPEm8SN4P9NS+9YgLV5jMZ8bcag5ef0g79k154heFuQ0g8UUtjjSbY6J4b+d4eTN/BIARWm0wAUE5YOQ6Qsvq8xjsWdGygJdYDcb522mMvmpPRj9ReA81pH6GwduWwQhX6ioPKxS1T7TlXNO7qIdKfSD1zjkEThiN5qScn+G9xPwGCzDkBt2murD/m7yQrYM72Q="
   matrix:
     - BUILD_TYPE=Debug
     - BUILD_TYPE=Release
@@ -38,7 +38,7 @@ addons:
       name: "kartikkumar/astro"
       description: "Build submitted via Travis CI"
     notification_email: me@kartikkumar.com
-    build_command_prepend: "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on -DBUILD_TESTS_WITH_EIGEN=on .."
+    build_command_prepend: "mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on .."
     build_command: "make"
     branch_pattern: coverity_scan
 
@@ -47,18 +47,15 @@ before_install:
   - bash scripts/install_doxygen.sh
   - chmod ugo+x scripts/check_doxygen.sh
   - if [ "$COVERITY_SCAN_BRANCH_PATTERN" != "coverity_scan" ] && [ "$CXX" == "g++" ] && [ "$BUILD_TYPE" == "Debug" ]; then
+      echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-;
       pip install --user cpp-coveralls;
     fi
-
-before_script::
-  - ls -R $HOME/cmake
-  - ls -R $HOME/doxygen
 
 script:
   - if [ "$COVERITY_SCAN_BRANCH_PATTERN" != "coverity_scan" ]; then
       mkdir build;
       cd build;
-      $HOME/cmake/bin/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on -DBUILD_TESTS_WITH_EIGEN=on -DDOXYGEN_EXECUTABLE=$HOME/doxygen/bin/doxygen -DBUILD_DOXYGEN_DOCS=on ..;
+      $HOME/cmake/bin/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTS=on -DDOXYGEN_EXECUTABLE=$HOME/doxygen/bin/doxygen -DBUILD_DOXYGEN_DOCS=on ..;
       make;
       ctest -V;
       ../scripts/check_doxygen.sh;

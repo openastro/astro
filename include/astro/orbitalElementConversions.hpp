@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
@@ -15,8 +15,6 @@
 #include <limits>
 #include <stdexcept>
 #include <vector>
-
-#include <sml/sml.hpp>
 
 #include "astro/stateVectorIndices.hpp"
 
@@ -82,38 +80,90 @@ Vector6 convertCartesianToKeplerianElements(
 
     Vector6 keplerianElements = cartesianElements;
 
+    typedef std::vector< Real > Vector;
+
     // Set position and velocity vectors.
-    std::vector< Real > position( 3 );
+    Vector position( 3 );
     position[ xPositionIndex ] = cartesianElements[ xPositionIndex ];
     position[ yPositionIndex ] = cartesianElements[ yPositionIndex ];
     position[ zPositionIndex ] = cartesianElements[ zPositionIndex ];
 
-    std::vector< Real > velocity( 3 );
+    Vector velocity( 3 );
     velocity[ 0 ] = cartesianElements[ xVelocityIndex ];
     velocity[ 1 ] = cartesianElements[ yVelocityIndex ];
     velocity[ 2 ] = cartesianElements[ zVelocityIndex ];
 
     // Compute orbital angular momentum vector.
-    const std::vector< Real > angularMomentum( sml::cross( position, velocity ) );
+    Vector angularMomentum( 3 );
+    angularMomentum[ 0 ] = position[ 1 ] * velocity[ 2 ] - position[ 2 ] * velocity[ 1 ];
+    angularMomentum[ 1 ] = position[ 2 ] * velocity[ 0 ] - position[ 0 ] * velocity[ 2 ];
+    angularMomentum[ 2 ] = position[ 0 ] * velocity[ 1 ] - position[ 1 ] * velocity[ 0 ];
 
     // Compute semi-latus rectum.
-    const Real semiLatusRectum
-        = sml::squaredNorm< Real >( angularMomentum ) / gravitationalParameter;
+    const Real angularMomentumSquaredNorm = angularMomentum[ 0 ] * angularMomentum[ 0 ]
+                                            + angularMomentum[ 1 ] * angularMomentum[ 1 ]
+                                            + angularMomentum[ 2 ] * angularMomentum[ 2 ];
+    const Real semiLatusRectum = angularMomentumSquaredNorm / gravitationalParameter;
 
     // Compute unit vector to ascending node.
-    std::vector< Real > ascendingNodeUnitVector
-        = sml::normalize< Real >(
-            sml::cross( sml::getZUnitVector< std::vector< Real > >( ),
-                        sml::normalize< Real >( angularMomentum ) ) );
+    const Real angularMomentumNorm = std::sqrt( angularMomentumSquaredNorm );
+    Vector angularMomentumNormalized( 3 );
+    angularMomentumNormalized[ 0 ] = angularMomentum[ 0 ] / angularMomentumNorm;
+    angularMomentumNormalized[ 1 ] = angularMomentum[ 1 ] / angularMomentumNorm;
+    angularMomentumNormalized[ 2 ] = angularMomentum[ 2 ] / angularMomentumNorm;
+
+    const Vector zUnitVector( { 0.0, 0.0, 1.0 } );
+
+    Vector ascendingNodeVector( 3 );
+    ascendingNodeVector[ 0 ] = zUnitVector[ 1 ] * angularMomentumNormalized[ 2 ]
+                               - zUnitVector[ 2 ] * angularMomentumNormalized[ 1 ];
+    ascendingNodeVector[ 1 ] = zUnitVector[ 2 ] * angularMomentumNormalized[ 0 ]
+                               - zUnitVector[ 0 ] * angularMomentumNormalized[ 2 ];
+    ascendingNodeVector[ 2 ] = zUnitVector[ 0 ] * angularMomentumNormalized[ 1 ]
+                               - zUnitVector[ 1 ] * angularMomentumNormalized[ 0 ];
+
+    const Real ascendingNodeVectorNorm
+        = std::sqrt( ascendingNodeVector[ 0 ] * ascendingNodeVector[ 0 ]
+                     + ascendingNodeVector[ 1 ] * ascendingNodeVector[ 1 ]
+                     + ascendingNodeVector[ 2 ] * ascendingNodeVector[ 2 ] );
+
+    Vector ascendingNodeUnitVector( 3 );
+    ascendingNodeUnitVector[ 0 ] = ascendingNodeVector[ 0 ] / ascendingNodeVectorNorm;
+    ascendingNodeUnitVector[ 1 ] = ascendingNodeVector[ 1 ] / ascendingNodeVectorNorm;
+    ascendingNodeUnitVector[ 2 ] = ascendingNodeVector[ 2 ] / ascendingNodeVectorNorm;
 
     // Compute eccentricity vector.
-    std::vector< Real > eccentricityVector
-        = sml::add( sml::multiply( sml::cross( velocity, angularMomentum ),
-                                   1.0 / gravitationalParameter ),
-                    sml::multiply( sml::normalize< Real >( position ), -1.0 ) );
+    const Real positionNorm = std::sqrt( position[ 0 ] * position[ 0 ]
+                                         + position[ 1 ] * position[ 1 ]
+                                         + position[ 2 ] * position[ 2 ] );
+    Vector positionNormalized( 3 );
+    positionNormalized[ 0 ] = position[ 0 ] / positionNorm;
+    positionNormalized[ 1 ] = position[ 1 ] / positionNorm;
+    positionNormalized[ 2 ] = position[ 2 ] / positionNorm;
+
+    Vector eccentricityVector( 3 );
+    eccentricityVector[ 0 ] = ( velocity[ 1 ] * angularMomentum[ 2 ]
+                                - velocity[ 2 ] * angularMomentum[ 1 ] ) / gravitationalParameter
+                              - positionNormalized[ 0 ];
+    eccentricityVector[ 1 ] = ( velocity[ 2 ] * angularMomentum[ 0 ]
+                                - velocity[ 0 ] * angularMomentum[ 2 ] ) / gravitationalParameter
+                              - positionNormalized[ 1 ];
+    eccentricityVector[ 2 ] = ( velocity[ 0 ] * angularMomentum[ 1 ]
+                                - velocity[ 1 ] * angularMomentum[ 0 ] ) / gravitationalParameter
+                              - positionNormalized[ 2 ];
 
     // Store eccentricity.
-    keplerianElements[ eccentricityIndex ] = sml::norm< Real >( eccentricityVector );
+    const Real eccentricityVectorNorm
+        = std::sqrt( eccentricityVector[ 0 ] * eccentricityVector[ 0 ]
+                     + eccentricityVector[ 1 ] * eccentricityVector[ 1 ]
+                     + eccentricityVector[ 2 ] * eccentricityVector[ 2 ] );
+
+    Vector eccentricityVectorNormalized( 3 );
+    eccentricityVectorNormalized[ 0 ] = eccentricityVector[ 0 ] / eccentricityVectorNorm;
+    eccentricityVectorNormalized[ 1 ] = eccentricityVector[ 1 ] / eccentricityVectorNorm;
+    eccentricityVectorNormalized[ 2 ] = eccentricityVector[ 2 ] / eccentricityVectorNorm;
+
+    keplerianElements[ eccentricityIndex ] = eccentricityVectorNorm;
 
     // Compute and store semi-major axis.
     // Check if orbit is parabolic. If it is, store the semi-latus rectum instead of the
@@ -133,7 +183,7 @@ Vector6 convertCartesianToKeplerianElements(
 
     // Compute and store inclination.
     keplerianElements[ inclinationIndex ]
-        = std::acos( angularMomentum[ zPositionIndex ] / sml::norm< Real >( angularMomentum ) );
+        = std::acos( angularMomentum[ zPositionIndex ] / angularMomentumNorm );
 
     // Compute and store longitude of ascending node.
     // Define the quadrant condition for the argument of perigee.
@@ -143,7 +193,7 @@ Vector6 convertCartesianToKeplerianElements(
     // x-axis.
     if ( std::fabs( keplerianElements[ inclinationIndex ] ) < tolerance )
     {
-        ascendingNodeUnitVector = sml::getXUnitVector< std::vector< Real > >( );
+        const Vector ascendingNodeUnitVector( { 1.0, 0.0, 0.0 } );
 
         // If the orbit is equatorial, eccentricityVector_z is zero, therefore the quadrant
         // condition is taken to be the y-component, eccentricityVector_y.
@@ -158,12 +208,14 @@ Vector6 convertCartesianToKeplerianElements(
     if ( ascendingNodeUnitVector[ yPositionIndex ] < 0.0 )
     {
         keplerianElements[ longitudeOfAscendingNodeIndex ]
-            = 2.0 * sml::SML_PI - keplerianElements[ longitudeOfAscendingNodeIndex ];
+            = 2.0 * 3.14159265358979323846 - keplerianElements[ longitudeOfAscendingNodeIndex ];
     }
 
     // Compute and store argument of periapsis.
     // Define the quadrant condition for the true anomaly.
-    Real trueAnomalyQuandrantCondition = sml::dot< Real >( position, velocity );
+    Real trueAnomalyQuandrantCondition = position[ 0 ] * velocity[ 0 ]
+                                         + position[ 1 ] * velocity[ 1 ]
+                                         + position[ 2 ] * velocity[ 2 ];
 
     // Check if the orbit is circular. If it is, set the eccentricity vector to unit vector
     // pointing to the ascending node, i.e. set the argument of periapsis to zero.
@@ -175,7 +227,7 @@ Vector6 convertCartesianToKeplerianElements(
 
         // Check if orbit is also equatorial and set true anomaly quandrant check condition
         // accordingly.
-        if ( ascendingNodeUnitVector == sml::getXUnitVector< std::vector< Real > >( ) )
+        if ( ascendingNodeUnitVector == Vector( { 1.0, 0.0, 0.0 } ) )
         {
             // If the orbit is circular, dot( position, velocity ) = 0, therefore this value
             // cannot be used as a quadrant condition. Moreover, if the orbit is equatorial,
@@ -197,21 +249,23 @@ Vector6 convertCartesianToKeplerianElements(
     else
     {
         keplerianElements[ argumentOfPeriapsisIndex ]
-            = std::acos( sml::dot< Real >( sml::normalize< Real >( eccentricityVector ),
-                         ascendingNodeUnitVector ) );
+            = std::acos( eccentricityVectorNormalized[ 0 ] * ascendingNodeUnitVector[ 0 ]
+                         + eccentricityVectorNormalized[ 1 ] * ascendingNodeUnitVector[ 1 ]
+                         + eccentricityVectorNormalized[ 2 ] * ascendingNodeUnitVector[ 2 ] );
 
         // Check if the quadrant is correct.
         if ( argumentOfPeriapsisQuandrantCondition < 0.0 )
         {
             keplerianElements[ argumentOfPeriapsisIndex ]
-                = 2.0 * sml::SML_PI - keplerianElements[ argumentOfPeriapsisIndex ];
+                = 2.0 * 3.14159265358979323846 - keplerianElements[ argumentOfPeriapsisIndex ];
         }
     }
 
     // Compute dot-product of position and eccentricity vectors.
     Real dotProductPositionAndEccentricityVectors
-        = sml::dot< Real >( sml::normalize< Real >( position ),
-                            sml::normalize< Real >( eccentricityVector ) );
+        = positionNormalized[ 0 ] * eccentricityVectorNormalized[ 0 ]
+          + positionNormalized[ 1 ] * eccentricityVectorNormalized[ 1 ]
+          + positionNormalized[ 2 ] * eccentricityVectorNormalized[ 2 ];
 
     // Check if the dot-product is one of the limiting cases: 0.0 or 1.0
     // (within prescribed tolerance).
@@ -232,7 +286,7 @@ Vector6 convertCartesianToKeplerianElements(
     if ( trueAnomalyQuandrantCondition < 0.0 )
     {
         keplerianElements[ trueAnomalyIndex ]
-            = 2.0 * sml::SML_PI - keplerianElements[ trueAnomalyIndex ];
+            = 2.0 * 3.14159265358979323846 - keplerianElements[ trueAnomalyIndex ];
     }
 
     return keplerianElements;

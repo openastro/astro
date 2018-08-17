@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015 Kartik Kumar, Dinamica Srl
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2015 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2015 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2015 Juan Romero, University of Strathclyde
@@ -11,8 +11,6 @@
 #define ASTRO_CENTRAL_BODY_ACCELERATION_MODEL_HPP
 
 #include <cmath>
-
-#include <sml/sml.hpp>
 
 namespace astro
 {
@@ -45,8 +43,10 @@ Vector3 computeCentralBodyAcceleration( const Real     gravitationalParameter,
 {
     Vector3 acceleration = position;
 
-    const double positionNorm = sml::norm< double >( position );
-    const double preMultiplier = -gravitationalParameter
+    const Real positionNorm = std::sqrt( position[ 0 ] * position[ 0 ]
+                                         + position[ 1 ] * position[ 1 ]
+                                         + position[ 2 ] * position[ 2 ] );
+    const Real preMultiplier = -gravitationalParameter
                                  / ( positionNorm * positionNorm * positionNorm );
 
     acceleration[ 0 ] = preMultiplier * position[ 0 ];

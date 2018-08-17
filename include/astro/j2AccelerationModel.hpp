@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, K. Kumar, spacejunkies (kartik@satsearch.co)
+ * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
@@ -8,8 +8,6 @@
 #define ASTRO_J2_ACCELERATION_MODEL_HPP
 
 #include <cmath>
-
-#include <sml/sml.hpp>
 
 namespace astro
 {
@@ -54,12 +52,15 @@ Vector3 computeJ2Acceleration( const Real     gravitationalParameter,
 {
     Vector3 acceleration = position;
 
-    const Real positionNorm = sml::norm< Real >( position );
-    const Real scaledZSquared = position[ 2 ] * position[ 2 ] / ( positionNorm * positionNorm );
+    const Real positionNormSquared = position[ 0 ] * position[ 0 ]
+                                     + position[ 1 ] * position[ 1 ]
+                                     + position[ 2 ] * position[ 2 ];
+    const Real positionNorm = std::sqrt( positionNormSquared );
+
+    const Real scaledZSquared = position[ 2 ] * position[ 2 ] / positionNormSquared;
 
     const Real preMultiplier = -gravitationalParameter
-                                / ( positionNorm * positionNorm * positionNorm
-                                    * positionNorm * positionNorm )
+                                / ( positionNormSquared * positionNormSquared * positionNorm )
                                 * 1.5 * j2Coefficient * equatorialRadius * equatorialRadius;
 
     acceleration[ 0 ] = preMultiplier * position[ 0 ] * ( 1.0 - 5.0 * scaledZSquared );

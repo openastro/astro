@@ -1,0 +1,27 @@
+\form#0:\[ \vec{a}_{gravity}=-\frac{\mu}{r^{3}}\vec{r} \]
+\form#1:$\mu$
+\form#2:$\mu=GM=398,600.5 km^{3}s^-{2}$
+\form#3:$r$
+\form#4:$\vec{r}$
+\form#5:\begin{eqnarray*} {a}_{gravity,x} &=& -\mu_{2}*\frac{x_{1}-x_{2}}{r^{3}} * \frac{3}{2}*J_{2} * \left(\frac{R}{r}\right)^{2} * (1-5*\hat{z}^2) \\ {a}_{gravity,y} &=& -\mu_{2}*\frac{y_{1}-y_{2}}{r^{3}} * \frac{3}{2}*J_{2} * \left(\frac{R}{r}\right)^{2} * (1-5*\hat{z}^2) \\ {a}_{gravity,z} &=& \frac{-\mu_{2}}{r^{2}} * \frac{3}{2}*J_{2} * \left(\frac{R}{r}\right)^{2} * (3-5*\hat{z}^2) * \hat{z} \\ \end{eqnarray*}
+\form#6:$\mu_{2}$
+\form#7:$\hat{z} = \frac{z}{r}$
+\form#8:$x$
+\form#9:$y$
+\form#10:$z$
+\form#11:$J_{2}$
+\form#12:\[ P = \frac{W}{c} \]
+\form#13:$P$
+\form#14:$W$
+\form#15:$c$
+\form#16:\[ // * P = P_{ref} \frac{R_{ref}^{2}}{R^{2}} // * \]
+\form#17:$P_{ref}$
+\form#18:$R_{ref}$
+\form#19:$R$
+\form#20:$n$
+\form#21:\[ n = \sqrt{\frac{\mu}{a^{3}}} \]
+\form#22:$a$
+\form#23:$T$
+\form#24:\[ T = 2\pi\sqrt{\frac{a^{3}}{\mu}} \]
+\form#25:$V_{c}$
+\form#26:\[ V_{c} = \sqrt{\frac{2\mu}{a}} \]
