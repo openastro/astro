@@ -38,7 +38,7 @@ namespace astro
  * @return                                    Acceleration vector                      [km s^-2]
  */
 template< typename Real, typename Vector3 >
-Vector3 computeCentralBodyAcceleration( const Real     gravitationalParameter,
+Vector3 computeCentralBodyAcceleration( const Real gravitationalParameter,
                                         const Vector3& position )
 {
     Vector3 acceleration = position;
@@ -47,7 +47,7 @@ Vector3 computeCentralBodyAcceleration( const Real     gravitationalParameter,
                                          + position[ 1 ] * position[ 1 ]
                                          + position[ 2 ] * position[ 2 ] );
     const Real preMultiplier = -gravitationalParameter
-                                 / ( positionNorm * positionNorm * positionNorm );
+                               / ( positionNorm * positionNorm * positionNorm );
 
     acceleration[ 0 ] = preMultiplier * position[ 0 ];
     acceleration[ 1 ] = preMultiplier * position[ 1 ];

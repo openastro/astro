@@ -33,7 +33,7 @@ namespace astro
 template< typename Real >
 Real computeAbsorptionRadiationPressure( const Real energyFlux )
 {
-  return energyFlux / ASTRO_SPEED_OF_FLIGHT;
+  return energyFlux / ASTRO_SPEED_OF_LIGHT;
 }
 
 //! Compute radiation pressure.
@@ -78,17 +78,17 @@ Real computeRadiationPressure( const Real referenceRadiationPressure,
  *      a =  -P  C_{R}  \frac{3}{r\rho} \vec{u}
  * \f]
  *
- * where \f$P\f$ is the radiation pressure at a specified distance from the source, \f$C_{R}\f$ is
- * the radiation pressure coefficient (\f$C_{R} = 1\f$ for complete absorption and \f$C_{R} = 2\f$
- * for specular reflection), \f$ \pi r^2 \f$ is the radius of the sphere, \f$ \rho \f$ is the
- * bulk density of the sphere, and \f$ \vec{u} \f$ is the unit vector pointing from the source of
- * the radiation pressure, e.g., the Sun.
+ * where \f$P\f$ is the radiation pressure for complete absorption at a specified distance from the
+ * source, \f$C_{R}\f$ is the radiation pressure coefficient (\f$C_{R} = 1\f$ for complete
+ * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$ \pi r^2 \f$ is the radius of the
+ * sphere, \f$ \rho \f$ is the bulk density of the sphere, and \f$ \vec{u} \f$ is the unit vector
+ * pointing from the source of the radiation pressure, e.g., the Sun.
  *
  * @tparam    Real                            Floating-point type
  * @tparam    Vector3                         3-vector type
  * @param[in] radiationPressure               Radiation pressure                            [N m^-2]
  * @param[in] radiationPressureCoefficient    Radiation pressure coefficient                     [-]
- * @param[in] unitVectorToSource              Unit vector pointing from radiation source         [-]
+ * @param[in] unitVectorToSource              Unit vector pointing to radiation source           [-]
  * @param[in] radius                          Radius of sphere                                   [m]
  * @param[in] bulkDensity                     Bulk density of sphere                       [kg m^-3]
  * @return                                    Computed radiation pressure acceleration      [m s^-2]
@@ -104,7 +104,7 @@ Vector3 computeRadiationPressureAcceleration( const Real     radiationPressure,
 
     const Real preMultiplier = -radiationPressure
                                * radiationPressureCoefficient
-                               * 3.0 / ( radius * bulkDensity );
+                               * 0.75 / ( radius * bulkDensity );
 
     acceleration[ 0 ] = preMultiplier * unitVectorToSource[ 0 ];
     acceleration[ 1 ] = preMultiplier * unitVectorToSource[ 1 ];

@@ -8,6 +8,8 @@
  */
 
 #include <iostream>
+#include <limits>
+#include <iomanip>
 
 #include <cmath>
 #include <vector>
@@ -68,72 +70,51 @@ TEST_CASE( "Compute radiation pressure at Mercury by using 1 AU as reference",
              ==  Approx( expectedRadiationPressure ).epsilon( tolerance ) );
 }
 
-TEST_CASE( "Compute radiation pressure acceleration for arbitrary case",
+TEST_CASE( "Compute radiation pressure acceleration for arbitrary case at Earth distance",
            "[radiation_pressure, acceleration, models]" )
 {
-    // // Set expected radiation pressure acceleration vector [m/s^2].
-    // Vector expectedAcceleration( 3 );
-    // expectedAcceleration[ 0 ] = -2.964e-06;
-    // expectedAcceleration[ 1 ] = 0.0;
-    // expectedAcceleration[ 2 ] = 0.0;
+    // Set expected radiation pressure acceleration vector [m s^-2].
+    Vector expectedAcceleration( 3 );
+    expectedAcceleration[ 0 ] = -2.964e-06;
+    expectedAcceleration[ 1 ] = 0.0;
+    expectedAcceleration[ 2 ] = 0.0;
 
-    // // Set 1 AU in metres [m].
-    // const Real astronomicalUnitInMeters = 1.49598e11;
+    // Set tolerance for error between expected value and computed value.
+    const Real tolerance = 1.0e-15;
 
-//     // Set tolerance for error between expected value and computed value.
-//     const Real tolerance = 1.0e-15;
+    // Radiation pressure at 1 AU [N m^-2].
+    const Real radiationPressure = 4.56e-6;
 
-//     // Solar Radiation Pressure at 1 AU [N m^-2].
-//     const Real solarRadiationPressure = 4.56e-6;
+    // Set radiation pressure coefficient.
+    const Real radiationPressureCoefficient = 1.0 + 0.3;
 
-//     // Set radiation pressure coefficient.
-//     const Real radiationPressureCoefficient = 1.0 + 0.3;
+    // Set radius of cannonball [m].
+    const Real radius = std::sqrt( 2.0 / 3.14159265358979323846 );
+    std::cout << std::setprecision( std::numeric_limits< double >::digits10 ) << radius << std::endl;
 
-//     // Set absorbing area [m^2].
-//     const Real area = 2.0;
+    // Set bulk density of cannonball [kg m^-3].
+    const Real bulkDensity = 4.0 * 0.75 / ( 3.14159265358979323846 * radius * radius * radius );
+    std::cout << std::setprecision( std::numeric_limits< double >::digits10 ) << bulkDensity << std::endl;
 
-//     // Set mass [kg].
-//     const Real mass = 4.0;
+    // Set unit vector pointing from cannonball to the Sun.
+    Vector unitVectorToSource( 3 );
+    unitVectorToSource[ 0 ] = 1.0;
+    unitVectorToSource[ 1 ] = 0.0;
+    unitVectorToSource[ 2 ] = 0.0;
 
-//     // Set unit vector pointing from S/C to the Sun.
-//     Vector vectorToSource( 3 );
-//     vectorToSource[ 0 ] = astronomicalUnitInMeters;
-//     vectorToSource[ 1 ] = 0.0;
-//     vectorToSource[ 2 ] = 0.0;
+     // Compute the radiation pressure [m s^-2].
+    const Vector acceleration
+        = computeRadiationPressureAcceleration(
+            radiationPressure,
+            radiationPressureCoefficient,
+            unitVectorToSource,
+            radius,
+            bulkDensity );
 
-//     // Compute the unit vector to the Sun.
-//     const Real normVectorToSource = std::sqrt( vectorToSource[ 0 ] * vectorToSource[ 0 ]
-//                                                + vectorToSource[ 1 ] * vectorToSource[ 1 ]
-//                                                + vectorToSource[ 2 ] * vectorToSource[ 2 ] );
-
-//     const Real squaredNormVectorToSource = normVectorToSource * normVectorToSource;
-
-//     Vector unitVectorToSource( 3 );
-//     unitVectorToSource[ 0 ] = vectorToSource[ 0 ] / normVectorToSource;
-//     unitVectorToSource[ 1 ] = vectorToSource[ 1 ] / normVectorToSource;
-//     unitVectorToSource[ 2 ] = vectorToSource[ 2 ] / normVectorToSource;
-
-//     // Set radiation pressure at target [N/m^2].
-//     const double radiationPressureAtTarget =  solarRadiationPressure
-//                                               * astronomicalUnitInMeters * astronomicalUnitInMeters
-//                                               / squaredNormVectorToSource;
-
-//      // Compute the radiation pressure [m s^-2].
-//     const Vector computedAcceleration
-//         = computeSolarRadiationPressureAcceleration(
-//             radiationPressureAtTarget,      // Solar radiation pressure                    [N m^-2]
-//             radiationPressureCoefficient,   // Radiation pressure coefficient              [adim]
-//             unitVectorToSource,             // Unit vector pointing from S/C to sun (3x1)  [adim]
-//             area,                           // Absorbing area of S/C                       [m^2]
-//             mass );                         // Mass of the S/C                             [kg]
-
-//     // Check if computed acceleration matches expected values.
-//     REQUIRE( computedAcceleration[ 0 ]
-//              == Approx( expectedAcceleration[ 0 ] ).epsilon( tolerance ) );
-//     REQUIRE( computedAcceleration[ 1 ]
-//              == Approx( expectedAcceleration[ 1 ] ).epsilon( tolerance ) );
-//     REQUIRE( computedAcceleration[ 2 ]
-//              == Approx( expectedAcceleration[ 2 ] ).epsilon( tolerance ) );
+    // Check if computed acceleration matches expected values.
+    REQUIRE( acceleration[ 0 ] == Approx( expectedAcceleration[ 0 ] ).epsilon( tolerance ) );
+    REQUIRE( acceleration[ 1 ] == Approx( expectedAcceleration[ 1 ] ).epsilon( tolerance ) );
+    REQUIRE( acceleration[ 2 ] == Approx( expectedAcceleration[ 2 ] ).epsilon( tolerance ) );
 }
 
 } // namespace tests

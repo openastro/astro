@@ -32,7 +32,7 @@ const static double ASTRO_AU_IN_KM = 149597870.7;
 const static double ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS = 1721425.5;
 
 //! Speed of light [m s^-1] (Wikipedia, 2018).
-const static double ASTRO_SPEED_OF_FLIGHT = 299792458.0;
+const static double ASTRO_SPEED_OF_LIGHT = 299792458.0;
 
 } // namespace astro
 
