@@ -9,6 +9,6 @@ var searchData=
   ['astro_5fjulian_5fday_5fin_5fseconds',['ASTRO_JULIAN_DAY_IN_SECONDS',['../namespaceastro.html#a03d86f68699f0fdc27355431cdb11e71',1,'astro']]],
   ['astro_5fjulian_5fyear_5fin_5fdays',['ASTRO_JULIAN_YEAR_IN_DAYS',['../namespaceastro.html#a07dbe58e69b426929d73689d24e32fd2',1,'astro']]],
   ['astro_5fjulian_5fyear_5fin_5fseconds',['ASTRO_JULIAN_YEAR_IN_SECONDS',['../namespaceastro.html#ae04db502051681a1d03a4e4413328616',1,'astro']]],
-  ['astro_5fspeed_5fof_5fflight',['ASTRO_SPEED_OF_FLIGHT',['../namespaceastro.html#a4d0d331186d44d7119f84e2678173b48',1,'astro']]],
+  ['astro_5fspeed_5fof_5flight',['ASTRO_SPEED_OF_LIGHT',['../namespaceastro.html#a35c5e8babf7badd1156e9e1596df82c5',1,'astro']]],
   ['astro',['astro',['../index.html',1,'']]]
 ];

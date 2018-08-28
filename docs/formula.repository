@@ -25,3 +25,11 @@
 \form#24:\[ T = 2\pi\sqrt{\frac{a^{3}}{\mu}} \]
 \form#25:$V_{c}$
 \form#26:\[ V_{c} = \sqrt{\frac{2\mu}{a}} \]
+\form#27:\[ P = P_{ref} \frac{R_{ref}^{2}}{R^{2}} \]
+\form#28:\[ a = -P C_{R} \frac{3}{4r\rho} \vec{u} \]
+\form#29:$C_{R}$
+\form#30:$C_{R} = 1$
+\form#31:$C_{R} = 2$
+\form#32:$ \pi r^{2} $
+\form#33:$ \rho $
+\form#34:$ \vec{u} $

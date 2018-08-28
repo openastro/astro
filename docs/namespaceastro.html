@@ -183,6 +183,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a9226832344d4b64bfc136c7cf88d0f8e"><td class="memTemplItemLeft" align="right" valign="top">Real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceastro.html#a9226832344d4b64bfc136c7cf88d0f8e">computeAbsorptionRadiationPressure</a> (const Real energyFlux)</td></tr>
 <tr class="memdesc:a9226832344d4b64bfc136c7cf88d0f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute radiation pressure for complete absorption.  <a href="#a9226832344d4b64bfc136c7cf88d0f8e">More...</a><br /></td></tr>
 <tr class="separator:a9226832344d4b64bfc136c7cf88d0f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5eddd9c3a253a52c994364646731e8d"><td class="memTemplParams" colspan="2">template&lt;typename Real &gt; </td></tr>
+<tr class="memitem:af5eddd9c3a253a52c994364646731e8d"><td class="memTemplItemLeft" align="right" valign="top">Real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceastro.html#af5eddd9c3a253a52c994364646731e8d">computeRadiationPressure</a> (const Real referenceRadiationPressure, const Real referenceDistance, const Real distance)</td></tr>
+<tr class="memdesc:af5eddd9c3a253a52c994364646731e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute radiation pressure.  <a href="#af5eddd9c3a253a52c994364646731e8d">More...</a><br /></td></tr>
+<tr class="separator:af5eddd9c3a253a52c994364646731e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74093a11c2fbf333fde490f7689cb8cc"><td class="memTemplParams" colspan="2">template&lt;typename Real , typename Vector3 &gt; </td></tr>
+<tr class="memitem:a74093a11c2fbf333fde490f7689cb8cc"><td class="memTemplItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceastro.html#a74093a11c2fbf333fde490f7689cb8cc">computeCannonballRadiationPressureAcceleration</a> (const Real radiationPressure, const Real radiationPressureCoefficient, const Vector3 &amp;unitVectorToSource, const Real radius, const Real bulkDensity)</td></tr>
+<tr class="memdesc:a74093a11c2fbf333fde490f7689cb8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute radiation pressure acceleration for a cannonball.  <a href="#a74093a11c2fbf333fde490f7689cb8cc">More...</a><br /></td></tr>
+<tr class="separator:a74093a11c2fbf333fde490f7689cb8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a008bbb4233afdbb176015ff5b3e7eeaa"><td class="memTemplParams" colspan="2">template&lt;typename Real &gt; </td></tr>
 <tr class="memitem:a008bbb4233afdbb176015ff5b3e7eeaa"><td class="memTemplItemLeft" align="right" valign="top">Real&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceastro.html#a008bbb4233afdbb176015ff5b3e7eeaa">computeKeplerMeanMotion</a> (const Real semiMajorAxis, const Real gravitationalParameterOfCentralBody, const Real massOfOrbitingBody=0.0)</td></tr>
 <tr class="memdesc:a008bbb4233afdbb176015ff5b3e7eeaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute mean motion.  <a href="#a008bbb4233afdbb176015ff5b3e7eeaa">More...</a><br /></td></tr>
@@ -216,9 +224,9 @@ Variables</h2></td></tr>
 <tr class="memitem:ab41d7f04d66225abb1c664fc5144eab2"><td class="memItemLeft" align="right" valign="top">static const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceastro.html#ab41d7f04d66225abb1c664fc5144eab2">ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS</a> = 1721425.5</td></tr>
 <tr class="memdesc:ab41d7f04d66225abb1c664fc5144eab2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start of Gregorian epoch in Julian days (Ramsey, 2016).  <a href="#ab41d7f04d66225abb1c664fc5144eab2">More...</a><br /></td></tr>
 <tr class="separator:ab41d7f04d66225abb1c664fc5144eab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d0d331186d44d7119f84e2678173b48"><td class="memItemLeft" align="right" valign="top">static const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceastro.html#a4d0d331186d44d7119f84e2678173b48">ASTRO_SPEED_OF_FLIGHT</a> = 299792458.0</td></tr>
-<tr class="memdesc:a4d0d331186d44d7119f84e2678173b48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed of light [m s^-1] (Wikipedia, 2018).  <a href="#a4d0d331186d44d7119f84e2678173b48">More...</a><br /></td></tr>
-<tr class="separator:a4d0d331186d44d7119f84e2678173b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35c5e8babf7badd1156e9e1596df82c5"><td class="memItemLeft" align="right" valign="top">static const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceastro.html#a35c5e8babf7badd1156e9e1596df82c5">ASTRO_SPEED_OF_LIGHT</a> = 299792458.0</td></tr>
+<tr class="memdesc:a35c5e8babf7badd1156e9e1596df82c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Speed of light [m s^-1] (Wikipedia, 2018).  <a href="#a35c5e8babf7badd1156e9e1596df82c5">More...</a><br /></td></tr>
+<tr class="separator:a35c5e8babf7badd1156e9e1596df82c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="ac942a8ec1423c4ff337ba19f56a86516"></a>
@@ -424,9 +432,9 @@ template&lt;typename Real , typename Vector6 &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Converts a given set of Cartesian elements (position, velocity) to classical (osculating) Keplerian elements. See Chobotov (2006) for a full derivation of the conversion.</p>
+<p>Converts a given set of Cartesian elements (position, velocity) to classical (osculating) Keplerian elements. See Chobotov (2006) &amp; Wikipedia (2018) for a derivation of the conversion.</p>
 <p>The tolerance is given a default value. It should not be changed unless required for specific scenarios. Below this tolerance value for eccentricity and inclination, the orbit is considered to be a limit case. Essentially, special solutions are then used for parabolic, circular inclined, non-circular equatorial, and circular equatorial orbits. These special solutions are required because of singularities in the classical Keplerian elements. If high precision is required near these singularities, users are encouraged to consider using other elements, such as Modified Equinoctial Elements (MEE). It should be noted that MEE also suffer from singularities, but not for zero eccentricity and inclination.</p>
-<p>WARNING: If eccentricity is 1.0 within tolerance, keplerianElements( 0 ) = semi-latus rectum, since the orbit is parabolic. WARNING: If eccentricity is 0.0 within tolerance, argument of periapsis is set to 0.0, since the orbit is circular. WARNING: If inclination is 0.0 within tolerance, longitude of ascending node is set to 0.0, since since the orbit is equatorial.</p>
+<p>WARNING: If eccentricity is 1.0 within tolerance, keplerianElements( 0 ) = semi-latus rectum, since the orbit is parabolic. WARNING: If eccentricity is 0.0 within tolerance, argument of periapsis is set to NaN, since the orbit is circular. WARNING: If inclination is 0.0 within tolerance, longitude of ascending node is set to NaN, since since the orbit is equatorial.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Real</td><td>Real type </td></tr>
@@ -458,9 +466,7 @@ template&lt;typename Real , typename Vector6 &gt; </div>
  keplerianElements( 4 ) = longitude of ascending node [rad] <br />
  keplerianElements( 5 ) = true anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00068">68</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
-
-<p class="reference">References <a class="el" href="stateVectorIndices_8hpp_source.html#l00031">argumentOfPeriapsisIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00029">eccentricityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00030">inclinationIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00032">longitudeOfAscendingNodeIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00028">semiLatusRectumIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00027">semiMajorAxisIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00033">trueAnomalyIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00016">xPositionIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00019">xVelocityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00017">yPositionIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00020">yVelocityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00018">zPositionIndex</a>, and <a class="el" href="stateVectorIndices_8hpp_source.html#l00021">zVelocityIndex</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00069">69</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
 </div>
 </div>
@@ -530,7 +536,7 @@ template&lt;typename Real , typename Vector6 &gt; </div>
  cartesianElements( 4 ) = y-velocity coordinate [m/s] <br />
  cartesianElements( 5 ) = z-velocity coordinate [m/s] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00326">326</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00280">280</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="stateVectorIndices_8hpp_source.html#l00031">argumentOfPeriapsisIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00029">eccentricityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00030">inclinationIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00032">longitudeOfAscendingNodeIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00027">semiMajorAxisIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00033">trueAnomalyIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00016">xPositionIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00019">xVelocityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00017">yPositionIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00020">yVelocityIndex</a>, <a class="el" href="stateVectorIndices_8hpp_source.html#l00018">zPositionIndex</a>, and <a class="el" href="stateVectorIndices_8hpp_source.html#l00021">zVelocityIndex</a>.</p>
 
@@ -581,9 +587,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Elliptical eccentric anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00430">430</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00384">384</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00511">convertTrueAnomalyToEccentricAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00465">convertTrueAnomalyToEccentricAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -632,9 +638,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Hyperbolic eccentric anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00466">466</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00420">420</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00511">convertTrueAnomalyToEccentricAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00465">convertTrueAnomalyToEccentricAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -684,9 +690,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Eccentric anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00511">511</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00465">465</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00430">convertTrueAnomalyToEllipticalEccentricAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00466">convertTrueAnomalyToHyperbolicEccentricAnomaly()</a>.</p>
+<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00384">convertTrueAnomalyToEllipticalEccentricAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00420">convertTrueAnomalyToHyperbolicEccentricAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -735,9 +741,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mean anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00559">559</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00513">513</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00617">convertEccentricAnomalyToMeanAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00571">convertEccentricAnomalyToMeanAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -786,9 +792,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mean anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00586">586</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00540">540</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00617">convertEccentricAnomalyToMeanAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00571">convertEccentricAnomalyToMeanAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -838,9 +844,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mean anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00617">617</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00571">571</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00559">convertEllipticalEccentricAnomalyToMeanAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00586">convertHyperbolicEccentricAnomalyToMeanAnomaly()</a>.</p>
+<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00513">convertEllipticalEccentricAnomalyToMeanAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00540">convertHyperbolicEccentricAnomalyToMeanAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -887,9 +893,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00661">661</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00615">615</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00721">convertEccentricAnomalyToTrueAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00675">convertEccentricAnomalyToTrueAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -936,9 +942,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00686">686</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00640">640</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00721">convertEccentricAnomalyToTrueAnomaly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orbitalElementConversions_8hpp_source.html#l00675">convertEccentricAnomalyToTrueAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -988,9 +994,9 @@ template&lt;typename Real &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True anomaly [rad] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00721">721</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orbitalElementConversions_8hpp_source.html#l00675">675</a> of file <a class="el" href="orbitalElementConversions_8hpp_source.html">orbitalElementConversions.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00661">convertEllipticalEccentricAnomalyToTrueAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00686">convertHyperbolicEccentricAnomalyToTrueAnomaly()</a>.</p>
+<p class="reference">References <a class="el" href="orbitalElementConversions_8hpp_source.html#l00615">convertEllipticalEccentricAnomalyToTrueAnomaly()</a>, and <a class="el" href="orbitalElementConversions_8hpp_source.html#l00640">convertHyperbolicEccentricAnomalyToTrueAnomaly()</a>.</p>
 
 </div>
 </div>
@@ -1028,8 +1034,144 @@ template&lt;typename Real &gt; </div>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>Computed radiation pressure [N m^-2] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html#l00033">33</a> of file <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html">radiationPressureAccelerationModel.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html#l00034">34</a> of file <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html">radiationPressureAccelerationModel.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="constants_8hpp_source.html#l00035">ASTRO_SPEED_OF_LIGHT</a>.</p>
+
+</div>
+</div>
+<a id="af5eddd9c3a253a52c994364646731e8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5eddd9c3a253a52c994364646731e8d">&#9670;&nbsp;</a></span>computeRadiationPressure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Real astro::computeRadiationPressure </td>
+          <td>(</td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>referenceRadiationPressure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>referenceDistance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>distance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes radiation pressure at a specified distance from the source, e.g., the Sun, by scaling with respect to a given reference. Typically, the reference is taken to be the average energy flux at Earth, i.e., approximately 1 AU.</p>
+<p>Since the flux is inversely proportional to the square of the distance, the radiation presurre at a given distance is computed using the following equation:</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ P = P_{ref} \frac{R_{ref}^{2}}{R^{2}} \]" src="form_27.png"/>
+</p>
+<p>where <img class="formulaInl" alt="$P$" src="form_13.png"/> is the computed radiation pressure, <img class="formulaInl" alt="$P_{ref}$" src="form_17.png"/> is the reference radiation pressure, <img class="formulaInl" alt="$R_{ref}$" src="form_18.png"/> is the reference distance, and <img class="formulaInl" alt="$R$" src="form_19.png"/> is the specified distance.</p>
+<p>The distances can be given in any units, so long as they are both in the same units.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>Floating-point type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">referenceRadiationPressure</td><td>Reference radiation pressure [N m^-2] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">referenceDistance</td><td>Reference distance [AU] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">distance</td><td>Given distance from the Sun [AU] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Radiation pressure at given distance [N m^-2] </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html#l00064">64</a> of file <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html">radiationPressureAccelerationModel.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a74093a11c2fbf333fde490f7689cb8cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74093a11c2fbf333fde490f7689cb8cc">&#9670;&nbsp;</a></span>computeCannonballRadiationPressureAcceleration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real , typename Vector3 &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 astro::computeCannonballRadiationPressureAcceleration </td>
+          <td>(</td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>radiationPressure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>radiationPressureCoefficient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector3 &amp;&#160;</td>
+          <td class="paramname"><em>unitVectorToSource</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Real&#160;</td>
+          <td class="paramname"><em>bulkDensity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compute radiation pressure acceleration for a canonball model. The model for the radiation pressure acceleration is given by (Montenbruck, 2000):</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ a = -P C_{R} \frac{3}{4r\rho} \vec{u} \]" src="form_28.png"/>
+</p>
+<p>where <img class="formulaInl" alt="$P$" src="form_13.png"/> is the radiation pressure for complete absorption at a specified distance from the source, <img class="formulaInl" alt="$C_{R}$" src="form_29.png"/> is the radiation pressure coefficient ( <img class="formulaInl" alt="$C_{R} = 1$" src="form_30.png"/> for complete absorption and <img class="formulaInl" alt="$C_{R} = 2$" src="form_31.png"/> for specular reflection), <img class="formulaInl" alt="$ \pi r^{2} $" src="form_32.png"/> is the radius of the sphere, <img class="formulaInl" alt="$ \rho $" src="form_33.png"/> is the bulk density of the sphere, and <img class="formulaInl" alt="$ \vec{u} $" src="form_34.png"/> is the unit vector pointing from the source of the radiation pressure, e.g., the Sun.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>Floating-point type </td></tr>
+    <tr><td class="paramname">Vector3</td><td>3-vector type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">radiationPressure</td><td>Radiation pressure [N m^-2] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">radiationPressureCoefficient</td><td>Radiation pressure coefficient [-] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unitVectorToSource</td><td>Unit vector pointing to radiation source [-] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">radius</td><td>Radius of sphere [m] </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bulkDensity</td><td>Bulk density of sphere [kg m^-3] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Computed radiation pressure acceleration [m s^-2] </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html#l00097">97</a> of file <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html">radiationPressureAccelerationModel.hpp</a>.</p>
 
 </div>
 </div>
@@ -1346,8 +1488,8 @@ template&lt;typename Real &gt; </div>
 
 </div>
 </div>
-<a id="a4d0d331186d44d7119f84e2678173b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d0d331186d44d7119f84e2678173b48">&#9670;&nbsp;</a></span>ASTRO_SPEED_OF_FLIGHT</h2>
+<a id="a35c5e8babf7badd1156e9e1596df82c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35c5e8babf7badd1156e9e1596df82c5">&#9670;&nbsp;</a></span>ASTRO_SPEED_OF_LIGHT</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1356,7 +1498,7 @@ template&lt;typename Real &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const double astro::ASTRO_SPEED_OF_FLIGHT = 299792458.0</td>
+          <td class="memname">const double astro::ASTRO_SPEED_OF_LIGHT = 299792458.0</td>
         </tr>
       </table>
   </td>
@@ -1368,6 +1510,8 @@ template&lt;typename Real &gt; </div>
 
 <p class="definition">Definition at line <a class="el" href="constants_8hpp_source.html#l00035">35</a> of file <a class="el" href="constants_8hpp_source.html">constants.hpp</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="radiationPressureAccelerationModel_8hpp_source.html#l00034">computeAbsorptionRadiationPressure()</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
@@ -1376,7 +1520,7 @@ template&lt;typename Real &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespaceastro.html">astro</a></li>
-    <li class="footer">Generated on Thu Aug 16 2018 19:21:28 for astro by
+    <li class="footer">Generated on Tue Aug 28 2018 11:14:43 for astro by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>
