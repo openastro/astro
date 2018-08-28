@@ -4,6 +4,8 @@
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
+#include <iostream>
+
 #include <limits>
 #include <vector>
 
@@ -22,14 +24,31 @@ typedef std::vector< Real > Vector;
 TEST_CASE( "Convert Cartesian elements to Keplerian elements",
            "[cartesian-to-keplerian-elements]" )
 {
+    SECTION( "Test incorrect Cartesian state vector" )
+    {
+        // Set gravitational parameter [m^3 s^-2].
+        const Real gravitationalParameter = 1.23456789;
+
+        // Set Cartesian elements.
+        Vector cartesianElements( 5 );
+        cartesianElements[ 0 ] = 3.75e6;
+        cartesianElements[ 1 ] = 4.24e6;
+        cartesianElements[ 2 ] = -1.39e6;
+        cartesianElements[ 3 ] = -4.65e3;
+        cartesianElements[ 4 ] = -2.21e3;
+
+        REQUIRE_THROWS( convertCartesianToKeplerianElements< Real, Vector >(
+                            cartesianElements, gravitationalParameter ) );
+    }
+
     SECTION( "Test elliptical orbit around the Earth" )
     {
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
-        // Set Earth gravitational parameter [m^3 s^-2] .
-        const Real earthGravitationalParameter = 3.986004415e14;
+        // Set Earth gravitational parameter [m^3 s^-2].
+        const Real gravitationalParameter = 3.986004415e14;
 
-        // Set Cartesian elements.
+        // Set Cartesian elements [m].
         Vector cartesianElements( 6 );
         cartesianElements[ 0 ] = 3.75e6;
         cartesianElements[ 1 ] = 4.24e6;
@@ -38,7 +57,7 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
         cartesianElements[ 4 ] = -2.21e3;
         cartesianElements[ 5 ] = 1.66e3;
 
-        // Set expected Keplerian elements.
+        // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
         Vector keplerianElements( 6 );
         keplerianElements[ 0 ] = 3.707478199246163e6;
         keplerianElements[ 1 ] = 0.949175203660321;
@@ -47,17 +66,51 @@ TEST_CASE( "Convert Cartesian elements to Keplerian elements",
         keplerianElements[ 4 ] = 1.630852596545341;
         keplerianElements[ 5 ] = 3.302032232567084;
 
-        // Compute Keplerian elements.
-        Vector result( 6 );
-        result = convertCartesianToKeplerianElements< Real, Vector >(
-            cartesianElements, earthGravitationalParameter );
+        const Vector result = convertCartesianToKeplerianElements< Real, Vector >(
+            cartesianElements, gravitationalParameter );
 
-        // Loop through vectors and require that each element of the result matches the expected
-        // value to the given tolerance.
-        for ( unsigned int i = 0; i < result.size( ); i++ )
-        {
-            REQUIRE( keplerianElements[ i ] == Approx( result[ i ] ).epsilon( 1.0e-14 ) );
-        }
+        REQUIRE( keplerianElements[ 0 ] == Approx( result[ 0 ] ).epsilon( 1.0e-14 ) );
+        REQUIRE( keplerianElements[ 1 ] == Approx( result[ 1 ] ).epsilon( 1.0e-14 ) );
+        REQUIRE( keplerianElements[ 2 ] == Approx( result[ 2 ] ).epsilon( 1.0e-14 ) );
+        REQUIRE( keplerianElements[ 3 ] == Approx( result[ 3 ] ).epsilon( 1.0e-14 ) );
+        REQUIRE( keplerianElements[ 4 ] == Approx( result[ 4 ] ).epsilon( 1.0e-14 ) );
+        REQUIRE( keplerianElements[ 5 ] == Approx( result[ 5 ] ).epsilon( 1.0e-14 ) );
+    }
+
+    SECTION( "Test equatorial, circular orbit around Venus" )
+    {
+        // The benchmark data is obtained by running ODTBX (NASA, 2012).
+
+        // Set Venus gravitational parameter [m^3 s^-2].
+        const Real gravitationalParameter = 3.2485504415e14;
+
+        // Set Cartesian elements [m].
+        Vector cartesianElements( 6 );
+        cartesianElements[ 0 ] = 5.580537430785387e6;
+        cartesianElements[ 1 ] = 2.816487703435473e6;
+        cartesianElements[ 2 ] = 0.0;
+        cartesianElements[ 3 ] = -3.248092722413634e3;
+        cartesianElements[ 4 ] = 6.435711753323540e3;
+        cartesianElements[ 5 ] = 0.0;
+
+        // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
+        Vector keplerianElements( 6 );
+        keplerianElements[ 0 ] = 6.251e6;
+        keplerianElements[ 1 ] = 0.0;
+        keplerianElements[ 2 ] = 0.0;
+        keplerianElements[ 3 ] = 0.0;
+        keplerianElements[ 4 ] = 0.0;
+        keplerianElements[ 5 ] = 26.78 / 180.0 * 3.14159265358979323846;
+
+        const Vector result = convertCartesianToKeplerianElements< Real, Vector >(
+            cartesianElements, gravitationalParameter );
+
+        REQUIRE( keplerianElements[ 0 ] == Approx( result[ 0 ] ).epsilon( 1.0e-15 ) );
+        REQUIRE( std::fabs( result[ 1 ] ) < std::numeric_limits< Real >::epsilon( ) );
+        REQUIRE( std::fabs( result[ 2 ] ) < std::numeric_limits< Real >::epsilon( ) );
+        REQUIRE( std::isnan( result[ 3 ] ) );
+        REQUIRE( std::isnan( result[ 4 ] ) );
+        REQUIRE( keplerianElements[ 5 ] == Approx( result[ 5 ] ).epsilon( 1.0e-15 ) );
     }
 }
 
