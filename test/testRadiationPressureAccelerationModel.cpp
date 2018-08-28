@@ -70,7 +70,7 @@ TEST_CASE( "Compute radiation pressure at Mercury by using 1 AU as reference",
              ==  Approx( expectedRadiationPressure ).epsilon( tolerance ) );
 }
 
-TEST_CASE( "Compute radiation pressure acceleration for arbitrary case at Earth distance",
+TEST_CASE( "Compute radiation pressure acceleration for cannonball at Earth distance",
            "[radiation_pressure, acceleration, models]" )
 {
     // Set expected radiation pressure acceleration vector [m s^-2].
@@ -90,11 +90,9 @@ TEST_CASE( "Compute radiation pressure acceleration for arbitrary case at Earth 
 
     // Set radius of cannonball [m].
     const Real radius = std::sqrt( 2.0 / 3.14159265358979323846 );
-    std::cout << std::setprecision( std::numeric_limits< double >::digits10 ) << radius << std::endl;
 
     // Set bulk density of cannonball [kg m^-3].
     const Real bulkDensity = 4.0 * 0.75 / ( 3.14159265358979323846 * radius * radius * radius );
-    std::cout << std::setprecision( std::numeric_limits< double >::digits10 ) << bulkDensity << std::endl;
 
     // Set unit vector pointing from cannonball to the Sun.
     Vector unitVectorToSource( 3 );
@@ -104,7 +102,7 @@ TEST_CASE( "Compute radiation pressure acceleration for arbitrary case at Earth 
 
      // Compute the radiation pressure [m s^-2].
     const Vector acceleration
-        = computeRadiationPressureAcceleration(
+        = computeCannonballRadiationPressureAcceleration(
             radiationPressure,
             radiationPressureCoefficient,
             unitVectorToSource,

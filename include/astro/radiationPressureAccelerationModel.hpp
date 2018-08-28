@@ -75,12 +75,12 @@ Real computeRadiationPressure( const Real referenceRadiationPressure,
  * pressure acceleration is given by (Montenbruck, 2000):
  *
  * \f[
- *      a =  -P  C_{R}  \frac{3}{r\rho} \vec{u}
+ *      a =  -P  C_{R}  \frac{3}{4r\rho} \vec{u}
  * \f]
  *
  * where \f$P\f$ is the radiation pressure for complete absorption at a specified distance from the
  * source, \f$C_{R}\f$ is the radiation pressure coefficient (\f$C_{R} = 1\f$ for complete
- * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$ \pi r^2 \f$ is the radius of the
+ * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$ \pi r^{2} \f$ is the radius of the
  * sphere, \f$ \rho \f$ is the bulk density of the sphere, and \f$ \vec{u} \f$ is the unit vector
  * pointing from the source of the radiation pressure, e.g., the Sun.
  *
@@ -94,11 +94,11 @@ Real computeRadiationPressure( const Real referenceRadiationPressure,
  * @return                                    Computed radiation pressure acceleration      [m s^-2]
  */
 template< typename Real, typename Vector3 >
-Vector3 computeRadiationPressureAcceleration( const Real     radiationPressure,
-                                              const Real     radiationPressureCoefficient,
-                                              const Vector3& unitVectorToSource,
-                                              const Real     radius,
-                                              const Real     bulkDensity )
+Vector3 computeCannonballRadiationPressureAcceleration( const Real     radiationPressure,
+                                                        const Real     radiationPressureCoefficient,
+                                                        const Vector3& unitVectorToSource,
+                                                        const Real     radius,
+                                                        const Real     bulkDensity )
 {
     Vector3 acceleration = unitVectorToSource;
 
