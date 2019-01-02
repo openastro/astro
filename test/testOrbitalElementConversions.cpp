@@ -606,6 +606,60 @@ TEST_CASE( "Convert eccentric anomaly to true anomaly" , "[eccentric-to-true-ano
     }
 }
 
+TEST_CASE( "Compute Kepler function for elliptical orbits" , "[kepler-function]" )
+{
+    // Set elliptical eccentric anomalies [rad].
+    const Real ellipticalEccentricAnomalies[ 3 ]
+            = { 176.09 / 180.0 * 3.14159265358979323846,
+                320.12 / 180.0 * 3.14159265358979323846,
+                0.0 };
+
+    // Set eccentricities [-].
+    const Real eccentricities[ 3 ] = { 0.541, 0.0, 0.0 };
+
+    // Set mean anomalies [rad].
+    const Real expectedMeanAnomalies[ 3 ]
+        = { 3.036459804491048,
+            5.587148001484247,
+            0.0 };
+
+    for ( int i = 0; i < 3; ++i )
+    {
+        REQUIRE( computeEllipticalKeplerFunction( ellipticalEccentricAnomalies[ i ],
+                                                  eccentricities[ i ],
+                                                  expectedMeanAnomalies[ i ] )
+                 < 1.0e-15 );
+    }
+}
+
+TEST_CASE( "Compute 1st derivative of Kepler function for elliptical orbits" , "[kepler-function]" )
+{
+    // Note that the test values in this section do not come from literature. They were generated
+    // manually.
+
+    // Set elliptical eccentric anomalies [rad].
+    const Real ellipticalEccentricAnomalies[ 3 ]
+            = { 0.0,
+                2.89735,
+                -1.7274 };
+
+    // Set eccentricities [-].
+    const Real eccentricities[ 3 ] = { 0.0, 0.3782, 0.79442 };
+
+    // Set expected function values.
+    const Real expectedFunctionValues[ 3 ] = { 1.0,
+                                               1.3669753060972498,
+                                               1.1239011971120707 };
+
+    for ( int i = 0; i < 3; ++i )
+    {
+        REQUIRE( computeFirstDerivativeEllipticalKeplerFunction( ellipticalEccentricAnomalies[ i ],
+                                                                 eccentricities[ i ] )
+                 == Approx( expectedFunctionValues[ i ] ).epsilon(
+                        std::numeric_limits< Real >::epsilon( ) ) );
+    }
+}
+
 } // namespace tests
 } // namespace astro
 

@@ -704,6 +704,61 @@ Real convertEccentricAnomalyToTrueAnomaly( const Real eccentricAnomaly, const Re
     return trueAnomaly;
 }
 
+//! Compute Kepler function for elliptical orbits.
+/*!
+ * Computes Kepler function, given as:
+ *
+ *      \f[
+ *          f( E ) = E - e * sin( E ) - M
+ *      \f]
+ *
+ * for elliptical orbits, where \f$E\f$ is the eccentric anomaly, \f$e\f$ is the
+ * eccentricity, \f$M\f$ is the mean anomaly.
+ *
+ * This function can be used for root-finding for mean-to-eccentric anomaly conversion.
+ *
+ * All elliptical eccentricities >= 0.0 and < 1.0 are valid.
+ *
+ * @sa convertEllipticalMeanAnomalyToEccentricAnomaly
+ * @tparam    Real                Real type
+ * @param[in] eccentricAnomaly    Eccentric anomaly                                            [rad]
+ * @param[in] eccentricity        Eccentricity                                                   [-]
+ * @param[in] meanAnomaly         Mean anomaly                                                 [rad]
+ * @return                        Kepler equation value for given elliptical orbit             [rad]
+ */
+template< typename Real >
+Real computeEllipticalKeplerFunction( const Real eccentricAnomaly,
+                                      const Real eccentricity,
+                                      const Real meanAnomaly )
+{
+    return eccentricAnomaly - eccentricity * std::sin( eccentricAnomaly ) - meanAnomaly;
+}
+
+//! Compute 1st-derivative of Kepler function for elliptical orbits.
+/*!
+ * Computes the 1st-derivative of Kepler function, given as:
+ *
+ *      \f[
+ *          \frac{ df( E ) } { dE } = 1 - e * cos( E )
+ *      \f]
+ *
+ * for elliptical orbits, where \f$E\f$ is the eccentric anomaly, and \f$e\f$ is the
+ * eccentricity.
+ *
+ * All elliptical eccentricities >= 0.0 and < 1.0 are valid.
+ *
+ * @tparam    Real                Real type
+ * @param[in] eccentricAnomaly    Eccentric anomaly                                            [rad]
+ * @param[in] eccentricity        Eccentricity                                                   [-]
+ * @return                        First-derivative of Kepler's function for elliptical orbits  [rad]
+ */
+template< typename Real >
+Real computeFirstDerivativeEllipticalKeplerFunction( const Real eccentricAnomaly,
+                                                     const Real eccentricity )
+{
+    return 1.0 - eccentricity * std::cos( eccentricAnomaly );
+}
+
 } // namespace astro
 
 #endif // ASTRO_ORBITAL_ELEMENT_CONVERSIONS_HPP
