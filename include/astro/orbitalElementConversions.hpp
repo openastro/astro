@@ -721,9 +721,9 @@ Real convertEccentricAnomalyToTrueAnomaly( const Real eccentricAnomaly, const Re
  *
  * @sa convertEllipticalMeanAnomalyToEccentricAnomaly
  * @tparam    Real                Real type
- * @param[in] eccentricAnomaly    Eccentric anomaly                                            [rad]
- * @param[in] eccentricity        Eccentricity                                                   [-]
- * @param[in] meanAnomaly         Mean anomaly                                                 [rad]
+ * @param     eccentricAnomaly    Eccentric anomaly                                            [rad]
+ * @param     eccentricity        Eccentricity                                                   [-]
+ * @param     meanAnomaly         Mean anomaly                                                 [rad]
  * @return                        Kepler equation value for given elliptical orbit             [rad]
  */
 template< typename Real >
@@ -748,8 +748,8 @@ Real computeEllipticalKeplerFunction( const Real eccentricAnomaly,
  * All elliptical eccentricities >= 0.0 and < 1.0 are valid.
  *
  * @tparam    Real                Real type
- * @param[in] eccentricAnomaly    Eccentric anomaly                                            [rad]
- * @param[in] eccentricity        Eccentricity                                                   [-]
+ * @param     eccentricAnomaly    Eccentric anomaly                                            [rad]
+ * @param     eccentricity        Eccentricity                                                   [-]
  * @return                        First-derivative of Kepler's function for elliptical orbits  [rad]
  */
 template< typename Real >
@@ -759,6 +759,113 @@ Real computeFirstDerivativeEllipticalKeplerFunction( const Real eccentricAnomaly
     return 1.0 - eccentricity * std::cos( eccentricAnomaly );
 }
 
+
+//! Convert elliptical mean anomaly to eccentric anomaly.
+/*!
+ * Converts mean anomaly to eccentric anomaly for elliptical orbits, for all eccentricities >=
+ * 0.0 and < (1.0 - tolerance).
+ *
+ * If the conversion fails or the eccentricity falls outside the valid range, then a runtime
+ * exception is thrown.
+ *
+ * The tolerance (1.0e-11) for the upper bound of the eccentricty range is based on the fact that
+ * the root-finding algorithm struggles with near-parabolic orbits. This is an experimental finding
+ * based on extensive research into the behaviour of the root-finding process (Musegaas, 2012).
+ *
+ * Also, note that the mean anomaly is automatically transformed to fit within the 0 to 2.0pi range.
+ *
+ * @tparam    Real                  Real number type
+ * @tparam    Integer               Integer type
+ * @param     eccentricity          Eccentricity                                                 [-]
+ * @param     meanAnomaly           Mean anomaly                                               [rad]
+ * @param     rootFindingTolerance  Stopping condition tolernace for Newton-Raphson algorithm  [rad]
+ * @param     maximumIterations     Maximum iteration for Newton-Raphson algorithm               [-]
+ * @return                          Eccentric anomaly                                          [rad]
+ */
+template< typename Real, typename Integer >
+Real convertEllipticalMeanAnomalyToEccentricAnomaly(
+    const Real      eccentricity,
+    const Real      meanAnomaly,
+    const Real      rootFindingTolerance = 1.0e-3 * std::numeric_limits< Real >::epsilon( ),
+    const Integer   maximumIterations = 100 )
+{
+    const Real pi = 3.14159265358979323846;
+
+    // Check if eccentricity is invalid and throw an error if true.
+    if ( eccentricity < 0.0 )
+    {
+        throw std::runtime_error( "ERROR: Eccentricity is negative!" );
+    }
+    else if ( eccentricity > ( 1.0 - 1.0e-11 ) )
+    {
+        throw std::runtime_error( "ERROR: Eccentricity is non-elliptical!" );
+    }
+
+    // Set mean anomaly to domain between 0 and 2pi.
+    Real meanAnomalyShifted = std::fmod( meanAnomaly, 2.0 * pi );
+    if ( meanAnomalyShifted < 0.0 )
+    {
+        meanAnomalyShifted += 2.0 * pi;
+    }
+
+    Real eccentricAnomaly = std::numeric_limits< Real >::quiet_NaN( );
+
+    // Check if orbit is elliptical, and not near-parabolic.
+    if ( eccentricity < ( 1.0 - 1.0e-11 ) )
+    {
+        // Set the initial guess for the eccentric anomaly.
+        // !!!!!!!!!!!!!     IMPORTANT     !!!!!!!!!!!!!
+        // If this scheme is changed, please run a very extensive test suite. The Newton-Raphson
+        // root-finding scheme tends to be chaotic for very specific combinations of mean anomaly
+        // and eccentricity. Various random tests of 100,000,000 samples were done to verify the
+        // default scheme for the initial guess. (Musegaas, 2012).
+        Real initialGuess = 0.0;
+        if ( meanAnomalyShifted > pi )
+        {
+            initialGuess =  meanAnomalyShifted - eccentricity;
+        }
+        else
+        {
+            initialGuess = meanAnomalyShifted + eccentricity;
+        }
+
+        // Execute Newton-Raphson root-finding algorithm.
+        eccentricAnomaly = initialGuess;
+        for ( int i = 0; i < maximumIterations + 1; ++i )
+        {
+            if ( i == maximumIterations )
+            {
+                throw std::runtime_error(
+                    "ERROR: Maximum iterations for Newton-Raphson root-finding exceeded!" );
+            }
+
+            const Real nextEccentricAnomaly
+                = eccentricAnomaly
+                  - computeEllipticalKeplerFunction( eccentricAnomaly,
+                                                     eccentricity,
+                                                     meanAnomalyShifted )
+                  / computeFirstDerivativeEllipticalKeplerFunction( eccentricAnomaly,
+                                                                    eccentricity );
+
+            const Real eccentricAnomalyDifference = eccentricAnomaly - nextEccentricAnomaly;
+
+            eccentricAnomaly = nextEccentricAnomaly;
+
+            if ( eccentricAnomalyDifference < rootFindingTolerance )
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        throw std::runtime_error( "ERROR: Eccentricity is non-elliptical!" );
+    }
+
+    // Return eccentric anomaly.
+    return eccentricAnomaly;
+}
+
 } // namespace astro
 
 #endif // ASTRO_ORBITAL_ELEMENT_CONVERSIONS_HPP
@@ -766,5 +873,7 @@ Real computeFirstDerivativeEllipticalKeplerFunction( const Real eccentricAnomaly
 /*!
  * References
  *  Chobotov, V.A. Orbital Mechanics, Third Edition, AIAA Education Series, VA, 2002.
+ *  Musegaas, P. Optimization of Space Trajectories Including Multiple Gravity Assists and Deep
+ *      Space Maneuvers. MSc thesis, Delft University of Technology, 2013.
  *  Wikipedia. True anomaly: https://en.wikipedia.org/wiki/True_anomaly, 21 August 2018.
  */

@@ -33,3 +33,8 @@
 \form#32:$ \pi r^{2} $
 \form#33:$ \rho $
 \form#34:$ \vec{u} $
+\form#35:\[ f( E ) = E - e * sin( E ) - M \]
+\form#36:$E$
+\form#37:$e$
+\form#38:$M$
+\form#39:\[ \frac{ df( E ) } { dE } = 1 - e * cos( E ) \]

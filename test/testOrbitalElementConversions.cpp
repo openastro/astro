@@ -19,6 +19,7 @@ namespace tests
 {
 
 typedef double Real;
+typedef int Integer;
 typedef std::vector< Real > Vector;
 
 TEST_CASE( "Convert Cartesian elements to Keplerian elements",
@@ -623,7 +624,7 @@ TEST_CASE( "Compute Kepler function for elliptical orbits" , "[kepler-function]"
             5.587148001484247,
             0.0 };
 
-    for ( int i = 0; i < 3; ++i )
+    for ( unsigned int i = 0; i < 3; ++i )
     {
         REQUIRE( computeEllipticalKeplerFunction( ellipticalEccentricAnomalies[ i ],
                                                   eccentricities[ i ],
@@ -651,12 +652,91 @@ TEST_CASE( "Compute 1st derivative of Kepler function for elliptical orbits" , "
                                                1.3669753060972498,
                                                1.1239011971120707 };
 
-    for ( int i = 0; i < 3; ++i )
+    for ( unsigned int i = 0; i < 3; ++i )
     {
         REQUIRE( computeFirstDerivativeEllipticalKeplerFunction( ellipticalEccentricAnomalies[ i ],
                                                                  eccentricities[ i ] )
                  == Approx( expectedFunctionValues[ i ] ).epsilon(
                         std::numeric_limits< Real >::epsilon( ) ) );
+    }
+}
+
+TEST_CASE( "Convert elliptical mean anomaly to eccentric anomaly for elliptical orbits" ,
+           "[mean-to-eccentric-anomaly]" )
+{
+    const Real pi = 3.14159265358979323846;
+
+    SECTION( "Test circular orbits" )
+    {
+        const Real eccentricity = 0.0;
+        const Real ellipticalMeanAnomaly = 1.0472;
+        const Real expectedEccentricAnomaly = 1.0472;
+
+        // Compute eccentric anomaly, modulo 2*pi.
+        const Real computedEccentricAnomaly
+                = convertEllipticalMeanAnomalyToEccentricAnomaly< Real, Integer >(
+                    eccentricity, ellipticalMeanAnomaly );
+
+        REQUIRE( computedEccentricAnomaly
+                    == Approx( expectedEccentricAnomaly ).epsilon(
+                        std::numeric_limits< Real >::epsilon( ) ) );
+    }
+
+    SECTION( "Test arbitrary elliptical orbits using GTOP data." )
+    {
+        // The benchmark data is obtained from GTOP.
+        const Real eccentricities[ 3 ] = { 0.01671, 0.43582, 0.78514 };
+        const Real ellipticalMeanAnomalies[ 3 ] = { 60.0 / 180.0 * pi,
+                                                    90.0 / 180.0 * pi,
+                                                    120.0 / 180.0 * pi };
+        const Real expectedEccentricAnomalies[ 3 ] = { 1.06178920406832,
+                                                       1.97200731113253,
+                                                       2.5392410896466 };
+
+        for ( unsigned int i = 0; i < 3; ++i )
+        {
+            const Real computedEccentricAnomaly
+                = convertEllipticalMeanAnomalyToEccentricAnomaly< Real, Integer >(
+                        eccentricities[ i ], ellipticalMeanAnomalies[ i ] );
+
+            Real computedEccentricAnomalyShifted = std::fmod( computedEccentricAnomaly, 2.0 * pi );
+            if ( computedEccentricAnomalyShifted < 0.0 )
+            {
+                computedEccentricAnomalyShifted += 2.0 * pi;
+            }
+
+            REQUIRE( computedEccentricAnomalyShifted
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon(
+                            10.0 * std::numeric_limits< Real >::epsilon( ) ) );
+        }
+    }
+
+    SECTION( "Test arbitrary elliptical orbits using PyKEP data." )
+    {
+        // The benchmark data is obtained from PyKEP.
+        const Real eccentricities[ 4 ] = { 0.5132, 0.0, 0.223, 0.991 };
+        const Real ellipticalMeanAnomalies[ 4 ] = { 2.5746, 4.47712, -3.39915, 0.5571 };
+        const Real expectedEccentricAnomalies[ 4 ] = { 2.76387035891018,
+                                                       4.47712,
+                                                       -3.35247173243822 + 2.0 * pi,
+                                                       1.54783886054501 };
+
+        for ( unsigned int i = 0; i < 4; ++i )
+        {
+            const Real computedEccentricAnomaly
+                = convertEllipticalMeanAnomalyToEccentricAnomaly< Real, Integer >(
+                        eccentricities[ i ], ellipticalMeanAnomalies[ i ] );
+
+            Real computedEccentricAnomalyShifted = std::fmod( computedEccentricAnomaly, 2.0 * pi );
+            if ( computedEccentricAnomalyShifted < 0.0 )
+            {
+                computedEccentricAnomalyShifted += 2.0 * pi;
+            }
+
+            REQUIRE( computedEccentricAnomalyShifted
+                     == Approx( expectedEccentricAnomalies[ i ] ).epsilon(
+                            10.0 * std::numeric_limits< Real >::epsilon( ) ) );
+        }
     }
 }
 
@@ -666,9 +746,13 @@ TEST_CASE( "Compute 1st derivative of Kepler function for elliptical orbits" , "
 /*!
  * References
  *  Fortescue, P. W., et al. Spacecraft systems engineering, Third Edition, Wiley, England, 2003.
+ *  Advanced Concepts Team, ESA. Global Trajectory Optimization Problems Database (GTOP),
+ *    https://www.esa.int/gsp/ACT/projects/gtop/gtop.html, last accessed: 2nd January, 2019.
  *  NASA, Goddard Spaceflight Center. Orbit Determination Toolbox (ODTBX), NASA - GSFC Open
- *   Source Software, http://opensource.gsfc.nasa.gov/projects/ODTBX/, last accessed:
- *   31st January, 2012.
+ *    Source Software, http://opensource.gsfc.nasa.gov/projects/ODTBX/, last accessed:
+ *    31st January, 2012.
  *  Noomen, R. Space Mission Design: Basics, ae4-878 (Mission Geometry & Orbit Design), Delft
- *   University of Technology, The Netherlands, 2014.
+ *    University of Technology, The Netherlands, 2014.
+ *  pykep Development Team, ESA. pykep, https://esa.github.io/pykep, last accessed: 2nd January,
+ *    2019.
  */
