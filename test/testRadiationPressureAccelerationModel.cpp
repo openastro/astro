@@ -115,6 +115,11 @@ TEST_CASE( "Compute radiation pressure acceleration for cannonball at Earth dist
     REQUIRE( acceleration[ 2 ] == Approx( expectedAcceleration[ 2 ] ).epsilon( tolerance ) );
 }
 
+TEST_CASE( "Compute Poynting-Robertson drag acceleration for cannonball at Earth distance" )
+{
+    // @TODO: Add tests for PR drag.
+}
+
 } // namespace tests
 } // namespace astro
 

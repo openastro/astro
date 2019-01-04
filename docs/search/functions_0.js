@@ -1,6 +1,7 @@
 var searchData=
 [
   ['computeabsorptionradiationpressure',['computeAbsorptionRadiationPressure',['../namespaceastro.html#a9226832344d4b64bfc136c7cf88d0f8e',1,'astro']]],
+  ['computecannonballpoyntingrobertsondragacceleration',['computeCannonballPoyntingRobertsonDragAcceleration',['../namespaceastro.html#a68b3fc63d1f308f7c2c336716026f552',1,'astro']]],
   ['computecannonballradiationpressureacceleration',['computeCannonballRadiationPressureAcceleration',['../namespaceastro.html#a74093a11c2fbf333fde490f7689cb8cc',1,'astro']]],
   ['computecentralbodyacceleration',['computeCentralBodyAcceleration',['../namespaceastro.html#ab85bb7990a62e3651be25b345a826438',1,'astro']]],
   ['computecircularvelocity',['computeCircularVelocity',['../namespaceastro.html#a55c0cc8732aed4f4ef4977aa25d73199',1,'astro']]],

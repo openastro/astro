@@ -38,3 +38,21 @@
 \form#37:$e$
 \form#38:$M$
 \form#39:\[ \frac{ df( E ) } { dE } = 1 - e * cos( E ) \]
+\form#40:\[ a = P C_{R} \frac{3}{4r\rho} \left[ \vec(u) \left( \frac{\vec(V)^{T}}{c} \vec(u) \right) + frac{\vec{V}}{c} \right] - \]
+\form#41:\[ a = -C_{R} \frac{3}{4r\rho} P \vec{u} \]
+\form#42:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \]
+\form#43:$\frac{\vec(V)}}{c}$
+\form#44:$\frac{\vec(V)}{c}$
+\form#45:$\frac{\vec V}{c}$
+\form#46:$\frac{\vec{V}}{c}$
+\form#47:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{V} \]
+\form#48:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{V} \vec{u} \]
+\form#49:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{u} \vec{V} \]
+\form#50:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{V}^{T} \]
+\form#51:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{u} \]
+\form#52:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{u}^{T} \]
+\form#53:\[ a = C_{R} \frac{3}{4r\rho} P \vec{u} \vec{V}^{T} \vec{u} \]
+\form#54:\[ a = C_{R} \frac{3}{4r\rho} P \left[ \vec{u} \vec{V}^{T} \vec{u} \right] \]
+\form#55:\[ a = C_{R} \frac{3}{4r\rho} P \left[ \vec{u} \vec{V}^{T} \vec{u} + \vec{V} \right] \]
+\form#56:$\rho$
+\form#57:$ \vec{V} $

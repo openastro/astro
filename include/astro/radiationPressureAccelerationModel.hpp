@@ -71,26 +71,31 @@ Real computeRadiationPressure( const Real referenceRadiationPressure,
 
 //! Compute radiation pressure acceleration for a cannonball.
 /*!
- * Compute radiation pressure acceleration for a canonball model. The model for the radiation
+ * Compute radiation pressure acceleration for a canonball. The model for the radiation
  * pressure acceleration is given by (Montenbruck, 2000):
  *
  * \f[
- *      a =  -P  C_{R}  \frac{3}{4r\rho} \vec{u}
+ *      a = -C_{R} \frac{3}{4r\rho} P \vec{u}
  * \f]
  *
  * where \f$P\f$ is the radiation pressure for complete absorption at a specified distance from the
  * source, \f$C_{R}\f$ is the radiation pressure coefficient (\f$C_{R} = 1\f$ for complete
- * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$ \pi r^{2} \f$ is the radius of the
- * sphere, \f$ \rho \f$ is the bulk density of the sphere, and \f$ \vec{u} \f$ is the unit vector
- * pointing from the source of the radiation pressure, e.g., the Sun.
+ * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$r\f$ is the radius of the
+ * cannonball, \f$ \rho \f$ is the bulk density of the cannonball, and \f$ \vec{u} \f$ is the unit
+ * vector pointing to the source of the radiation pressure, e.g., the Sun.
  *
+ * This function can be used to compute the 1st-order effects of radiation pressure on small
+ * particles in the Solar System. The higher-order terms, stemming from Poynting-Robertson drag
+ * are neglected.
+ *
+ * @sa computeCannonballPoyntingRobertsonDragAcceleration
  * @tparam    Real                            Floating-point type
  * @tparam    Vector3                         3-vector type
  * @param[in] radiationPressure               Radiation pressure                            [N m^-2]
  * @param[in] radiationPressureCoefficient    Radiation pressure coefficient                     [-]
  * @param[in] unitVectorToSource              Unit vector pointing to radiation source           [-]
- * @param[in] radius                          Radius of sphere                                   [m]
- * @param[in] bulkDensity                     Bulk density of sphere                       [kg m^-3]
+ * @param[in] radius                          Radius of cannonball                               [m]
+ * @param[in] bulkDensity                     Bulk density of cannonball                   [kg m^-3]
  * @return                                    Computed radiation pressure acceleration      [m s^-2]
  */
 template< typename Real, typename Vector3 >
@@ -109,6 +114,73 @@ Vector3 computeCannonballRadiationPressureAcceleration( const Real     radiation
     acceleration[ 0 ] = preMultiplier * unitVectorToSource[ 0 ];
     acceleration[ 1 ] = preMultiplier * unitVectorToSource[ 1 ];
     acceleration[ 2 ] = preMultiplier * unitVectorToSource[ 2 ];
+
+    return acceleration;
+}
+
+//! Compute Poynting-Roberson drag acceleration for a cannonball.
+/*!
+ * Compute Poynting-Roberson (PR) drag acceleration for a cannonball. The model for PR drag
+ * acceleration in an inertial reference frame is given by (Mignard, 1984):
+ *
+ * \f[
+ *      a = C_{R} \frac{3}{4r\rho} P \left[ \vec{u} \vec{V}^{T} \vec{u} + \vec{V} \right]
+ * \f]
+ *
+ * where \f$P\f$ is the radiation pressure for complete absorption at a specified distance from the
+ * source, \f$C_{R}\f$ is the radiation pressure coefficient (\f$C_{R} = 1\f$ for complete
+ * absorption and \f$C_{R} = 2\f$ for specular reflection), \f$r\f$ is the radius of the
+ * cannonball, \f$\rho\f$ is the bulk density of the cannonball, \f$ \vec{u} \f$ is the unit vector
+ * pointing from the source of the radiation pressure, e.g., the Sun, and \f$ \vec{V} \f$ is the
+ * total velocity of the cannonball in an inertial frame centered at the source.
+ *
+ * This function can be used to compute the higher-order effects of radiation pressure on small
+ * particles in the Solar System. The 1st-order effect (zeroth-order in \f$\frac{\vec{V}}{c}\f$) is
+ * not included.
+ *
+ * @sa computeCannonballRadiationPressureAcceleration
+ * @tparam    Real                            Floating-point type
+ * @tparam    Vector3                         3-vector type
+ * @param[in] radiationPressure               Radiation pressure                            [N m^-2]
+ * @param[in] radiationPressureCoefficient    Radiation pressure coefficient                     [-]
+ * @param[in] unitVectorToSource              Unit vector pointing to radiation source           [-]
+ * @param[in] radius                          Radius of cannonball                               [m]
+ * @param[in] bulkDensity                     Bulk density of cannonball                   [kg m^-3]
+ * @param[in] velocity                        Total orbital velocity of cannonball wrt
+ *                                            inertial centered at radiation source         [m s^-1]
+ * @return                                    Computed radiation pressure acceleration      [m s^-2]
+
+ */
+template< typename Real, typename Vector3 >
+Vector3 computeCannonballPoyntingRobertsonDragAcceleration(
+    const Real     radiationPressure,
+    const Real     radiationPressureCoefficient,
+    const Vector3& unitVectorToSource,
+    const Real     radius,
+    const Real     bulkDensity,
+    const Vector3& velocity )
+{
+    Vector3 acceleration = unitVectorToSource;
+
+    const Real preMultiplier = radiationPressure
+                               * radiationPressureCoefficient
+                               * 0.75 / ( radius * bulkDensity * ASTRO_SPEED_OF_LIGHT );
+
+    acceleration[ 0 ]
+        = preMultiplier * ( ( unitVectorToSource[ 0 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
+                              + unitVectorToSource[ 0 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
+                              + unitVectorToSource[ 0 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
+                            + velocity[ 0 ] );
+    acceleration[ 1 ]
+        = preMultiplier * ( ( unitVectorToSource[ 1 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
+                              + unitVectorToSource[ 1 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
+                              + unitVectorToSource[ 1 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
+                            + velocity[ 1 ] );
+    acceleration[ 2 ]
+        = preMultiplier * ( ( unitVectorToSource[ 2 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
+                              + unitVectorToSource[ 2 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
+                              + unitVectorToSource[ 2 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
+                            + velocity[ 2 ] );
 
     return acceleration;
 }
