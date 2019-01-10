@@ -167,20 +167,11 @@ Vector3 computeCannonballPoyntingRobertsonDragAcceleration(
                                * 0.75 / ( radius * bulkDensity * ASTRO_SPEED_OF_LIGHT );
 
     acceleration[ 0 ]
-        = preMultiplier * ( ( unitVectorToSource[ 0 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
-                              + unitVectorToSource[ 0 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
-                              + unitVectorToSource[ 0 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
-                            + velocity[ 0 ] );
+      = preMultiplier * ( unitVectorToSource[ 0 ] * unitVectorToSource[ 0 ] + 1.0 ) * velocity[ 0 ];
     acceleration[ 1 ]
-        = preMultiplier * ( ( unitVectorToSource[ 1 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
-                              + unitVectorToSource[ 1 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
-                              + unitVectorToSource[ 1 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
-                            + velocity[ 1 ] );
+      = preMultiplier * ( unitVectorToSource[ 1 ] * unitVectorToSource[ 1 ] + 1.0 ) * velocity[ 1 ];
     acceleration[ 2 ]
-        = preMultiplier * ( ( unitVectorToSource[ 2 ] * unitVectorToSource[ 0 ] * velocity[ 0 ]
-                              + unitVectorToSource[ 2 ] * unitVectorToSource[ 1 ] * velocity[ 1 ]
-                              + unitVectorToSource[ 2 ] * unitVectorToSource[ 2 ] * velocity[ 2 ] )
-                            + velocity[ 2 ] );
+      = preMultiplier * ( unitVectorToSource[ 2 ] * unitVectorToSource[ 2 ] + 1.0 ) * velocity[ 2 ];
 
     return acceleration;
 }
