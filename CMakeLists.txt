@@ -1,145 +1,80 @@
-# Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
+# Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
 # Distributed under the MIT License.
-# See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
+# See accompanying file LICENSE or copy at http://opensource.org/licenses/MIT
 
-cmake_minimum_required(VERSION 2.6)
-set(CMAKE_CXX_STANDARD 11)
+# The CMake setup for this project is based off of the following source:
+# - https://cliutils.gitlab.io/modern-cmake
 
-# Change this section to correspond with your project info.
-project(astro C CXX)
-set(PROJECT_SUMMARY                            "A simple astrodynamics library")
-set(${CMAKE_PROJECT_NAME}_VENDOR_NAME          "openastro")
-set(${CMAKE_PROJECT_NAME}_VENDOR_CONTACT       "me@kartikkumar.com")
-set(${CMAKE_PROJECT_NAME}_VERSION_MAJOR        1)
-set(${CMAKE_PROJECT_NAME}_VERSION_MINOR        0)
-set(${CMAKE_PROJECT_NAME}_VERSION_PATCH        0)
-set(PROJECT_VERSION
-  "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}.${${CMAKE_PROJECT_NAME}_VERSION_MINOR}.${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
+# Make sure that an old version of CMake is not being used so modern features are available
+# Update this to the mix, max versions that are applicable
+cmake_minimum_required(VERSION 3.14)
+if(${CMAKE_VERSION} VERSION_LESS 3.23)
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+else()
+    cmake_policy(VERSION 3.23)
+endif()
 
-set(PROJECT_PATH                               "${CMAKE_CURRENT_SOURCE_DIR}")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}     "${PROJECT_PATH}/cmake/Modules")
-set(INCLUDE_PATH                               "${PROJECT_PATH}/include")
-set(TEST_SRC_PATH                              "${PROJECT_PATH}/test")
-if(NOT EXTERNAL_PATH)
-  set(EXTERNAL_PATH                            "${PROJECT_PATH}/external")
-endif(NOT EXTERNAL_PATH)
-if(NOT DOXYGEN_PATH)
-  set(DOXYGEN_PATH                             "${PROJECT_PATH}/docs")
-endif(NOT DOXYGEN_PATH)
-set(TEST_PATH                                  "${PROJECT_BINARY_DIR}/test")
-set(TEST_NAME                                  "test_${CMAKE_PROJECT_NAME}")
+# Set up project details
+project(
+    astro
+    VERSION     2.0
+    DESCRIPTION "A simple astrodynamics library"
+    LANGUAGES   CXX
+    )
 
-OPTION(BUILD_DOXYGEN_DOCS                      "Build Doxygen docs"                 OFF)
-OPTION(BUILD_TESTS                             "Build tests"                        OFF)
-OPTION(BUILD_DEPENDENCIES                      "Force local build of dependencies"  OFF)
+# Require out-of-source builds
+# Source: https://stackoverflow.com/questions/11143062/getting-cmake-to-build-out-of-source-without-wrapping-scripts
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+    message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt.")
+endif()
 
-include(CMakeDependentOption)
-CMAKE_DEPENDENT_OPTION(BUILD_COVERAGE_ANALYSIS "Build code coverage analysis"   OFF
-                                               "BUILD_TESTS"                    OFF)
+# Support folders in IDEs
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Set CMake build-type. If it not supplied by the user, the default built type is "Release".
-if(((NOT CMAKE_BUILD_TYPE)
-  AND (NOT BUILD_COVERAGE_ANALYSIS))
-  OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
-    message(STATUS "WARNING: building release version!")
-    set(CMAKE_BUILD_TYPE Release)
-elseif((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (BUILD_COVERAGE_ANALYSIS))
-    message(STATUS "WARNING: building debug version!")
-endif(((NOT CMAKE_BUILD_TYPE)
-  AND (NOT BUILD_COVERAGE_ANALYSIS))
-  OR (CMAKE_BUILD_TYPE STREQUAL "Release"))
+# Enable downloads during the configure step using FetchContent
+# FetchContent was added in CMake 3.11
+# FetchContent_MakeAvailable was not added until CMake 3.14
+include(FetchContent)
 
-# Set platform-specific compiler flags.
-if(WIN32)
-  if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Ox /W3 /FC -D_SCL_SECURE_NO_WARNINGS")
-    # We need to force MSVC to use static runtime:
-    # (from http://www.cmake.org/Wiki/CMake_FAQ#Dynamic_Replace).
-    foreach(flag_var
-      CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-      CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-      # Find all dynamic runtime (MD) references and replace with static (MT)
-      if(${flag_var} MATCHES "/MD")
-        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-      endif(${flag_var} MATCHES "/MD")
-    endforeach(flag_var)
-  else(MSVC)
-    set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
-  endif(MSVC)
-else(WIN32)
-  set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual -Wold-style-cast -Wnon-virtual-dtor")
-endif(WIN32)
+# Instantiate version file based on project details
+configure_file (
+    "${PROJECT_SOURCE_DIR}/version.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/${project_name}/version.hpp"
+)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g3")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-    set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+# Add subdirs for headers, sources, and executables
+# Subdirs contain CMakeLists.txt files with commands to setup build
+# Comment the following line if the library is header-only
+#add_subdirectory(src)
+# Uncomment the following line if the library is header-only
+add_subdirectory(include)
+# Comment the following line if there are no applications in this project
+#add_subdirectory(apps)
 
-include(Dependencies.cmake)
-include(ProjectFiles.cmake)
-include_directories(AFTER "${INCLUDE_PATH}")
+# Enable testing
+if(BUILD_TESTING)
+    include(CTest)
+    add_subdirectory(tests)
+endif(BUILD_TESTING)
 
-if(BUILD_DOXYGEN_DOCS)
-  find_package(Doxygen)
+# Build Doxygen docs
+if(BUILD_DOCS)
+    find_package(Doxygen OPTIONAL_COMPONENTS dot)
+    if(Doxygen_FOUND)
+        add_subdirectory(docs)
+    else()
+        message(STATUS "Doxygen not found, not building docs")
+    endif(Doxygen_FOUND)
+endif(BUILD_DOCS)
 
-  if(NOT DOXYGEN_FOUND)
-    message(FATAL_ERROR
-            "Doxygen is needed to build the documentation. Please make sure it is installed.")
-  endif(NOT DOXYGEN_FOUND)
+# Set up uninstall target to enable 'make uninstall'
+# Source: https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#can-i-do-make-uninstall-with-cmake
+if(NOT TARGET uninstall)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
-  configure_file(${PROJECT_PATH}/Doxyfile.in
-                 ${PROJECT_BINARY_DIR}/Doxyfile @ONLY IMMEDIATE)
-
-  # Add a custom target to run Doxygen whenever the project is built.
-  # If you want the documentation to be generated EVERY time you build the project
-  # then add the 'ALL' keyword before 'COMMAND' below.
-  add_custom_target(doxygen_docs COMMAND ${DOXYGEN_EXECUTABLE}
-                    ${PROJECT_BINARY_DIR}/Doxyfile
-                    SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
-endif(BUILD_DOXYGEN_DOCS)
-
-if(BUILD_TESTS)
-  enable_testing()
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TEST_PATH})
-
-  add_executable(${TEST_NAME} ${TEST_SRC})
-  if(NOT CATCH2_FOUND)
-    add_dependencies(${TEST_NAME} catch2-lib)
-  endif(NOT CATCH2_FOUND)
-  add_test(NAME ${TEST_NAME} COMMAND "${TEST_PATH}/${TEST_NAME}")
-
-  if(BUILD_COVERAGE_ANALYSIS)
-    include(CodeCoverage)
-    set(COVERAGE_EXTRACT '${PROJECT_PATH}/include/*' '${PROJECT_PATH}/src/*')
-    setup_target_for_coverage(coverage "${TEST_NAME}" coverage)
-  endif(BUILD_COVERAGE_ANALYSIS)
-endif(BUILD_TESTS)
-
-# Install files.
-# Destination is set by CMAKE_INSTALL_PREFIX and defaults to usual locations, unless overridden by
-# user.
-install(DIRECTORY ${INCLUDE_PATH}/${CMAKE_PROJECT_NAME}
-        DESTINATION include
-        FILES_MATCHING PATTERN "*.hpp")
-
-# Set up packager.
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
-set(CPACK_PACKAGE_VENDOR              "${CMAKE_PROJECT_NAME}_VENDOR_NAME")
-set(CPACK_PACKAGE_DESCRIPTION_FILE    "${PROJECT_PATH}/README.md")
-set(CPACK_RESOURCE_FILE_LICENSE       "${PROJECT_PATH}/LICENSE.md")
-set(CPACK_PACKAGE_VERSION_MAJOR       "${${CMAKE_PROJECT_NAME}_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR       "${${CMAKE_PROJECT_NAME}_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH       "${${CMAKE_PROJECT_NAME}_VERSION_PATCH}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY   "${CMAKE_PROJECT_NAME}")
-if(WIN32 AND NOT UNIX)
-  # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of four (4) backslashes.
-  set(CPACK_NSIS_DISPLAY_NAME         "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
-  set(CPACK_NSIS_CONTACT              "${CMAKE_PROJECT_NAME}_VENDOR_CONTACT")
-  set(CPACK_NSIS_MODIFY_PATH ON)
-else(WIN32 AND NOT UNIX)
-endif(WIN32 AND NOT UNIX)
-include(CPack)
+  add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()

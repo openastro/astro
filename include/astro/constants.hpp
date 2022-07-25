@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
+ * Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
@@ -7,8 +7,7 @@
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#ifndef ASTRO_CONSTANTS_HPP
-#define ASTRO_CONSTANTS_HPP
+#pragma once
 
 namespace astro
 {
@@ -35,8 +34,6 @@ const static double ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS = 1721425.5;
 const static double ASTRO_SPEED_OF_LIGHT = 299792458.0;
 
 } // namespace astro
-
-#endif // ASTRO_CONSTANTS_HPP
 
 /*!
  * References

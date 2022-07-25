@@ -4,7 +4,7 @@ Copyright (c) 2014-2016 Kartik Kumar, Dinamica Srl (me@kartikkumar.com)
 Copyright (c) 2015 Marko Jankovic, DFKI GmbH
 Copyright (c) 2015 Natalia Ortiz, University of Southampton
 Copyright (c) 2015 Juan Romero, University of Strathclyde
-Copyright (c) 2017-2018 Kartik Kumar (me@kartikkumar.com)
+Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,3 +23,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+

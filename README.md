@@ -3,7 +3,7 @@ astro
 
 \cond [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/kartikkumar/astro.svg?branch=master)](https://travis-ci.org/kartikkumar/astro) [![Coverity Scan Build Status](https://scan.coverity.com/projects/kartikkumar-astro/badge.svg)](https://scan.coverity.com/projects/kartikkumar-astro) [![Coverage Status](https://coveralls.io/repos/github/kartikkumar/astro/badge.svg?branch=master)](https://coveralls.io/github/kartikkumar/astro?branch=master) \endcond
 
-astro is a header-only, C++ (template) library that provides basic astrodynamics functionality. It is intended to be lightweight and simple to use in other projects. A CMake module is available to make it easy to include astro in other CMake-based projects: [Findastro.cmake](https://github.com/openastro/cmake-modules/blob/master/Modules/Findastro.cmake).
+astro is a header-only, C++ library that provides basic astrodynamics functionality. It is intended to be lightweight and simple to use in other projects. A CMake module is available to make it easy to include astro in other CMake-based projects: [Findastro.cmake](https://github.com/openastro/cmake-modules/blob/master/Modules/Findastro.cmake).
 
 Features
 ------

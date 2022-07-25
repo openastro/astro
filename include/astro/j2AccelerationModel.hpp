@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
+ * Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#ifndef ASTRO_J2_ACCELERATION_MODEL_HPP
-#define ASTRO_J2_ACCELERATION_MODEL_HPP
+#pragma once
 
 #include <cmath>
 
@@ -34,42 +33,40 @@ namespace astro
  * The positions and accelerations are given with respect to an inertial (barycentric) reference
  * frame.
  *
- * @tparam  Real                      Real type
- * @tparam  Vector                    Vector type
- * @param[in] position                Position vector of body subject to J2-acceleration         [m]
+ * @tparam Real                       Real type
+ * @tparam Vector                     Vector type
+ * @param[in] position                Position vector of body subject to J2-acceleration  [m]
  * @param[in] gravitationalParameter  Gravitational parameter of central body             [m^3 s^-2]
- * @param[in] equatorialRadius        Equatorial radius of central body, in formulation of
- *                                    spherical harmonics expansion                              [m]
+ * @param[in] equatorialRadius        Equatorial radius of central body, in formulation
+ *                                    of spherical harmonics expansion                    [m]
  * @param[in] j2Coefficient           Unnormalized J2-coefficient of spherical harmonics
- *                                    expansion                                                  [-]
- * @return                            J2 gravitational acceleration                         [m s^-2]
+ *                                    expansion                                           [-]
+ * @return                            J2 gravitational acceleration                       [m s^-2]
  */
-template< typename Real, typename Vector3 >
-Vector3 computeJ2Acceleration( const Real     gravitationalParameter,
-                               const Vector3& position,
-                               const Real     equatorialRadius,
-                               const Real     j2Coefficient )
+template <typename Real, typename Vector3>
+Vector3 computeJ2Acceleration(const Real     gravitationalParameter,
+                              const Vector3& position,
+                              const Real     equatorialRadius,
+                              const Real     j2Coefficient)
 {
     Vector3 acceleration = position;
 
-    const Real positionNormSquared = position[ 0 ] * position[ 0 ]
-                                     + position[ 1 ] * position[ 1 ]
-                                     + position[ 2 ] * position[ 2 ];
-    const Real positionNorm = std::sqrt( positionNormSquared );
+    const Real positionNormSquared = position[0] * position[0]
+                                     + position[1] * position[1]
+                                     + position[2] * position[2];
+    const Real positionNorm = std::sqrt(positionNormSquared);
 
-    const Real scaledZSquared = position[ 2 ] * position[ 2 ] / positionNormSquared;
+    const Real scaledZSquared = position[2] * position[2] / positionNormSquared;
 
     const Real preMultiplier = -gravitationalParameter
-                                / ( positionNormSquared * positionNormSquared * positionNorm )
+                                / (positionNormSquared * positionNormSquared * positionNorm)
                                 * 1.5 * j2Coefficient * equatorialRadius * equatorialRadius;
 
-    acceleration[ 0 ] = preMultiplier * position[ 0 ] * ( 1.0 - 5.0 * scaledZSquared );
-    acceleration[ 1 ] = preMultiplier * position[ 1 ] * ( 1.0 - 5.0 * scaledZSquared );
-    acceleration[ 2 ] = preMultiplier * position[ 2 ] * ( 3.0 - 5.0 * scaledZSquared );
+    acceleration[0] = preMultiplier * position[0] * (1.0 - 5.0 * scaledZSquared);
+    acceleration[1] = preMultiplier * position[1] * (1.0 - 5.0 * scaledZSquared);
+    acceleration[2] = preMultiplier * position[2] * (3.0 - 5.0 * scaledZSquared);
 
     return acceleration;
 }
 
 } // namespace astro
-
-#endif // ASTRO_J2_ACCELERATION_MODEL_HPP

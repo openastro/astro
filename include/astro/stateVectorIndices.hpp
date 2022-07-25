@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2014-2018 Kartik Kumar (me@kartikkumar.com)
+ * Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
  * Distributed under the MIT License.
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
-#ifndef ASTRO_STATE_VECTOR_INDICES_HPP
-#define ASTRO_STATE_VECTOR_INDICES_HPP
+#pragma once
 
 namespace astro
 {
@@ -35,5 +34,3 @@ enum KeplerianElementIndices
 };
 
 } // namespace astro
-
-#endif // ASTRO_STATE_VECTOR_INDICES_HPP
