@@ -566,76 +566,76 @@ $(document).ready(function(){initNavTree('orbitalElementConversions_8hpp_source.
 <div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>}</div>
 <div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span> </div>
 <div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span> </div>
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Real, <span class="keyword">typename</span> Integer&gt;</div>
-<div class="line"><a id="l00739" name="l00739"></a><span class="lineno"><a class="line" href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">  739</a></span>Real <a class="code hl_function" href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">convertEllipticalMeanAnomalyToEccentricAnomaly</a>(</div>
-<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>    <span class="keyword">const</span> Real      eccentricity,</div>
-<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>    <span class="keyword">const</span> Real      meanAnomaly,</div>
-<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>    <span class="keyword">const</span> Real      rootFindingTolerance = 1.0e-3 * std::numeric_limits&lt;Real&gt;::epsilon(),</div>
-<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>    <span class="keyword">const</span> Integer   maximumIterations = 100)</div>
-<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>{</div>
-<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>    assert(eccentricity &gt;= 0.0 &amp;&amp; eccentricity &lt; (1.0 - 1.0e-11));</div>
-<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span> </div>
-<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span>    <span class="keyword">const</span> Real pi = 3.14159265358979323846;</div>
-<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span> </div>
-<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>    <span class="comment">// Set mean anomaly to domain between 0 and 2pi.</span></div>
-<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>    Real meanAnomalyShifted = std::fmod(meanAnomaly, 2.0 * pi);</div>
-<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>    <span class="keywordflow">if</span> (meanAnomalyShifted &lt;0.0)</div>
-<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span>    {</div>
-<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>        meanAnomalyShifted += 2.0 * pi;</div>
-<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>    }</div>
-<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span> </div>
-<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>    Real eccentricAnomaly = std::numeric_limits&lt;Real&gt;::quiet_NaN();</div>
-<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span> </div>
-<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>    <span class="comment">// Set the initial guess for the eccentric anomaly.</span></div>
-<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>    <span class="comment">// !!!!!!!!!!!!!     IMPORTANT     !!!!!!!!!!!!!</span></div>
-<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    <span class="comment">// If this scheme is changed, please run a very extensive test suite. The Newton-Raphson</span></div>
-<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>    <span class="comment">// root-finding scheme tends to be chaotic for very specific combinations of mean anomaly</span></div>
-<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>    <span class="comment">// and eccentricity. Various random tests of 100,000,000 samples were done to verify the</span></div>
-<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>    <span class="comment">// default scheme for the initial guess. (Musegaas, 2012).</span></div>
-<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>    Real initialGuess = 0.0;</div>
-<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>    <span class="keywordflow">if</span> (meanAnomalyShifted &gt; pi)</div>
-<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>    {</div>
-<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>        initialGuess =  meanAnomalyShifted - eccentricity;</div>
-<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    }</div>
-<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>    {</div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>        initialGuess = meanAnomalyShifted + eccentricity;</div>
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>    }</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span> </div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    <span class="comment">// Execute Newton-Raphson root-finding algorithm.</span></div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>    eccentricAnomaly = initialGuess;</div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; maximumIterations + 1; ++i)</div>
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    {</div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>        <span class="keywordflow">if</span> (i == maximumIterations)</div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>        {</div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>            <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>                <span class="stringliteral">&quot;ERROR: Maximum iterations for Newton-Raphson root-finding exceeded!&quot;</span>);</div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>        }</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span> </div>
-<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>        <span class="keyword">const</span> Real nextEccentricAnomaly</div>
-<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>            = eccentricAnomaly</div>
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>              - <a class="code hl_function" href="namespaceastro.html#a94f763a63ac83e9bb28a61a59da4573a">computeEllipticalKeplerFunction</a>(eccentricAnomaly,</div>
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>                                                 eccentricity,</div>
-<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>                                                 meanAnomalyShifted)</div>
-<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>              / <a class="code hl_function" href="namespaceastro.html#a494b64c8ca4a83801d1a04fd4b2012a3">computeFirstDerivativeEllipticalKeplerFunction</a>(eccentricAnomaly,</div>
-<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>                                                                eccentricity);</div>
-<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span> </div>
-<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>        <span class="keyword">const</span> Real eccentricAnomalyDifference = eccentricAnomaly - nextEccentricAnomaly;</div>
-<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span> </div>
-<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>        eccentricAnomaly = nextEccentricAnomaly;</div>
-<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span> </div>
-<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>        <span class="keywordflow">if</span> (eccentricAnomalyDifference &lt; rootFindingTolerance)</div>
-<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>        {</div>
-<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>            <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>        }</div>
-<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>    }</div>
-<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span> </div>
-<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>    <span class="comment">// Return eccentric anomaly.</span></div>
-<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>    <span class="keywordflow">return</span> eccentricAnomaly;</div>
-<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>}</div>
-<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span> </div>
-<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>} <span class="comment">// namespace astro</span></div>
-<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span> </div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Real, <span class="keyword">typename</span> Integer&gt;</div>
+<div class="line"><a id="l00740" name="l00740"></a><span class="lineno"><a class="line" href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">  740</a></span>Real <a class="code hl_function" href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">convertEllipticalMeanAnomalyToEccentricAnomaly</a>(</div>
+<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>    <span class="keyword">const</span> Real      eccentricity,</div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>    <span class="keyword">const</span> Real      meanAnomaly,</div>
+<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span>    <span class="keyword">const</span> Real      rootFindingTolerance = 1.0e-3 * std::numeric_limits&lt;Real&gt;::epsilon(),</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>    <span class="keyword">const</span> Integer   maximumIterations = 100)</div>
+<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>{</div>
+<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>    assert(eccentricity &gt;= 0.0 &amp;&amp; eccentricity &lt; (1.0 - 1.0e-11));</div>
+<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span> </div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>    <span class="keyword">const</span> Real pi = 3.14159265358979323846;</div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span> </div>
+<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>    <span class="comment">// Set mean anomaly to domain between 0 and 2pi.</span></div>
+<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>    Real meanAnomalyShifted = std::fmod(meanAnomaly, 2.0 * pi);</div>
+<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span>    <span class="keywordflow">if</span> (meanAnomalyShifted &lt;0.0)</div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>    {</div>
+<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>        meanAnomalyShifted += 2.0 * pi;</div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>    }</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span> </div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>    Real eccentricAnomaly = std::numeric_limits&lt;Real&gt;::quiet_NaN();</div>
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span> </div>
+<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>    <span class="comment">// Set the initial guess for the eccentric anomaly.</span></div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    <span class="comment">// !!!!!!!!!!!!!     IMPORTANT     !!!!!!!!!!!!!</span></div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>    <span class="comment">// If this scheme is changed, please run a very extensive test suite. The Newton-Raphson</span></div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>    <span class="comment">// root-finding scheme tends to be chaotic for very specific combinations of mean anomaly</span></div>
+<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>    <span class="comment">// and eccentricity. Various random tests of 100,000,000 samples were done to verify the</span></div>
+<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>    <span class="comment">// default scheme for the initial guess. (Musegaas, 2012).</span></div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>    Real initialGuess = 0.0;</div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>    <span class="keywordflow">if</span> (meanAnomalyShifted &gt; pi)</div>
+<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>    {</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>        initialGuess =  meanAnomalyShifted - eccentricity;</div>
+<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>    }</div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>    {</div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>        initialGuess = meanAnomalyShifted + eccentricity;</div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    }</div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span> </div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>    <span class="comment">// Execute Newton-Raphson root-finding algorithm.</span></div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>    eccentricAnomaly = initialGuess;</div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; maximumIterations + 1; ++i)</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    {</div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>        <span class="keywordflow">if</span> (i == maximumIterations)</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>        {</div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>            <span class="keywordflow">throw</span> std::runtime_error(</div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>                <span class="stringliteral">&quot;ERROR: Maximum iterations for Newton-Raphson root-finding exceeded!&quot;</span>);</div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>        }</div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span> </div>
+<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>        <span class="keyword">const</span> Real nextEccentricAnomaly</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>            = eccentricAnomaly</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>              - <a class="code hl_function" href="namespaceastro.html#a94f763a63ac83e9bb28a61a59da4573a">computeEllipticalKeplerFunction</a>(eccentricAnomaly,</div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>                                                eccentricity,</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>                                                meanAnomalyShifted)</div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>              / <a class="code hl_function" href="namespaceastro.html#a494b64c8ca4a83801d1a04fd4b2012a3">computeFirstDerivativeEllipticalKeplerFunction</a>(eccentricAnomaly,</div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>                                                               eccentricity);</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span> </div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>        <span class="keyword">const</span> Real eccentricAnomalyDifference = eccentricAnomaly - nextEccentricAnomaly;</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span> </div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>        eccentricAnomaly = nextEccentricAnomaly;</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span> </div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>        <span class="keywordflow">if</span> (eccentricAnomalyDifference &lt; rootFindingTolerance)</div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>        {</div>
+<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>            <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>        }</div>
+<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span>    }</div>
+<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span> </div>
+<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>    <span class="comment">// Return eccentric anomaly.</span></div>
+<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>    <span class="keywordflow">return</span> eccentricAnomaly;</div>
+<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span>}</div>
+<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span> </div>
+<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>} <span class="comment">// namespace astro</span></div>
+<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span> </div>
 <div class="ttc" id="anamespaceastro_html"><div class="ttname"><a href="namespaceastro.html">astro</a></div><div class="ttdef"><b>Definition:</b> <a href="centralBodyAccelerationModel_8hpp_source.html#l00014">centralBodyAccelerationModel.hpp:15</a></div></div>
 <div class="ttc" id="anamespaceastro_html_a15038b10355b3c8217de80408cef1f89"><div class="ttname"><a href="namespaceastro.html#a15038b10355b3c8217de80408cef1f89">astro::convertEccentricAnomalyToTrueAnomaly</a></div><div class="ttdeci">Real convertEccentricAnomalyToTrueAnomaly(const Real eccentricAnomaly, const Real eccentricity)</div><div class="ttdoc">Convert eccentric anomaly to true anomaly.</div><div class="ttdef"><b>Definition:</b> <a href="orbitalElementConversions_8hpp_source.html#l00638">orbitalElementConversions.hpp:638</a></div></div>
 <div class="ttc" id="anamespaceastro_html_a2bfdf89798be1a757358155a8eca261e"><div class="ttname"><a href="namespaceastro.html#a2bfdf89798be1a757358155a8eca261e">astro::convertKeplerianToCartesianElements</a></div><div class="ttdeci">Vector6 convertKeplerianToCartesianElements(const Vector6 &amp;keplerianElements, const Real gravitationalParameter, const Real tolerance=10.0 *std::numeric_limits&lt; Real &gt;::epsilon())</div><div class="ttdoc">Convert Keplerian elements to Cartesian elements.</div><div class="ttdef"><b>Definition:</b> <a href="orbitalElementConversions_8hpp_source.html#l00272">orbitalElementConversions.hpp:272</a></div></div>
@@ -662,7 +662,7 @@ $(document).ready(function(){initNavTree('orbitalElementConversions_8hpp_source.
 <div class="ttc" id="anamespaceastro_html_ad59814e1ddaffbc6026f23a9e25b39e4ae8a6921f3aaadd7e41488958478e35e9"><div class="ttname"><a href="namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4ae8a6921f3aaadd7e41488958478e35e9">astro::longitudeOfAscendingNodeIndex</a></div><div class="ttdeci">@ longitudeOfAscendingNodeIndex</div><div class="ttdef"><b>Definition:</b> <a href="stateVectorIndices_8hpp_source.html#l00031">stateVectorIndices.hpp:31</a></div></div>
 <div class="ttc" id="anamespaceastro_html_ad59814e1ddaffbc6026f23a9e25b39e4af8378bea5f26ffe2219a651d3d4d5168"><div class="ttname"><a href="namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4af8378bea5f26ffe2219a651d3d4d5168">astro::inclinationIndex</a></div><div class="ttdeci">@ inclinationIndex</div><div class="ttdef"><b>Definition:</b> <a href="stateVectorIndices_8hpp_source.html#l00029">stateVectorIndices.hpp:29</a></div></div>
 <div class="ttc" id="anamespaceastro_html_ad59814e1ddaffbc6026f23a9e25b39e4afea4e9d3a1d49aebd036fe5451aa41ac"><div class="ttname"><a href="namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4afea4e9d3a1d49aebd036fe5451aa41ac">astro::semiMajorAxisIndex</a></div><div class="ttdeci">@ semiMajorAxisIndex</div><div class="ttdef"><b>Definition:</b> <a href="stateVectorIndices_8hpp_source.html#l00026">stateVectorIndices.hpp:26</a></div></div>
-<div class="ttc" id="anamespaceastro_html_afa1b5b05447c8575115467c6740faf4d"><div class="ttname"><a href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">astro::convertEllipticalMeanAnomalyToEccentricAnomaly</a></div><div class="ttdeci">Real convertEllipticalMeanAnomalyToEccentricAnomaly(const Real eccentricity, const Real meanAnomaly, const Real rootFindingTolerance=1.0e-3 *std::numeric_limits&lt; Real &gt;::epsilon(), const Integer maximumIterations=100)</div><div class="ttdoc">Convert elliptical mean anomaly to eccentric anomaly.</div><div class="ttdef"><b>Definition:</b> <a href="orbitalElementConversions_8hpp_source.html#l00739">orbitalElementConversions.hpp:739</a></div></div>
+<div class="ttc" id="anamespaceastro_html_afa1b5b05447c8575115467c6740faf4d"><div class="ttname"><a href="namespaceastro.html#afa1b5b05447c8575115467c6740faf4d">astro::convertEllipticalMeanAnomalyToEccentricAnomaly</a></div><div class="ttdeci">Real convertEllipticalMeanAnomalyToEccentricAnomaly(const Real eccentricity, const Real meanAnomaly, const Real rootFindingTolerance=1.0e-3 *std::numeric_limits&lt; Real &gt;::epsilon(), const Integer maximumIterations=100)</div><div class="ttdoc">Convert elliptical mean anomaly to eccentric anomaly.</div><div class="ttdef"><b>Definition:</b> <a href="orbitalElementConversions_8hpp_source.html#l00740">orbitalElementConversions.hpp:740</a></div></div>
 <div class="ttc" id="astateVectorIndices_8hpp_html"><div class="ttname"><a href="stateVectorIndices_8hpp.html">stateVectorIndices.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
