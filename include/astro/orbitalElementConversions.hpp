@@ -727,6 +727,7 @@ Real computeFirstDerivativeEllipticalKeplerFunction(const Real eccentricAnomaly,
  *
  * Also, note that the mean anomaly is automatically transformed to fit within the 0 to 2.0pi range.
  *
+ * @sa computeEllipticalKeplerFunction, computeFirstDerivativeEllipticalKeplerFunction
  * @tparam    Real                  Real number type
  * @tparam    Integer               Integer type
  * @param     eccentricity          Eccentricity                                               [-]
@@ -784,10 +785,10 @@ Real convertEllipticalMeanAnomalyToEccentricAnomaly(
         const Real nextEccentricAnomaly
             = eccentricAnomaly
               - computeEllipticalKeplerFunction(eccentricAnomaly,
-                                                 eccentricity,
-                                                 meanAnomalyShifted)
+                                                eccentricity,
+                                                meanAnomalyShifted)
               / computeFirstDerivativeEllipticalKeplerFunction(eccentricAnomaly,
-                                                                eccentricity);
+                                                               eccentricity);
 
         const Real eccentricAnomalyDifference = eccentricAnomaly - nextEccentricAnomaly;
 
