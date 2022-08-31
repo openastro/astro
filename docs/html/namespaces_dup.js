@@ -17,6 +17,9 @@ var namespaces_dup =
         [ "argumentOfPeriapsisIndex", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4a8b9b1f0d29e6ba02dcc2c55b9b480a95", null ],
         [ "longitudeOfAscendingNodeIndex", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4ae8a6921f3aaadd7e41488958478e35e9", null ],
         [ "trueAnomalyIndex", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4abfd93e4812b3db876cd492a98db63cd4", null ],
+        [ "trueLongitudeOfPeriapsis", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4a52468b14c028a2c772c11da72bd04bfb", null ],
+        [ "argumentOfLatitude", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4a3138872c1fe00e33178fb7a1d50c4444", null ],
+        [ "trueLongitude", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4ab82e017fe91e2de11316888e3015314a", null ],
         [ "meanAnomalyIndex", "namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4acc7d358d16d3519a57d3e4964068e7a2", null ]
       ] ],
       [ "computeCentralBodyAcceleration", "namespaceastro.html#ab85bb7990a62e3651be25b345a826438", null ],

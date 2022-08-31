@@ -24,12 +24,14 @@ namespace astro
 //! Convert Cartesian elements to Keplerian elements.
 /*!
  * Converts a given set of Cartesian elements (position, velocity) to classical (osculating)
- * Keplerian elements. See Chobotov (2006) & Wikipedia (2018) for a derivation of the conversion.
+ * Keplerian elements. See Vallado (2007) for a derivation of the conversion.
  *
- * The tolerance is given a default value. It should not be changed unless required for specific
+ * The tolerance is set to a default value. It should not be changed unless required for specific
  * scenarios. Below this tolerance value for eccentricity and inclination, the orbit is considered
- * to be a limit case. Essentially, special solutions are then used for parabolic, circular
- * inclined, non-circular equatorial, and circular equatorial orbits. These special solutions are
+ * to be a limit case.
+ *
+ * Essentially, special solutions are then used for parabolic, circular inclined,
+ * non-circular equatorial, and circular equatorial orbits. These special solutions are
  * required because of singularities in the classical Keplerian elements. If high precision is
  * required near these singularities, users are encouraged to consider using other elements, such
  * as Modified Equinoctial Elements (MEE). It should be noted that MEE also suffer from
@@ -41,6 +43,14 @@ namespace astro
  *          orbit is circular.
  * WARNING: If inclination is 0.0 within tolerance, longitude of ascending node is set to NaN, since
  *          since the orbit is equatorial.
+ * WARNING: If inclination is 0.0 within tolerance, longitude of ascending node is set to NaN, since
+ *          since the orbit is equatorial.
+ * WARNING: If eccentricity = 0.0 within tolerance, inclination = non-zero
+ *          keplerianElements(5) = argument of latitude
+ * WARNING: If eccentricity = non-zero, inclination = 0.0 within tolerance
+ *          keplerianElements(5) = true longitude of periapsis
+ * WARNING: If eccentricity = 0.0 within tolerance, inclination = 0.0 within tolerance
+ *          keplerianElements(5) = true latitude
  *
  * @tparam  Real                    Real type
  * @tparam  Vector                  Vector type
@@ -72,10 +82,12 @@ Vector6 convertCartesianToKeplerianElements(
     const Real tolerance = 10.0 * std::numeric_limits<Real>::epsilon())
 {
     assert(cartesianElements.size() == 6);
+    assert(gravitationalParameter > 0.0);
 
     const Real pi = 3.14159265358979323846;
-
     typedef std::vector<Real> Vector;
+
+    // Cartesian position
     const Vector position = Vector({cartesianElements[0],
                                     cartesianElements[1],
                                     cartesianElements[2]});
@@ -84,6 +96,7 @@ Vector6 convertCartesianToKeplerianElements(
                                      + position[2] * position[2];
     const Real positionNorm = std::sqrt(positionNormSquared);
 
+    // Cartesian velocity
     const Vector velocity = Vector({cartesianElements[3],
                                     cartesianElements[4],
                                     cartesianElements[5]});
@@ -91,6 +104,7 @@ Vector6 convertCartesianToKeplerianElements(
                                      + velocity[1] * velocity[1]
                                      + velocity[2] * velocity[2];
 
+    // Angular momentum
     const Vector angularMomentum
         = Vector({position[1] * velocity[2] - position[2] * velocity[1],
                     position[2] * velocity[0] - position[0] * velocity[2],
@@ -104,23 +118,21 @@ Vector6 convertCartesianToKeplerianElements(
                   angularMomentum[1] / angularMomentumNorm,
                   angularMomentum[2] / angularMomentumNorm});
 
-    const Real inclination = std::acos(angularMomentumUnitVector[2]);
-
-    const Real eccentricityPreMultiplier
-        = 1.0 / gravitationalParameter
-          * (velocityNormSquared - gravitationalParameter / positionNorm);
+    // Eccentricity
+    const Real eccentricityVectorFirsTermMultiplier
+        = velocityNormSquared / gravitationalParameter - 1.0 / positionNorm;
 
     const Real positionDotVelocity = position[0] * velocity[0]
                                      + position[1] * velocity[1]
                                      + position[2] * velocity[2];
 
     const Vector eccentricityVector
-        = Vector({eccentricityPreMultiplier * position[0]
-                    - positionDotVelocity * velocity[0] / gravitationalParameter,
-                    eccentricityPreMultiplier * position[1]
-                    - positionDotVelocity * velocity[1] / gravitationalParameter,
-                    eccentricityPreMultiplier * position[2]
-                    - positionDotVelocity * velocity[2] / gravitationalParameter});
+    = Vector({eccentricityVectorFirsTermMultiplier * position[0]
+                - positionDotVelocity  / gravitationalParameter * velocity[0],
+              eccentricityVectorFirsTermMultiplier * position[1]
+                - positionDotVelocity  / gravitationalParameter * velocity[1],
+              eccentricityVectorFirsTermMultiplier * position[2]
+                - positionDotVelocity  / gravitationalParameter * velocity[2]});
 
     const Real eccentricityNormSquared = eccentricityVector[0] * eccentricityVector[0]
                                             + eccentricityVector[1] * eccentricityVector[1]
@@ -128,13 +140,23 @@ Vector6 convertCartesianToKeplerianElements(
 
     const Real eccentricity = std::sqrt(eccentricityNormSquared);
 
-    const Real semiMajorAxis
-        = (std::fabs(eccentricity - 1.0) < tolerance)
-          ? angularMomentumNormSquared / gravitationalParameter
-          : 1.0 / (2.0 / positionNorm - velocityNormSquared / gravitationalParameter);
+    // Semi-major axis
+    Real semiMajorAxis = 0.0;
+    if (std::fabs(eccentricity - 1.0) < tolerance)
+    {
+        semiMajorAxis = angularMomentumNormSquared / gravitationalParameter;
+    }
+    else
+    {
+        semiMajorAxis = 1.0 / (2.0 / positionNorm - velocityNormSquared / gravitationalParameter);
+    }
 
+    // Inclination
+    const Real inclination = std::acos(angularMomentumUnitVector[2]);
+
+    // Longitude of ascending node
     const Vector ascendingNodeVector
-        = Vector({-angularMomentumUnitVector[1], angularMomentumUnitVector[0], 0.0});
+        = Vector({-angularMomentum[1], angularMomentum[0], 0.0});
 
     const Real ascendingNodeVectorNormSquared
         = ascendingNodeVector[0] * ascendingNodeVector[0]
@@ -151,82 +173,89 @@ Vector6 convertCartesianToKeplerianElements(
     Real longitudeOfAscendingNode = 0.0;
     if (std::fabs(inclination) < tolerance)
     {
+        // Set value to NaN if orbit is equatorial
         longitudeOfAscendingNode = std::numeric_limits<Real>::quiet_NaN();
     }
     else
     {
-        const Real cosLongitudeOfAscendingNode = ascendingNodeUnitVector[0];
-        const Real sinLongitudeOfAscendingNode = ascendingNodeUnitVector[1];
-        const Real longitudeOfAscendingNodeShifted = std::atan2(sinLongitudeOfAscendingNode,
-                                                                cosLongitudeOfAscendingNode);
-        longitudeOfAscendingNode = longitudeOfAscendingNodeShifted > 0.0
-                                   ? longitudeOfAscendingNodeShifted
-                                   : longitudeOfAscendingNodeShifted + 2.0 * pi;
+        longitudeOfAscendingNode = std::acos(ascendingNodeUnitVector[0]);
+        if (ascendingNodeVector[1] < 0.0)
+        {
+            longitudeOfAscendingNode = 2.0 * pi - longitudeOfAscendingNode;
+        }
     }
+
+    // Argument of periapsis
+    const Real ascendingNodeVectorDotEccentricityVector
+        = ascendingNodeVector[0] * eccentricityVector[0]
+          + ascendingNodeVector[1] * eccentricityVector[1]
+          + ascendingNodeVector[2] * eccentricityVector[2];
 
     Real argumentOfPeriapsis = 0.0;
     if (std::fabs(eccentricity) < tolerance)
     {
+        // Set value to NaN if orbit is circular
         argumentOfPeriapsis = std::numeric_limits<Real>::quiet_NaN();
-   }
+    }
     else
     {
-        const Real cosArgumentOfPeriapsis
-            = ascendingNodeUnitVector[0] * eccentricityVector[0] / eccentricity
-              + ascendingNodeUnitVector[1] * eccentricityVector[1] / eccentricity
-              + ascendingNodeUnitVector[2] * eccentricityVector[2] / eccentricity;
-        const Real sinArgumentOfPeriapsis
-            = ((ascendingNodeUnitVector[1] * eccentricityVector[2]
-                  - ascendingNodeUnitVector[2] * eccentricityVector[1]) / eccentricity)
-                * angularMomentumUnitVector[0]
-              + ((ascendingNodeUnitVector[2] * eccentricityVector[0]
-                  - ascendingNodeUnitVector[0] * eccentricityVector[2]) / eccentricity)
-                * angularMomentumUnitVector[1]
-              + ((ascendingNodeUnitVector[0] * eccentricityVector[1]
-                  - ascendingNodeUnitVector[1] * eccentricityVector[0]) / eccentricity)
-                * angularMomentumUnitVector[2];
-        const Real argumentOfPeriapsisShifted = std::atan2(sinArgumentOfPeriapsis,
-                                                            cosArgumentOfPeriapsis);
-        argumentOfPeriapsis = argumentOfPeriapsisShifted > 0.0
-                              ? argumentOfPeriapsisShifted
-                              : argumentOfPeriapsisShifted + 2.0 * pi;
-   }
+        argumentOfPeriapsis
+            = std::acos(ascendingNodeVectorDotEccentricityVector
+              / (ascendingNodeVectorNorm * eccentricity));
+        if (eccentricityVector[2] < 0.0)
+        {
+            argumentOfPeriapsis = 2.0 * pi - argumentOfPeriapsis;
+        }
+    }
 
+    // True anomaly
+    const Real eccentricityVectorDotPosition = eccentricityVector[0] * position[0]
+                                               + eccentricityVector[1] * position[1]
+                                               + eccentricityVector[2] * position[2];
+    const Real ascendingNodeVectorDotPosition = ascendingNodeVector[0] * position[0]
+                                                + ascendingNodeVector[1] * position[1]
+                                                + ascendingNodeVector[2] * position[2];
     Real trueAnomaly = 0.0;
     if (std::fabs(eccentricity) < tolerance)
     {
         if (std::fabs(inclination) < tolerance)
         {
-            trueAnomaly = (velocity[0] < 0.0)
-                          ? std::acos(position[0] / positionNorm)
-                          : 2.0 * pi - std::acos(position[0] / positionNorm);
+            // Circular, equatorial
+            trueAnomaly = std::acos(position[0] / positionNorm);
+            if (position[1] < 0.0)
+            {
+                trueAnomaly = 2.0 * pi - trueAnomaly;
+            }
+
         }
         else
         {
-            trueAnomaly = std::acos(position[0] / positionNorm * ascendingNodeUnitVector[0]
-                                     + position[1] / positionNorm * ascendingNodeUnitVector[1]
-                                     + position[2] / positionNorm * ascendingNodeUnitVector[2]);
+            // Circular, inclined
+            trueAnomaly = std::acos(ascendingNodeVectorDotPosition
+                          / (ascendingNodeVectorNorm * positionNorm));
+            if (position[2] < 0.0)
+            {
+                trueAnomaly = 2.0 * pi - trueAnomaly;
+            }
         }
-   }
+    }
+    else if (std::fabs(inclination) < tolerance)
+    {
+        // Elliptical equatorial
+        trueAnomaly = std::acos(eccentricityVector[0] / eccentricity);
+        if (eccentricityVector[1] < 0.0)
+        {
+            trueAnomaly = 2.0 * pi - trueAnomaly;
+        }
+    }
     else
     {
-        const Real cosTrueAnomaly
-            = eccentricityVector[0] * position[0] / (eccentricity * positionNorm)
-              + eccentricityVector[1] * position[1] / (eccentricity * positionNorm)
-              + eccentricityVector[2] * position[2] / (eccentricity * positionNorm);
-        const Real sinTrueAnomaly
-            = ((eccentricityVector[1] * position[2]
-                  - eccentricityVector[2] * position[1]) / (eccentricity * positionNorm))
-                * angularMomentumUnitVector[0]
-              + ((eccentricityVector[2] * position[0]
-                  - eccentricityVector[0] * position[2]) / (eccentricity * positionNorm))
-                * angularMomentumUnitVector[1]
-              + ((eccentricityVector[0] * position[1]
-                  - eccentricityVector[1] * position[0]) / (eccentricity * positionNorm))
-                * angularMomentumUnitVector[2];
-        const Real trueAnomalyShifted = std::atan2(sinTrueAnomaly, cosTrueAnomaly);
-        trueAnomaly = trueAnomalyShifted> 0.0 ? trueAnomalyShifted : trueAnomalyShifted + 2.0 * pi;
-   }
+        trueAnomaly = std::acos(eccentricityVectorDotPosition / (eccentricity * positionNorm));
+        if (positionDotVelocity < 0.0)
+        {
+            trueAnomaly = 2.0 * pi - trueAnomaly;
+        }
+    }
 
     Vector6 keplerianElements = cartesianElements;
     keplerianElements[0] = semiMajorAxis;
@@ -808,8 +837,8 @@ Real convertEllipticalMeanAnomalyToEccentricAnomaly(
 
 /*!
  * References
- *  Chobotov, V.A. Orbital Mechanics, Third Edition, AIAA Education Series, VA, 2002.
+ *  Vallado, D.A.. Fundamentals of Astrodynamics and Applications. Third Edition, Microcosm Press,
+ *      2007.
  *  Musegaas, P. Optimization of Space Trajectories Including Multiple Gravity Assists and Deep
  *      Space Maneuvers. MSc thesis, Delft University of Technology, 2013.
- *  Wikipedia. True anomaly: https://en.wikipedia.org/wiki/True_anomaly, 21 August 2018.
  */

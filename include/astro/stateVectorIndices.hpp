@@ -30,6 +30,9 @@ enum KeplerianElementIndices
     argumentOfPeriapsisIndex      = 3,
     longitudeOfAscendingNodeIndex = 4,
     trueAnomalyIndex              = 5,
+    trueLongitudeOfPeriapsis      = 5,
+    argumentOfLatitude            = 5,
+    trueLongitude                 = 5,
     meanAnomalyIndex              = 5
 };
 

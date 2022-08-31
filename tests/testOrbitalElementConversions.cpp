@@ -60,7 +60,7 @@ TEST_CASE("Convert Cartesian elements to Keplerian elements",
         REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-14));
     }
 
-    SECTION("Test equatorial, circular orbit around Venus")
+    SECTION("Test circular, equatorial orbit around Venus")
     {
         // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
@@ -94,6 +94,16 @@ TEST_CASE("Convert Cartesian elements to Keplerian elements",
         REQUIRE(std::isnan(result[3]));
         REQUIRE(std::isnan(result[4]));
         REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-15));
+    }
+
+    SECTION("Test circular, inclined orbit")
+    {
+        // @TODO: add test case for circular inclined
+    }
+
+    SECTION("Test elliptical, inclined orbit")
+    {
+        // @TODO: add test case for elliptical inclined
     }
 
     // @TODO: find a way to test assert statement in convertCartesianToKeplerianElements()
