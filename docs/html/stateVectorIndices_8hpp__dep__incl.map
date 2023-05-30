@@ -1,5 +1,8 @@
 <map id="stateVectorIndices.hpp" name="stateVectorIndices.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,161,31"/>
-<area shape="rect" id="node2" href="$astroAll_8hpp.html" title=" " alt="" coords="38,152,129,177"/>
-<area shape="rect" id="node3" href="$orbitalElementConversions_8hpp.html" title=" " alt="" coords="51,79,254,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,161,31"/>
+<area shape="rect" id="Node000002" href="$astroAll_8hpp.html" title=" " alt="" coords="38,153,128,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="63,44,51,61,42,80,40,99,47,119,72,150,67,154,43,121,35,100,36,78,46,58,59,41"/>
+<area shape="rect" id="Node000003" href="$orbitalElementConversions_8hpp.html" title=" " alt="" coords="51,79,254,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="106,40,143,77,139,80,103,43"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="133,117,97,154,93,150,129,113"/>
 </map>

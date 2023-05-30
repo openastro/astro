@@ -1,6 +1,9 @@
 <map id="twoBodyMethods.hpp" name="twoBodyMethods.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="51,5,199,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,71,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="95,79,154,104"/>
-<area shape="rect" id="node4" href="$constants_8hpp.html" title=" " alt="" coords="179,79,316,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="49,5,197,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,70,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,34,64,72,61,67,107,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="94,79,152,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,31,126,64,120,64,120,31"/>
+<area shape="rect" id="Node000004" href="$constants_8hpp.html" title=" " alt="" coords="176,79,312,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="145,29,212,69,210,73,142,34"/>
 </map>

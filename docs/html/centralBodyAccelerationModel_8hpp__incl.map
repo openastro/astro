@@ -1,4 +1,5 @@
 <map id="centralBodyAccelerationModel.hpp" name="centralBodyAccelerationModel.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,228,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="87,79,146,104"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,228,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="88,79,145,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,31,119,64,114,64,114,31"/>
 </map>
