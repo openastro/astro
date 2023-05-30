@@ -29,7 +29,6 @@ typedef std::vector<Real> Vector;
 TEST_CASE("Convert Cartesian elements to Keplerian elements",
            "[cartesian-to-keplerian-elements]")
 {
-
     SECTION("Test general orbit around the Earth")
     {
         // The benchmark data is obtained from (Vallado, 2013).
