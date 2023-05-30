@@ -94,9 +94,9 @@ Vector6 convertCartesianToKeplerianElements(
     Vector6 keplerianElements = cartesianElements;
 
     // Cartesian position
-    const Vector position = Vector({cartesianElements[0],
-                                    cartesianElements[1],
-                                    cartesianElements[2]});
+    const Vector position = Vector({cartesianElements[xPositionIndex],
+                                    cartesianElements[yPositionIndex],
+                                    cartesianElements[zPositionIndex]});
     const Real positionNormSquared = position[0] * position[0]
                                      + position[1] * position[1]
                                      + position[2] * position[2];
@@ -106,12 +106,13 @@ Vector6 convertCartesianToKeplerianElements(
 std::cout << "(debug) r: " << positionNorm << std::endl;
 
     // Cartesian velocity
-    const Vector velocity = Vector({cartesianElements[3],
-                                    cartesianElements[4],
-                                    cartesianElements[5]});
+    const Vector velocity = Vector({cartesianElements[xVelocityIndex],
+                                    cartesianElements[yVelocityIndex],
+                                    cartesianElements[zVelocityIndex]});
     const Real velocityNormSquared = velocity[0] * velocity[0]
                                      + velocity[1] * velocity[1]
                                      + velocity[2] * velocity[2];
+    const Real velocityNorm = std::sqrt(velocityNormSquared);
 
 std::cout << "(debug) v: " << std::sqrt(velocityNormSquared) << std::endl;
 
@@ -128,6 +129,9 @@ std::cout << "(debug) v: " << std::sqrt(velocityNormSquared) << std::endl;
         = Vector({angularMomentum[0] / angularMomentumNorm,
                   angularMomentum[1] / angularMomentumNorm,
                   angularMomentum[2] / angularMomentumNorm});
+std::cout << "(debug) h: " << angularMomentum[0] << ","
+                           << angularMomentum[1] << ","
+                           << angularMomentum[2] << std::endl;
 
 std::cout << "(debug) hx: " << angularMomentum[0] << std::endl;
 std::cout << "(debug) hy: " << angularMomentum[1] << std::endl;
@@ -144,6 +148,8 @@ std::cout << "(debug) h: " << angularMomentumNorm << std::endl;
     const Real positionDotVelocity = position[0] * velocity[0]
                                      + position[1] * velocity[1]
                                      + position[2] * velocity[2];
+
+    const Real positionDotVelocityScaled = positionDotVelocity / gravitationalParameter;
 
     const Vector eccentricityVector
     = Vector({eccentricityVectorFirsTermMultiplier * position[0]
@@ -186,6 +192,8 @@ std::cout << "(debug) Esp: " << specificTotalEnergy << std::endl;
         semiLatusRectum = angularMomentumNormSquared * gravitationalParameterInverse;
         keplerianElements[0] = semiLatusRectum;
     }
+    assert(semiMajorAxis > 0.0);
+std::cout << "(debug) a: " << semiMajorAxis << std::endl;
 
 std::cout << "(debug) a: " << keplerianElements[0] << std::endl;
 std::cout << "(debug) p: " << semiLatusRectum << std::endl;
@@ -199,6 +207,9 @@ std::cout << "(debug) i: " << keplerianElements[2] / pi * 180.0 << std::endl;
     // Ascending node vector
     const Vector ascendingNodeVector
         = Vector({-angularMomentum[1], angularMomentum[0], 0.0});
+std::cout << "(debug) asc. node vec.: " << ascendingNodeVector[0] << ", "
+                                        << ascendingNodeVector[1] << ", "
+                                        << ascendingNodeVector[2] << std::endl;
 
     const Real ascendingNodeVectorNormSquared
         = ascendingNodeVector[0] * ascendingNodeVector[0]
@@ -224,6 +235,7 @@ std::cout << "(debug) n: " << ascendingNodeVectorNorm << std::endl;
     {
         longitudeOfAscendingNode = 2.0 * pi - longitudeOfAscendingNode;
     }
+std::cout << "(debug) RAAN: " << longitudeOfAscendingNode << std::endl;
 
     keplerianElements[4] = longitudeOfAscendingNode;
 

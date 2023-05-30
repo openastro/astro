@@ -4,9 +4,14 @@
  * See accompanying file LICENSE.md or copy at http://opensource.org/licenses/MIT
  */
 
+// Remove
+#include <iomanip>
+
+
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
 
+#include <iostream>
 #include <limits>
 #include <vector>
 
@@ -218,23 +223,24 @@ TEST_CASE("Convert Keplerian elements to Cartesian elements",
             keplerianElements[trueAnomalyIndex]              = 46.11 / 180.0 * pi;
 
             // Set expected Cartesian elements [m,m,m,m/s,m/s,m/s].
-            Vector cartesianElements(6);
-            cartesianElements[xPositionIndex] = 2.021874804243437e6;
-            cartesianElements[yPositionIndex] = 6.042523817035284e6;
-            cartesianElements[zPositionIndex] = -1.450371183512575e6;
-            cartesianElements[xVelocityIndex] = -7.118283509842652e3;
-            cartesianElements[yVelocityIndex] = 4.169050171542199e3;
-            cartesianElements[zVelocityIndex] = 2.029066072016241e3;
+            Vector expectedCartesianElements(6);
+            expectedCartesianElements[xPositionIndex] = 2.021874804243437e6;
+            expectedCartesianElements[yPositionIndex] = 6.042523817035284e6;
+            expectedCartesianElements[zPositionIndex] = -1.450371183512575e6;
+            expectedCartesianElements[xVelocityIndex] = -7.118283509842652e3;
+            expectedCartesianElements[yVelocityIndex] = 4.169050171542199e3;
+            expectedCartesianElements[zVelocityIndex] = 2.029066072016241e3;
 
             // Compute Cartesian elements.
-            Vector result = convertKeplerianToCartesianElements<Real, Vector>(
+            Vector computedCartesianElements = convertKeplerianToCartesianElements<Real, Vector>(
                 keplerianElements, earthGravitationalParameter);
 
             // Loop through vectors and require that each element of the result matches the expected
             // value to the given tolerance.
-            for (unsigned int i = 0; i < result.size(); i++)
+            for (unsigned int i = 0; i < computedCartesianElements.size(); i++)
             {
-                REQUIRE(cartesianElements[i] == Catch::Approx(result[i]).epsilon(1.0e-14));
+                REQUIRE(expectedCartesianElements[i]
+                    == Catch::Approx(computedCartesianElements[i]).epsilon(1.0e-14));
             }
         }
 
