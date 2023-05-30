@@ -53,7 +53,7 @@ TEST_CASE("Convert Cartesian elements to Keplerian elements",
         keplerianElements[0] = 36127.343;
         keplerianElements[1] = 0.832853;
         keplerianElements[2] = 87.870;
-        keplerianElements[3] = 53.38;
+        keplerianElements[3] = 53.380;
         keplerianElements[4] = 227.898;
         keplerianElements[5] = 92.335;
 
@@ -67,134 +67,92 @@ TEST_CASE("Convert Cartesian elements to Keplerian elements",
         REQUIRE(keplerianElements[3] == Catch::Approx(result[3]*rad2deg).epsilon(1.0e-4));
         REQUIRE(keplerianElements[4] == Catch::Approx(result[4]*rad2deg).epsilon(1.0e-5));
         REQUIRE(keplerianElements[5] == Catch::Approx(result[5]*rad2deg).epsilon(1.0e-5));
-
     }
 
-    // SECTION("Test general orbit around the Earth")
-    // {
-    //     // The benchmark data is obtained from (Vallado, 2007).
+    SECTION("Test elliptical orbit around the Earth")
+    {
+        // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
-    //     const Real rad2deg = 180.0 / 3.14159265358979323846;
+        // Set Earth gravitational parameter [m^3 s^-2].
+        const Real gravitationalParameter = 3.986004415e14;
 
-    //     // Set Earth gravitational parameter [Canonical units].
-    //     const Real gravitationalParameter = 1.0;
+        // Set Cartesian elements [m].
+        Vector cartesianElements(6);
+        cartesianElements[0] = 3.75e6;
+        cartesianElements[1] = 4.24e6;
+        cartesianElements[2] = -1.39e6;
+        cartesianElements[3] = -4.65e3;
+        cartesianElements[4] = -2.21e3;
+        cartesianElements[5] = 1.66e3;
 
-    //     // Set Cartesian elements [Earth radii (ER), Canonical Time Unit (TU)].
-    //     // Source for Canonical units: https://en.wikipedia.org/wiki/Canonical_units
-    //     Vector cartesianElements(6);
-    //     cartesianElements[0] = 1.023;
-    //     cartesianElements[1] = 1.076;
-    //     cartesianElements[2] = 1.011;
-    //     cartesianElements[3] = 0.62;
-    //     cartesianElements[4] = 0.7;
-    //     cartesianElements[5] = -0.25;
+        // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
+        Vector keplerianElements(6);
+        keplerianElements[0] = 3.707478199246163e6;
+        keplerianElements[1] = 0.949175203660321;
+        keplerianElements[2] = 0.334622356632438;
+        keplerianElements[3] = 2.168430616511167;
+        keplerianElements[4] = 1.630852596545341;
+        keplerianElements[5] = 3.302032232567084;
 
-    //     // Set expected Keplerian elements [ER, -, deg, deg, deg, deg].
-    //     Vector keplerianElements(6);
-    //     keplerianElements[0] = 5.664247;
-    //     keplerianElements[1] = 0.832853;
-    //     keplerianElements[2] = 87.870;
-    //     keplerianElements[3] = 53.38;
-    //     // keplerianElements[4] = 1.630852596545341;
-    //     // keplerianElements[5] = 3.302032232567084;
+        // Convert Cartesian elements to Keplerian elements.
+        const Vector result = convertCartesianToKeplerianElements<Real, Vector>(
+            cartesianElements, gravitationalParameter);
 
-    //     // Convert Cartesian elements to Keplerian elements.
-    //     const Vector result = convertCartesianToKeplerianElements<Real, Vector>(
-    //         cartesianElements, gravitationalParameter);
+        REQUIRE(keplerianElements[0] == Catch::Approx(result[0]).epsilon(1.0e-14));
+        REQUIRE(keplerianElements[1] == Catch::Approx(result[1]).epsilon(1.0e-14));
+        REQUIRE(keplerianElements[2] == Catch::Approx(result[2]).epsilon(1.0e-14));
+        REQUIRE(keplerianElements[3] == Catch::Approx(result[3]).epsilon(1.0e-14));
+        REQUIRE(keplerianElements[4] == Catch::Approx(result[4]).epsilon(1.0e-14));
+        REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-14));
+    }
 
-    //     REQUIRE(keplerianElements[0] == Catch::Approx(result[0]).epsilon(1.0e-6));
-    //     REQUIRE(keplerianElements[1] == Catch::Approx(result[1]).epsilon(1.0e-6));
-    //     REQUIRE(keplerianElements[2] == Catch::Approx(result[2]*rad2deg).epsilon(1.0e-5));
-    //     REQUIRE(keplerianElements[3] == Catch::Approx(result[3]*rad2deg).epsilon(1.0e-14));
-    // //     REQUIRE(keplerianElements[4] == Catch::Approx(result[4]).epsilon(1.0e-14));
-    // //     REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-14));
-
-    // }
-
-    // SECTION("Test elliptical orbit around the Earth")
-    // {
+    SECTION("Test circular, equatorial orbit around Venus")
+    {
     //     // The benchmark data is obtained by running ODTBX (NASA, 2012).
 
-    //     // Set Earth gravitational parameter [m^3 s^-2].
-    //     const Real gravitationalParameter = 3.986004415e14;
+        // Set Venus gravitational parameter [m^3 s^-2].
+        const Real gravitationalParameter = 3.2485504415e14;
 
-    //     // Set Cartesian elements [m].
-    //     Vector cartesianElements(6);
-    //     cartesianElements[0] = 3.75e6;
-    //     cartesianElements[1] = 4.24e6;
-    //     cartesianElements[2] = -1.39e6;
-    //     cartesianElements[3] = -4.65e3;
-    //     cartesianElements[4] = -2.21e3;
-    //     cartesianElements[5] = 1.66e3;
+        // Set Cartesian elements [m].
+        Vector cartesianElements(6);
+        cartesianElements[0] = 5.580537430785387e6;
+        cartesianElements[1] = 2.816487703435473e6;
+        cartesianElements[2] = 0.0;
+        cartesianElements[3] = -3.248092722413634e3;
+        cartesianElements[4] = 6.435711753323540e3;
+        cartesianElements[5] = 0.0;
 
-    //     // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
-    //     Vector keplerianElements(6);
-    //     keplerianElements[0] = 3.707478199246163e6;
-    //     keplerianElements[1] = 0.949175203660321;
-    //     keplerianElements[2] = 0.334622356632438;
-    //     keplerianElements[3] = 2.168430616511167;
-    //     keplerianElements[4] = 1.630852596545341;
-    //     keplerianElements[5] = 3.302032232567084;
+        // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
+        Vector keplerianElements(6);
+        keplerianElements[0] = 6.251e6;
+        keplerianElements[1] = 0.0;
+        keplerianElements[2] = 0.0;
+        keplerianElements[3] = 0.0;
+        keplerianElements[4] = 0.0;
+        keplerianElements[5] = 26.78 / 180.0 * 3.14159265358979323846;
 
-    //     // Convert Cartesian elements to Keplerian elements.
-    //     const Vector result = convertCartesianToKeplerianElements<Real, Vector>(
-    //         cartesianElements, gravitationalParameter);
+        const Vector result = convertCartesianToKeplerianElements<Real, Vector>(
+            cartesianElements, gravitationalParameter);
 
-    //     REQUIRE(keplerianElements[0] == Catch::Approx(result[0]).epsilon(1.0e-14));
-    //     REQUIRE(keplerianElements[1] == Catch::Approx(result[1]).epsilon(1.0e-14));
-    //     REQUIRE(keplerianElements[2] == Catch::Approx(result[2]).epsilon(1.0e-14));
-    //     // REQUIRE(keplerianElements[3] == Catch::Approx(result[3]).epsilon(1.0e-14));
-    //     // REQUIRE(keplerianElements[4] == Catch::Approx(result[4]).epsilon(1.0e-14));
-    //     // REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-14));
-    // }
+        REQUIRE(keplerianElements[0] == Catch::Approx(result[0]).epsilon(1.0e-15));
+        REQUIRE(std::fabs(result[1]) < std::numeric_limits<Real>::epsilon());
+        REQUIRE(std::fabs(result[2]) < std::numeric_limits<Real>::epsilon());
+        REQUIRE(std::isnan(result[3]));
+        REQUIRE(std::isnan(result[4]));
+        REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-15));
+    }
 
-    // SECTION("Test circular, equatorial orbit around Venus")
-    // {
-    //     // The benchmark data is obtained by running ODTBX (NASA, 2012).
+    SECTION("Test circular, inclined orbit")
+    {
+        // @TODO: add test case for circular inclined
+    }
 
-    //     // Set Venus gravitational parameter [m^3 s^-2].
-    //     const Real gravitationalParameter = 3.2485504415e14;
+    SECTION("Test elliptical, inclined orbit")
+    {
+        // @TODO: add test case for elliptical inclined
+    }
 
-    //     // Set Cartesian elements [m].
-    //     Vector cartesianElements(6);
-    //     cartesianElements[0] = 5.580537430785387e6;
-    //     cartesianElements[1] = 2.816487703435473e6;
-    //     cartesianElements[2] = 0.0;
-    //     cartesianElements[3] = -3.248092722413634e3;
-    //     cartesianElements[4] = 6.435711753323540e3;
-    //     cartesianElements[5] = 0.0;
-
-    //     // Set expected Keplerian elements [m, -, rad, rad, rad, rad].
-    //     Vector keplerianElements(6);
-    //     keplerianElements[0] = 6.251e6;
-    //     keplerianElements[1] = 0.0;
-    //     keplerianElements[2] = 0.0;
-    //     keplerianElements[3] = 0.0;
-    //     keplerianElements[4] = 0.0;
-    //     keplerianElements[5] = 26.78 / 180.0 * 3.14159265358979323846;
-
-    //     const Vector result = convertCartesianToKeplerianElements<Real, Vector>(
-    //         cartesianElements, gravitationalParameter);
-
-    //     REQUIRE(keplerianElements[0] == Catch::Approx(result[0]).epsilon(1.0e-15));
-    //     REQUIRE(std::fabs(result[1]) < std::numeric_limits<Real>::epsilon());
-    //     REQUIRE(std::fabs(result[2]) < std::numeric_limits<Real>::epsilon());
-    //     REQUIRE(std::isnan(result[3]));
-    //     REQUIRE(std::isnan(result[4]));
-    //     REQUIRE(keplerianElements[5] == Catch::Approx(result[5]).epsilon(1.0e-15));
-    // }
-
-    // SECTION("Test circular, inclined orbit")
-    // {
-    //     // @TODO: add test case for circular inclined
-    // }
-
-    // SECTION("Test elliptical, inclined orbit")
-    // {
-    //     // @TODO: add test case for elliptical inclined
-    // }
-
-    // // @TODO: find a way to test assert statement in convertCartesianToKeplerianElements()
+    // @TODO: find a way to test assert statement in convertCartesianToKeplerianElements()
 
 }
 

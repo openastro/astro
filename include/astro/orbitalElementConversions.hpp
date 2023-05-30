@@ -104,6 +104,7 @@ Vector6 convertCartesianToKeplerianElements(
     const Real positionNormInverse = 1.0 / positionNorm;
 
 std::cout << "(debug) r: " << positionNorm << std::endl;
+std::cout << "(debug) r_scaled: " << positionNorm / 6378.137 << std::endl;
 
     // Cartesian velocity
     const Vector velocity = Vector({cartesianElements[xVelocityIndex],
@@ -115,6 +116,7 @@ std::cout << "(debug) r: " << positionNorm << std::endl;
     const Real velocityNorm = std::sqrt(velocityNormSquared);
 
 std::cout << "(debug) v: " << std::sqrt(velocityNormSquared) << std::endl;
+std::cout << "(debug) v_scaled: " << velocityNorm / 7.905365719014 << std::endl;
 
     // Angular momentum
     const Vector angularMomentum
@@ -129,17 +131,11 @@ std::cout << "(debug) v: " << std::sqrt(velocityNormSquared) << std::endl;
         = Vector({angularMomentum[0] / angularMomentumNorm,
                   angularMomentum[1] / angularMomentumNorm,
                   angularMomentum[2] / angularMomentumNorm});
-std::cout << "(debug) h: " << angularMomentum[0] << ","
-                           << angularMomentum[1] << ","
-                           << angularMomentum[2] << std::endl;
-
 std::cout << "(debug) hx: " << angularMomentum[0] << std::endl;
 std::cout << "(debug) hy: " << angularMomentum[1] << std::endl;
 std::cout << "(debug) hz: " << angularMomentum[2] << std::endl;
-std::cout << "(debug) h: " << angularMomentumNorm << std::endl;std::cout << "(debug) hx: " << angularMomentum[0] << std::endl;
-std::cout << "(debug) hy: " << angularMomentum[1] << std::endl;
-std::cout << "(debug) hz: " << angularMomentum[2] << std::endl;
 std::cout << "(debug) h: " << angularMomentumNorm << std::endl;
+std::cout << "(debug) h_scaled: " << angularMomentumNorm / (6378.137 * 7.905365719014) << std::endl;
 
     // Eccentricity
     const Real eccentricityVectorFirsTermMultiplier
@@ -170,12 +166,14 @@ std::cout << "(debug) ex: " << eccentricityVector[0] << std::endl;
 std::cout << "(debug) ey: " << eccentricityVector[1] << std::endl;
 std::cout << "(debug) ez: " << eccentricityVector[2] << std::endl;
 std::cout << "(debug) e: " << keplerianElements[1] << std::endl;
+std::cout << "(debug) kep1: " << keplerianElements[1] << std::endl;
 
     // Specifc total energy using the vis-viva equation
     const Real specificTotalEnergy
         = 0.5 * velocityNormSquared - gravitationalParameter / positionNorm;
 
 std::cout << "(debug) Esp: " << specificTotalEnergy << std::endl;
+std::cout << "(debug) Esp_scaled: " << specificTotalEnergy / (7.905365719014 * 7.905365719014)<< std::endl;
 
     // Semi-major axis
     Real semiMajorAxis = std::numeric_limits<Real>::quiet_NaN();
@@ -194,22 +192,26 @@ std::cout << "(debug) Esp: " << specificTotalEnergy << std::endl;
     }
     assert(semiMajorAxis > 0.0);
 std::cout << "(debug) a: " << semiMajorAxis << std::endl;
-
-std::cout << "(debug) a: " << keplerianElements[0] << std::endl;
 std::cout << "(debug) p: " << semiLatusRectum << std::endl;
+std::cout << "(debug) kep0: " << keplerianElements[0] << std::endl;
 
     // Inclination
     const Real inclination = std::acos(angularMomentumUnitVector[2]);
     keplerianElements[2] = inclination;
 
 std::cout << "(debug) i: " << keplerianElements[2] / pi * 180.0 << std::endl;
+std::cout << "(debug) kep2: " << keplerianElements[2] << std::endl;
 
     // Ascending node vector
     const Vector ascendingNodeVector
         = Vector({-angularMomentum[1], angularMomentum[0], 0.0});
-std::cout << "(debug) asc. node vec.: " << ascendingNodeVector[0] << ", "
-                                        << ascendingNodeVector[1] << ", "
-                                        << ascendingNodeVector[2] << std::endl;
+std::cout << "(debug) nx: " << ascendingNodeVector[0] << std::endl;
+std::cout << "(debug) ny: " << ascendingNodeVector[1] << std::endl;
+std::cout << "(debug) nz: " << ascendingNodeVector[2] << std::endl;
+
+std::cout << "(debug) nx_scaled: " << ascendingNodeVector[0] / (6378.137 * 7.905365719014) << std::endl;
+std::cout << "(debug) ny_scaled: " << ascendingNodeVector[1] / (6378.137 * 7.905365719014) << std::endl;
+std::cout << "(debug) nz_scaled: " << ascendingNodeVector[2] / (6378.137 * 7.905365719014) << std::endl;
 
     const Real ascendingNodeVectorNormSquared
         = ascendingNodeVector[0] * ascendingNodeVector[0]
@@ -218,15 +220,19 @@ std::cout << "(debug) asc. node vec.: " << ascendingNodeVector[0] << ", "
 
     const Real ascendingNodeVectorNorm = std::sqrt(ascendingNodeVectorNormSquared);
 
+std::cout << "(debug) n: " << ascendingNodeVectorNorm / (6378.137 * 7.905365719014) << std::endl;
+
     const Vector ascendingNodeUnitVector
         = Vector({ascendingNodeVector[0] / ascendingNodeVectorNorm,
                     ascendingNodeVector[1] / ascendingNodeVectorNorm,
                     ascendingNodeVector[2] / ascendingNodeVectorNorm });
 
-std::cout << "(debug) nx: " << ascendingNodeVector[0] << std::endl;
-std::cout << "(debug) ny: " << ascendingNodeVector[1] << std::endl;
-std::cout << "(debug) nz: " << ascendingNodeVector[2] << std::endl;
-std::cout << "(debug) n: " << ascendingNodeVectorNorm << std::endl;
+std::cout << "(debug) nx_unit: " << ascendingNodeUnitVector[0] << std::endl;
+std::cout << "(debug) ny_unit: " << ascendingNodeUnitVector[1] << std::endl;
+std::cout << "(debug) nz_unit: " << ascendingNodeUnitVector[2] << std::endl;
+std::cout << "(debug) n_unit: " << ascendingNodeUnitVector[0] * ascendingNodeUnitVector[0]
+                                   + ascendingNodeUnitVector[1] * ascendingNodeUnitVector[1]
+                                   + ascendingNodeUnitVector[2] * ascendingNodeUnitVector[2]  << std::endl;
 
     // Longitude of ascending node
     Real longitudeOfAscendingNode = std::acos(ascendingNodeUnitVector[0]);
@@ -235,11 +241,11 @@ std::cout << "(debug) n: " << ascendingNodeVectorNorm << std::endl;
     {
         longitudeOfAscendingNode = 2.0 * pi - longitudeOfAscendingNode;
     }
-std::cout << "(debug) RAAN: " << longitudeOfAscendingNode << std::endl;
+std::cout << "(debug) raan: " << longitudeOfAscendingNode << std::endl;
 
     keplerianElements[4] = longitudeOfAscendingNode;
 
-std::cout << "(debug) raan: " << keplerianElements[4] / pi * 180.0 << std::endl;
+std::cout << "(debug) kep4: " << keplerianElements[4] / pi * 180.0 << std::endl;
 
     // Argument of periapsis
     const Real ascendingNodeVectorDotEccentricityVector
@@ -255,9 +261,11 @@ std::cout << "(debug) raan: " << keplerianElements[4] / pi * 180.0 << std::endl;
         argumentOfPeriapsis = 2.0 * pi - argumentOfPeriapsis;
     }
 
+std::cout << "(debug) omega: " << argumentOfPeriapsis << std::endl;
+
     keplerianElements[3] = argumentOfPeriapsis;
 
-std::cout << "(debug) omega: " << keplerianElements[3] / pi * 180.0 << std::endl;
+std::cout << "(debug) kep3: " << keplerianElements[3] / pi * 180.0 << std::endl;
 
     // True anomaly
     const Real eccentricityVectorDotPosition = eccentricityVector[0] * position[0]
@@ -271,42 +279,77 @@ std::cout << "(debug) omega: " << keplerianElements[3] / pi * 180.0 << std::endl
         trueAnomaly = 2.0 * pi - trueAnomaly;
     }
 
+std::cout << "(debug) ta: " << trueAnomaly << std::endl;
+
     keplerianElements[5] = trueAnomaly;
 
-std::cout << "(debug) ta: " << keplerianElements[5] / pi * 180.0 << std::endl;
+std::cout << "(debug) kep5: " << keplerianElements[5] / pi * 180.0 << std::endl;
 
-    // Special cases
-    // Elliptical, equatorial
-    Real trueLongitudeOfPeriapsis = std::acos(eccentricityVector[0]/eccentricity);
-    if (std::fabs(eccentricityVector[1]) < tolerance)
+    // True longitude of periapsis
+    Real trueLongitudeOfPeriapsis = std::acos(eccentricityVector[0] / eccentricity);
+
+    if (eccentricityVector[1] < tolerance)
     {
             trueLongitudeOfPeriapsis = 2.0 * pi - trueLongitudeOfPeriapsis;
+    }
+
+std::cout << "(debug) omega_true: " << trueLongitudeOfPeriapsis / pi * 180.0  << std::endl;
+
+    // Special case: elliptical, equatorial
+    if(std::fabs(eccentricity) > tolerance && std::fabs(inclination) < tolerance)
+    {
             longitudeOfAscendingNode = std::numeric_limits<Real>::quiet_NaN();
             keplerianElements[4] = trueLongitudeOfPeriapsis;
     }
 
-    // // Circular, inclined
-    // const Real ascendingNodeVectorDotPosition = ascendingNodeVector[0] * position[0]
-    //                                             + ascendingNodeVector[1] * position[1]
-    //                                             + ascendingNodeVector[2] * position[2];
-    // Real argumentOfLatitude = std::acos(ascendingNodeVectorDotPosition
-    //                           / (ascendingNodeVectorNorm * positionNorm));
-    // if (position[2] < 0.0)
-    // {
-    //     argumentOfLatitude = 2.0 * pi - argumentOfLatitude;
-    //     longitudeOfAscendingNode = std::numeric_limits<Real>::quiet_NaN();
-    //     keplerianElements[4] = argumentOfLatitude;
-    // }
+std::cout << "(debug) raan: " << longitudeOfAscendingNode << std::endl;
+std::cout << "(debug) kep4: " << keplerianElements[4] / pi * 180.0 << std::endl;
 
-    // // Circular, equatorial
-    // Real trueLongitude = std::acos(position[0] / positionNorm);
-    // if (position[1] < 0.0)
-    // {
-    //     trueLongitude = 2.0 * pi - trueLongitude;
-    //     longitudeOfAscendingNode = std::numeric_limits<Real>::quiet_NaN();
-    //     argumentOfPeriapsis = std::numeric_limits<Real>::quiet_NaN();
-    //     keplerianElements[5] = trueLongitude;
-    // }
+    // Argument of latitude
+    const Real ascendingNodeVectorDotPosition = ascendingNodeVector[0] * position[0]
+                                                + ascendingNodeVector[1] * position[1]
+                                                + ascendingNodeVector[2] * position[2];
+
+    Real argumentOfLatitude = std::acos(ascendingNodeVectorDotPosition
+                                        / (ascendingNodeVectorNorm * positionNorm));
+
+    if (position[2] < 0.0)
+    {
+        argumentOfLatitude = 2.0 * pi - argumentOfLatitude;
+    }
+
+std::cout << "(debug) u: " << argumentOfLatitude / pi * 180.0  << std::endl;
+
+    // Special case: circular, inclined
+    if(std::fabs(eccentricity) < tolerance && std::fabs(inclination) > tolerance)
+    {
+        argumentOfPeriapsis = std::numeric_limits<Real>::quiet_NaN();
+        keplerianElements[3] = argumentOfLatitude;
+    }
+
+std::cout << "(debug) omega: " << argumentOfPeriapsis << std::endl;
+std::cout << "(debug) kep3: " << keplerianElements[3] / pi * 180.0 << std::endl;
+
+    // True longitude
+    Real trueLongitude = std::acos(position[0] / positionNorm);
+    if (position[1] < 0.0)
+    {
+        trueLongitude = 2.0 * pi - trueLongitude;
+    }
+
+std::cout << "(debug) lambda: " << trueLongitude / pi * 180.0  << std::endl;
+
+    // // Special case: circular, equatorial
+    if (std::fabs(eccentricity) < tolerance && std::fabs(inclination) < tolerance)
+    {
+        argumentOfPeriapsis = std::numeric_limits<Real>::quiet_NaN();
+        longitudeOfAscendingNode = std::numeric_limits<Real>::quiet_NaN();
+        keplerianElements[5] = trueLongitude;
+    }
+
+std::cout << "(debug) omega: " << argumentOfPeriapsis << std::endl;
+std::cout << "(debug) raan: " << longitudeOfAscendingNode << std::endl;
+std::cout << "(debug) kep5: " << keplerianElements[5] / pi * 180.0 << std::endl;
 
     return keplerianElements;
 }
