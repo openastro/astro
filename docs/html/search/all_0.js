@@ -2,7 +2,7 @@ var searchData=
 [
   ['argumentoflatitude_0',['argumentOfLatitude',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4a3138872c1fe00e33178fb7a1d50c4444',1,'astro']]],
   ['argumentofperiapsisindex_1',['argumentOfPeriapsisIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4a8b9b1f0d29e6ba02dcc2c55b9b480a95',1,'astro']]],
-  ['astro_2',['astro',['../namespaceastro.html',1,'astro'],['../index.html',1,'(Global Namespace)']]],
+  ['astro_2',['astro',['../namespaceastro.html',1,'astro'],['../index.html',1,'astro']]],
   ['astro_5fau_5fin_5fkm_3',['ASTRO_AU_IN_KM',['../namespaceastro.html#a39a8b26b6629488f7a6cbea91b306bc1',1,'astro']]],
   ['astro_5fgravitational_5fconstant_4',['ASTRO_GRAVITATIONAL_CONSTANT',['../namespaceastro.html#a02f2f191434c90d081bad958cbbd830d',1,'astro']]],
   ['astro_5fgregorian_5fepoch_5fin_5fjulian_5fdays_5',['ASTRO_GREGORIAN_EPOCH_IN_JULIAN_DAYS',['../namespaceastro.html#ab41d7f04d66225abb1c664fc5144eab2',1,'astro']]],

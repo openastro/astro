@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['zpositionindex_0',['zPositionIndex',['../namespaceastro.html#ac942a8ec1423c4ff337ba19f56a86516adc0367b2aaae22ad392e9e29e47c59c4',1,'astro']]],
-  ['zvelocityindex_1',['zVelocityIndex',['../namespaceastro.html#ac942a8ec1423c4ff337ba19f56a86516a945418f9b56cdba2ad2534d484e867ce',1,'astro']]]
+  ['semilatusrectumindex_0',['semiLatusRectumIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4af6354bfe0d07f1a90cbdf97dfe8431c1',1,'astro']]],
+  ['semimajoraxisindex_1',['semiMajorAxisIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4afea4e9d3a1d49aebd036fe5451aa41ac',1,'astro']]],
+  ['statevectorindices_2ehpp_2',['stateVectorIndices.hpp',['../stateVectorIndices_8hpp.html',1,'']]],
+  ['structure_3',['Project structure',['../index.html#autotoc_md4',1,'']]]
 ];

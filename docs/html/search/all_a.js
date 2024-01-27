@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['semilatusrectumindex_0',['semiLatusRectumIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4af6354bfe0d07f1a90cbdf97dfe8431c1',1,'astro']]],
-  ['semimajoraxisindex_1',['semiMajorAxisIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4afea4e9d3a1d49aebd036fe5451aa41ac',1,'astro']]],
-  ['statevectorindices_2ehpp_2',['stateVectorIndices.hpp',['../stateVectorIndices_8hpp.html',1,'']]]
+  ['meananomalyindex_0',['meanAnomalyIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4acc7d358d16d3519a57d3e4964068e7a2',1,'astro']]]
 ];

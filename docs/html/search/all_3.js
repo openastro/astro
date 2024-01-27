@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['inclinationindex_0',['inclinationIndex',['../namespaceastro.html#ad59814e1ddaffbc6026f23a9e25b39e4af8378bea5f26ffe2219a651d3d4d5168',1,'astro']]]
+  ['disclaimer_0',['Disclaimer',['../index.html#autotoc_md6',1,'']]]
 ];
