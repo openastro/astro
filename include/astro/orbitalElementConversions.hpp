@@ -928,5 +928,9 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
  *      2007.
  *  Musegaas, P. Optimization of Space Trajectories Including Multiple Gravity Assists and Deep
  *      Space Maneuvers. MSc thesis, Delft University of Technology, 2013.
- *  TODO: fill out reference! from Astronomical Algorithms p. 206
+ *  TODO: in the text Meeus actually references Roger W. Sinnott's Sky & Telescope which was published
+ *      a few years earlier. I have not yet been able to locate a copy to confirm the algorithm exists
+ *      there as it does in AA, but this reference should likely be updated to the original developer
+ *      of the algorithm rather than Meeus' redistribution of it.
+ *  Meeus, J. Astronomical Algorithms. Second Edition, Willmann-Bell, Inc. 1991
  */
