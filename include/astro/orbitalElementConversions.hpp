@@ -881,7 +881,6 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
 
     Real M = meanAnomalyShifted;
     Real E = eccentricity;
-    // estimate for eccentric offset E
     Real E0;
     Real D;
 
@@ -890,33 +889,24 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
     // TODO: sign(M). This is used twice in the algorithm, and could be extracted to a separate function.
     Real F = (Real(0) < M) - (M < Real(0));
     M = fabs(M) / (2.0 * pi);
-    // 120 M = (M-INT(M))*2*PI*F
     M = (M - (int)M) * 2.0 * pi * F;
-    // 130 IF M < 0 THEN M = M+2*PI
     if (M < 0)
     {
         M = M + 2.0 * pi;
     }
 
-    // 140 F = 1
     F = 1.0;
-    // 150 IF M > PI THEN F = -1
-    // 160 IF M > PI THEN M = 2*PI - M
     if (M > pi)
     {
         F = -1.0;
         M = 2.0 * pi - M;
     }
 
-    // 170 E0 = PI/2 : D = PI/4
     E0 = pi * 0.5;
     D = pi * 0.25;
-    // 180 FOR J = 1 TO 33
     for (int J = 0; J < iterations; J++)
     {
-        // 190 M1 = E0 - E*SIN(E0)
         Real M1 = E0 - E * sin(E0);
-        // 200 E0 = E0 + D*SGN(M-M1) : D = D/2
         Real val = M - M1;
         E0 = E0 + D * ((Real(0) < val) - (val < Real(0)));
         D *= 0.5;
