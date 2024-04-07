@@ -884,6 +884,8 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
     Real E0;
     Real D;
 
+    // TODO: 33 iterations gets us to the limit of accuracy for a 10bit computer. We live in the
+    // future now, how many iterations do we need to get 64 bits of accuracy?
     const int iterations = 33;
 
     // TODO: sign(M). This is used twice in the algorithm, and could be extracted to a separate function.
