@@ -848,11 +848,6 @@ Real convertEllipticalMeanAnomalyToEccentricAnomaly(
     return eccentricAnomaly;
 }
 
-// TODO: where the hell to put this ?
-template <typename T> int sign(T val) {
-    return (T(0) < val) - (val < T(0));
-}
-
 //! Convert elliptical mean anomaly to eccentric anomaly using a binary search.
 /*!
  * Converts mean anomaly to eccentric anomaly for elliptical orbits,
@@ -892,8 +887,8 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
 
     const int iterations = 33;
 
-    // 110 F = SGN(M) : M = ABS(M)/(2*PI)
-    Real F = sign(M);
+    // TODO: sign(M). This is used twice in the algorithm, and could be extracted to a separate function.
+    Real F = (Real(0) < M) - (M < Real(0));
     M = fabs(M) / (2.0 * pi);
     // 120 M = (M-INT(M))*2*PI*F
     M = (M - (int)M) * 2.0 * pi * F;
@@ -922,11 +917,11 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
         // 190 M1 = E0 - E*SIN(E0)
         Real M1 = E0 - E * sin(E0);
         // 200 E0 = E0 + D*SGN(M-M1) : D = D/2
-        E0 = E0 + D * sign(M - M1);
+        Real val = M - M1;
+        E0 = E0 + D * ((Real(0) < val) - (val < Real(0)));
         D *= 0.5;
     }
 
-    // 220 E0 = E0*F
     E0 *= F;
 
     return E0;
