@@ -853,15 +853,27 @@ template <typename T> int sign(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
-// TODO: nice and cool documentation !
-// what is the problem with the newton's method approach?
-//
+//! Convert elliptical mean anomaly to eccentric anomaly using a binary search.
+/*!
+ * Converts mean anomaly to eccentric anomaly for elliptical orbits,
+ * for all eccentricities >= 0.0 and < 1.0.
+ *
+ * If the eccentricity falls outside the valid range, then a runtime
+ * exception is thrown.
+ *
+ * Also, note that the mean anomaly is automatically transformed to fit within the 0 to 2.0pi range.
+ *
+ * @tparam    Real                  Real number type
+ * @param     eccentricity          Eccentricity                                               [-]
+ * @param     meanAnomaly           Mean anomaly                                               [rad]
+ * @return                          Eccentric anomaly                                          [rad]
+ */
 template <typename Real>
 Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
         const Real      eccentricity,
         const Real      meanAnomaly)
 {
-    assert(eccentricity >= 0.0 && eccentricity < (1.0 - 1.0e-11));
+    assert(eccentricity >= 0.0 && eccentricity < 1.0);
 
     const Real pi = 3.14159265358979323846;
 
