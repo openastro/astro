@@ -856,17 +856,22 @@ Real convertEllipticalMeanAnomalyToEccentricAnomaly(
  * If the eccentricity falls outside the valid range, then a runtime
  * exception is thrown.
  *
+ * A binary search with 100 iterations should yield about 32 bits of precision.
+ *
  * Also, note that the mean anomaly is automatically transformed to fit within the 0 to 2.0pi range.
  *
  * @tparam    Real                  Real number type
+ * @tparam    Integer               Integer type
  * @param     eccentricity          Eccentricity                                               [-]
  * @param     meanAnomaly           Mean anomaly                                               [rad]
+ * @param     iterations            Binary search iterations                                   [-]
  * @return                          Eccentric anomaly                                          [rad]
  */
-template <typename Real>
+template <typename Real, typename Integer>
 Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
-        const Real      eccentricity,
-        const Real      meanAnomaly)
+    const Real      eccentricity,
+    const Real      meanAnomaly,
+    const Integer   iterations = 100)
 {
     assert(eccentricity >= 0.0 && eccentricity < 1.0);
 
@@ -883,10 +888,6 @@ Real convertEllipticalMeanAnomalyToEccentricAnomalyBS(
     Real E = eccentricity;
     Real E0;
     Real D;
-
-    // TODO: 33 iterations gets us to the limit of accuracy for a 10bit computer. We live in the
-    // future now, how many iterations do we need to get 64 bits of accuracy?
-    const int iterations = 33;
 
     // TODO: sign(M). This is used twice in the algorithm, and could be extracted to a separate function.
     Real F = (Real(0) < M) - (M < Real(0));
