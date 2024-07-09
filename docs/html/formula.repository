@@ -19,51 +19,51 @@
 \_form#9=8x9:$y$
 \_form#10=6x6:$z$
 \_form#11=11x13:$J_{2}$
-\_form#12=10x10:$E$
-\_form#13=5x6:$e$
-\_form#14=14x10:$M$
-\_form#15=43x28:\[
-     P = \frac{W}{c}
-\]
-\_form#16=10x10:$P$
-\_form#17=14x10:$W$
-\_form#18=5x6:$c$
-\_form#19=79x30:\[
-     P = P_{ref} \frac{R_{ref}^{2}}{R^{2}}
-\]
-\_form#20=23x14:$P_{ref}$
-\_form#21=25x14:$R_{ref}$
-\_form#22=10x10:$R$
-\_form#23=90x29:\[
-     a = -C_{R} \frac{3}{4r\rho} P \vec{u}
-\]
-\_form#24=16x13:$C_{R}$
-\_form#25=39x13:$C_{R} = 1$
-\_form#26=40x13:$C_{R} = 2$
-\_form#27=8x9:$ \rho $
-\_form#28=9x10:$ \vec{u} $
-\_form#29=141x29:\[
-     a = C_{R} \frac{3}{4r\rho} P \left[\vec{u} \vec{V}^{T} \vec{u} + \vec{V} \right]
-\]
-\_form#30=8x9:$\rho$
-\_form#31=10x13:$ \vec{V} $
-\_form#32=10x20:$\frac{\vec{V}}{c}$
-\_form#33=9x6:$n$
-\_form#34=53x31:\[
-     n = \sqrt{\frac{\mu}{a^{3}}}
-\]
-\_form#35=6x6:$a$
-\_form#36=10x9:$T$
-\_form#37=68x39:\[
-     T = 2\pi\sqrt{\frac{a^{3}}{\mu}}
-\]
-\_form#38=11x13:$V_{c}$
-\_form#39=59x31:\[
-     V_{c} = \sqrt{\frac{2\mu}{a}}
-\]
-\_form#40=153x14:\[
+\_form#12=153x14:\[
      f(E) = E - e * sin(E) - M
 \]
-\_form#41=125x28:\[
+\_form#13=10x10:$E$
+\_form#14=5x6:$e$
+\_form#15=14x10:$M$
+\_form#16=125x28:\[
      \frac{df(E)} {dE} = 1 - e * cos(E)
+\]
+\_form#17=43x28:\[
+     P = \frac{W}{c}
+\]
+\_form#18=10x10:$P$
+\_form#19=14x10:$W$
+\_form#20=5x6:$c$
+\_form#21=79x30:\[
+     P = P_{ref} \frac{R_{ref}^{2}}{R^{2}}
+\]
+\_form#22=23x14:$P_{ref}$
+\_form#23=25x14:$R_{ref}$
+\_form#24=10x10:$R$
+\_form#25=90x29:\[
+     a = -C_{R} \frac{3}{4r\rho} P \vec{u}
+\]
+\_form#26=16x13:$C_{R}$
+\_form#27=39x13:$C_{R} = 1$
+\_form#28=40x13:$C_{R} = 2$
+\_form#29=8x9:$ \rho $
+\_form#30=9x10:$ \vec{u} $
+\_form#31=141x29:\[
+     a = C_{R} \frac{3}{4r\rho} P \left[\vec{u} \vec{V}^{T} \vec{u} + \vec{V} \right]
+\]
+\_form#32=8x9:$\rho$
+\_form#33=10x13:$ \vec{V} $
+\_form#34=10x20:$\frac{\vec{V}}{c}$
+\_form#35=9x6:$n$
+\_form#36=53x31:\[
+     n = \sqrt{\frac{\mu}{a^{3}}}
+\]
+\_form#37=6x6:$a$
+\_form#38=10x9:$T$
+\_form#39=68x39:\[
+     T = 2\pi\sqrt{\frac{a^{3}}{\mu}}
+\]
+\_form#40=11x13:$V_{c}$
+\_form#41=59x31:\[
+     V_{c} = \sqrt{\frac{2\mu}{a}}
 \]
