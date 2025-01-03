@@ -67,3 +67,30 @@
 \_form#41=59x31:\[
      V_{c} = \sqrt{\frac{2\mu}{a}}
 \]
+\_form#42=89x24:\[     \vec{a}_{gravity}=-\frac{\mu}{r^{3}}\vec{r}
+\]
+\_form#43=328x109:\begin{eqnarray*}     {a}_{gravity,x} &=& -\mu_{2}*\frac{x_{1}-x_{2}}{r^{3}} * \frac{3}{2}*J_{2}
+                         * \left(\frac{R}{r}\right)^{2} * (1-5*\hat{z}^2)  \\
+     {a}_{gravity,y} &=& -\mu_{2}*\frac{y_{1}-y_{2}}{r^{3}} * \frac{3}{2}*J_{2}
+                         * \left(\frac{R}{r}\right)^{2} * (1-5*\hat{z}^2)  \\
+     {a}_{gravity,z} &=& \frac{-\mu_{2}}{r^{2}} * \frac{3}{2}*J_{2}
+                         * \left(\frac{R}{r}\right)^{2} * (3-5*\hat{z}^2) * \hat{z}  \\
+\end{eqnarray*}
+\_form#44=153x14:\[     f(E) = E - e * sin(E) - M
+\]
+\_form#45=125x28:\[     \frac{df(E)} {dE} = 1 - e * cos(E)
+\]
+\_form#46=43x28:\[     P = \frac{W}{c}
+\]
+\_form#47=79x30:\[     P = P_{ref} \frac{R_{ref}^{2}}{R^{2}}
+\]
+\_form#48=90x29:\[     a = -C_{R} \frac{3}{4r\rho} P \vec{u}
+\]
+\_form#49=141x29:\[     a = C_{R} \frac{3}{4r\rho} P \left[\vec{u} \vec{V}^{T} \vec{u} + \vec{V} \right]
+\]
+\_form#50=53x31:\[     n = \sqrt{\frac{\mu}{a^{3}}}
+\]
+\_form#51=68x39:\[     T = 2\pi\sqrt{\frac{a^{3}}{\mu}}
+\]
+\_form#52=59x31:\[     V_{c} = \sqrt{\frac{2\mu}{a}}
+\]
