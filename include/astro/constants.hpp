@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Kartik Kumar (me@kartikkumar.com)
+ * Copyright (c) 2014-2025 Kartik Kumar (me@kartikkumar.com)
  * Copyright (c) 2014-2016 Marko Jankovic, DFKI GmbH
  * Copyright (c) 2014-2016 Natalia Ortiz, University of Southampton
  * Copyright (c) 2014-2016 Juan Romero, University of Strathclyde
